@@ -1,7 +1,20 @@
 var express = require('express');
-var app = express();
-const PORT = process.env.PORT || 8081;
+const bodyParser = require('body-parser');
+const app = express();
+const constants = require('./constants');
 
-app.use('/', require('./routes/api'));
+const PORT = constants.PORT;
+const db = require('./db');
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.use(bodyParser.json());
+
+app.use('/api/stores', require('./routes/api/stores'));
+
+db.connect((err) => {
+    if(err) {
+        console.log("Unable to connect to db.");
+        process.exit(1);
+    } else {
+        app.listen(PORT, () => console.log(`Connected to DB. Server started on port ${PORT}`));
+    }
+});
