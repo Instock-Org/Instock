@@ -13,10 +13,10 @@ mongoClient.connect("mongodb://localhost:27017", { useNewUrlParser: true, useUni
 
 // Gets all the items from a store
 // GET /api/items/store/{storeId}
-router.get('/api/items/:storeId', (req, res) => {
+router.get('/api/items/store/:storeId', (req, res) => {
     db.collection("StoreHas").find({
         "storeId": req.params.storeId
-    }).toArray((err, result) => {
+    }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
         res.status(200).send(result);
     })
 });
@@ -39,19 +39,19 @@ router.post('/api/items/store/:storeId', (req, res) => {
     })
 });
 
-// Removes an item from a store
-// DELETE /api/items/store/{storeId}/{itemId}
-router.delete('/api/items/store/:storeId/:itemId', (req, res) => {
-   db.collection("StoreHas").deleteOne({
+// Removes items from a store
+// DELETE /api/items/store/{storeId}
+router.delete('/api/items/store/:storeId', (req, res) => {
+   db.collection("StoreHas").deleteMany({
        "storeId": req.params.storeId,
-       "itemId": req.params.itemId
+       "itemId": {$in: req.body.itemIds}
    }, (err, result) => {
        if (err) {
            res.status(400).send(err);
            return;
        }
 
-       res.send(result);
+       res.sendStatus(200);
    })
 });
 
