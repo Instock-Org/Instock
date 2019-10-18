@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Home Screen-->
+    <dimen name="home_side_margins">40dp</dimen>
+
+    <!--Check in-->
+    <dimen name="info_horizontal_margin">20dp</dimen>
+
+    <!--Select room -->
+    <dimen name="room_type_text_side">18dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+</resources>

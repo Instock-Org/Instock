@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="seaGreen1">#1BA399</color>
+    <color name="seaGreen">#99e699</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="subTitle">#A6A6A6</color>
+    <color name="darkestPurple">#542946</color>
+    <color name="darkPurple">#69276D</color>
+</resources>

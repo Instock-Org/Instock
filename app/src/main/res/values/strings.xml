@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">InStock</string>
+
+    <!--Start-->
+    <string name="start_title">In Stock</string>
+    <string name="start_customer_login">Log In as Customer</string>
+    <string name="start_employee_login">Log In as Employee</string>
+
+</resources>
