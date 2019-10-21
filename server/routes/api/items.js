@@ -42,6 +42,23 @@ router.post('/api/items/store/:storeId', (req, res) => {
 
 // Updates a store's availability on an item
 // PUT /api/items/store/{storeId}
+// TODO: Test
+router.put('/api/items/store/:storeId/:itemId', (req, res) => {
+    db.collection("StoreHas").update({
+        "storeId": req.params.storeId,
+        "itemId": req.body.itemId,
+    }, {
+        "quantity": req.body.quantity || 0,
+        "price": req.body.price || 0
+    }, (err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
+        res.sendStatus(200);
+    })
+});
 
 // Removes items from a store
 // DELETE /api/items/store/{storeId}
@@ -84,7 +101,8 @@ router.post('/api/items', (req, res) => {
         "name": req.body.name,
         // "brand": req.body.brand,
         "description": req.body.description,
-        "barcode": req.body.barcode
+        "barcode": req.body.barcode,
+        "units": req.body.units
     }, (err, result) => {
         if (err) {
             res.status(400).send(err);
@@ -94,6 +112,26 @@ router.post('/api/items', (req, res) => {
         res.sendStatus(200);
     })
 });
+
+router.put('/api/items/:itemId', (req, res) => {
+    db.collection("Items").update({
+        "_id": ObjectId(req.params.itemId)
+    },
+    {
+        "name": req.body.name,
+        // "brand": req.body.brand,
+        "description": req.body.description,
+        "barcode": req.body.barcode,
+        "units": req.body.units
+    }, (err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
+        res.sendStatus(200);
+    })
+})
 
 // Deletes items
 // DELETE /api/items
