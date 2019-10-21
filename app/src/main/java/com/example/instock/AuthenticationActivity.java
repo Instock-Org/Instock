@@ -63,7 +63,6 @@ public class AuthenticationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Google Login
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case 101:
