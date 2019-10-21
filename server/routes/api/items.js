@@ -9,7 +9,8 @@ var db;
 mongoClient.connect("mongodb://localhost:27017", { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) return console.log(err);
     db = client.db('instock');
-    db.collection("StoreHas").createIndex({storeId: 1, itemId: 1}, {unique: true})
+    db.collection("StoreHas").createIndex({storeId: 1, itemId: 1}, {unique: true});
+    db.collection("Items").createIndex({barcode: 1}, {unique: true});
 })
 
 // Gets all the items from a store
@@ -42,7 +43,7 @@ router.post('/api/items/store/:storeId', (req, res) => {
 
 // Updates a store's availability on an item
 // PUT /api/items/store/{storeId}
-// TODO: Test
+// TODO: Manually test
 router.put('/api/items/store/:storeId/:itemId', (req, res) => {
     db.collection("StoreHas").update({
         "storeId": req.params.storeId,
@@ -113,6 +114,9 @@ router.post('/api/items', (req, res) => {
     })
 });
 
+// Update item
+// PUT /api/items/{itemId}
+// TODO: Manually test
 router.put('/api/items/:itemId', (req, res) => {
     db.collection("Items").update({
         "_id": ObjectId(req.params.itemId)
