@@ -7,3 +7,5 @@ const router = express.Router();
 router.get('/api/groceries', (req, res) => {
     res.send("This is the GET request");
 });
+
+module.exports = router;
