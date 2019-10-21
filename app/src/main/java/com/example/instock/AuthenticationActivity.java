@@ -24,14 +24,15 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Arrays;
+
 public class AuthenticationActivity extends AppCompatActivity {
     private final String TAG = "AuthenticationActivity";
 
     private CallbackManager callbackManager;
-
     private LoginButton loginButton;
 
-    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient GoogleSignInClient;
     private SignInButton googleSignInButton;
     private Button signOut;
 
@@ -44,10 +45,16 @@ public class AuthenticationActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email"));
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "User has successfully logged in");
+
+                Intent intent = new Intent(AuthenticationActivity.this, TestActivity.class);
+                startActivity(intent);
+                AuthenticationActivity.this.finish();
             }
 
             @Override
@@ -65,12 +72,12 @@ public class AuthenticationActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInClient = GoogleSignIn.getClient(this, gso);
         googleSignInButton = findViewById(R.id.sign_in_button);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                Intent signInIntent = GoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, 101);
             }
         });
@@ -80,7 +87,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                GoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Log.d(TAG, "Successfully signed out of google");
@@ -88,15 +95,16 @@ public class AuthenticationActivity extends AppCompatActivity {
                 });
             }
         });
-
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Facebook login
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Google Login
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case 101:
@@ -104,12 +112,21 @@ public class AuthenticationActivity extends AppCompatActivity {
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         Log.d(TAG, "google signin successful");
+                        onGoogleLoggedIn(account);
                     } catch (ApiException e) {
                         // The ApiException status code indicates the detailed failure reason
                         Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
                     }
-
+                    break;
             }
         }
+    }
+
+    private void onGoogleLoggedIn(GoogleSignInAccount account) {
+        Intent intent = new Intent(this, TestActivity.class);
+        intent.putExtra(TestActivity.GOOGLE_ACCOUNT, account);
+
+        startActivity(intent);
+        finish();
     }
 }
