@@ -5,7 +5,4 @@
     <string name="start_title">In Stock</string>
     <string name="start_customer_login">Log In as Customer</string>
     <string name="start_employee_login">Log In as Employee</string>
-    <string name="facebook_app_id">2229610430662583</string>
-    <string name="fb_login_protocol_scheme">fb2229610430662583</string>
-
 </resources>
