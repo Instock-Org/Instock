@@ -13,9 +13,10 @@ const collection = constants.COLLECTION_STORES;
 // Get all stores and their details. 
 router.get('/', (req, res) => {
     db.getDB().collection(collection).find({}).toArray((err, documents) => {
-        if(err)
-            console.log(err);
-        else {
+        if(err){
+            res.status(400).send(err);
+            return; 
+        } else {
             res.json(documents);
         }
     });
@@ -25,7 +26,16 @@ router.get('/', (req, res) => {
 router.get('/:storeID', (req, res) => {
     const storeID = req.params.storeID;
 
-    res.send("Received");
+    db.getDB().collection(collection).find({
+        _id : db.getPrimaryKey(storeID)
+    }).toArray((err, documents) => {
+        if(err){
+            res.status(400).send(err);
+            return; 
+        } else {
+            res.json(documents);
+        }
+    });
 });
 
 
@@ -37,12 +47,17 @@ router.get('/:storeID', (req, res) => {
 router.post('/', (req, res) => {
     const userInput = req.body;
 
-    db.getDB().collection(collection).insertOne(userInput, 
-    (err, result) => {
-        if(err)
-            console.log(err);
-        else {
-            res.json(result);
+    db.getDB().collection(collection).insertOne({
+        "address": userInput.address,
+        "city": userInput.city,
+        "province": userInput.province,
+        "name": userInput.name
+    }, (err, result) => {
+        if(err) {
+            res.status(400).send(err);
+            return; 
+        } else {
+            res.sendStatus(200);
         }
     });
 });
@@ -60,8 +75,10 @@ router.put('/:storeID', (req, res) => {
     db.getDB().collection(collection).findOneAndUpdate(
         {_id : db.getPrimaryKey(storeID)}, 
         {$set : {
-            open: userInput.open,
-            city: userInput.city
+            address: userInput.address,
+            city: userInput.city,
+            province: userInput.province,
+            name: userInput.name
         }}, 
         {returnOriginal : false}, 
     (err, result) => {
