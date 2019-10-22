@@ -94,7 +94,6 @@ router.put('/:storeID', (req, res) => {
 /**
  * DELETE requests
  */
-
 // Delete a store with store id "storeID"
 router.delete('/:storeID', (req, res) => {
     const storeID = req.params.storeID;
