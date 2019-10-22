@@ -45,7 +45,7 @@ router.post('/api/items/store/:storeId', (req, res) => {
 // PUT /api/items/store/{storeId}
 // TODO: Manually test
 router.put('/api/items/store/:storeId/:itemId', (req, res) => {
-    db.collection("StoreHas").update({
+    db.collection("StoreHas").updateOne({
         "storeId": req.params.storeId,
         "itemId": req.body.itemId,
     }, {
@@ -78,7 +78,7 @@ router.delete('/api/items/store/:storeId', (req, res) => {
 });
 
 // Gets items by name or brand
-// GET /api/items
+// GET /api/items?search_term="string"
 // Returns if exact match only, case insensitive
 router.get('/api/items', (req, res) => {
     // Commented code would return results as long as it matches one word
@@ -88,7 +88,7 @@ router.get('/api/items', (req, res) => {
     // });
     // console.log(search_term_keywords);
     db.collection("Items").find({
-        "name": new RegExp('.*' + req.body.search_term + '.*', 'i')
+        "name": new RegExp('.*' + req.query.search_term + '.*', 'i')
         //$or: [{ name: { $in: search_term_keywords }}, { brand: { $in: search_term_keywords }}]
     }).toArray((err, result) => {
         res.status(200).send(result);
@@ -110,7 +110,7 @@ router.post('/api/items', (req, res) => {
             return;
         }
 
-        res.sendStatus(200);
+        res.status(200).send(result.ops[0]._id);
     })
 });
 
@@ -118,7 +118,7 @@ router.post('/api/items', (req, res) => {
 // PUT /api/items/{itemId}
 // TODO: Manually test
 router.put('/api/items/:itemId', (req, res) => {
-    db.collection("Items").update({
+    db.collection("Items").updateOne({
         "_id": ObjectId(req.params.itemId)
     },
     {

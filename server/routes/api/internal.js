@@ -13,6 +13,11 @@ mongoClient.connect("mongodb://localhost:27017", { useNewUrlParser: true, useUni
 // Get all entries from the Items table
 router.get('/api/internal/items', (req, res) => {
     db.collection("Items").find({}).toArray((err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
         res.status(200).send(result);
     })
 });
@@ -20,6 +25,11 @@ router.get('/api/internal/items', (req, res) => {
 // Get all entries from the StoreHas table
 router.get('/api/internal/store', (req, res) => {
     db.collection("StoreHas").find({}).toArray((err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
         res.status(200).send(result);
     })
 });
@@ -62,4 +72,16 @@ router.delete('/api/internal/items/store', (req, res) => {
     })
  });
 
- module.exports = router;
+ // Get all users
+ router.get('/api/internal/users', (req, res) => {
+    db.collection("Users").find({}).toArray((err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
+        res.status(200).send(result);
+    })
+});
+
+module.exports = router;
