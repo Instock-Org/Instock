@@ -6,11 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +36,8 @@ public class APIActivity extends AppCompatActivity {
         api_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAllItems(instockAPIs);
+//                getAllItems(instockAPIs);
+                addItem(instockAPIs);
             }
         });
     }
@@ -50,12 +50,12 @@ public class APIActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                // This is the success callback. Though the response type is JSON, with Retrofit we get the response in the form of JPResponse POJO class
+                // This is the success callback. Though the response type is JSON, with Retrofit we get the response in the form of ItemResponse POJO class
                 Log.d(TAG, String.valueOf(response.code()));
                 if (response.body() != null) {
-                    List<JPResponse> res = (List<JPResponse>) response.body();
-                    JPResponse jpResponse = res.get(0);
-                    Log.d(TAG, jpResponse.getName());
+                    List<ItemResponse> res = (List<ItemResponse>) response.body();
+                    ItemResponse ItemResponse = res.get(0);
+                    Log.d(TAG, ItemResponse.getName());
                 }
             }
             @Override
@@ -70,17 +70,18 @@ public class APIActivity extends AppCompatActivity {
     private void addItem(InstockAPIs instockAPIs) {
         // JSON body
         JsonObject body = new JsonObject();
-        body.addProperty("name", "cake");
-        body.addProperty("description", "its a banana");
-        body.addProperty("barcode", "11112");
+        body.addProperty("name", "cookies");
+        body.addProperty("description", "its a cookie");
+        body.addProperty("barcode", "11114");
         body.addProperty("units", "1 unit");
+
 
         Call call = instockAPIs.addItem(body); // post request
 
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                // This is the success callback. Though the response type is JSON, with Retrofit we get the response in the form of JPResponse POJO class
+                // This is the success callback. Though the response type is JSON, with Retrofit we get the response in the form of ItemResponse POJO class
                 Log.d(TAG, String.valueOf(response.code()));
                 if (response.body() != null) {
                     String res = response.body().toString();

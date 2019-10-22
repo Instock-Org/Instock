@@ -16,7 +16,7 @@ public interface InstockAPIs {
     Get request to fetch items that match a search term (exact match)
     */
     @GET("/api/items")
-    Call<List<JPResponse>> getItem(@Query("search_term") String term);
+    Call<List<ItemResponse>> getItem(@Query("search_term") String term);
 
     /*
     Post request to add a new item to the catalogue
@@ -24,4 +24,11 @@ public interface InstockAPIs {
     @Headers("Content-Type: application/json")
     @POST("/api/items")
     Call<String> addItem(@Body JsonObject body);
+
+    /*
+    Post request to send shopping list
+    */
+    @Headers("Content-Type: application/json")
+    @POST("/api/items")
+    Call<String> sendShoppingList(@Body JsonObject body);
 }

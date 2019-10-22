@@ -3,7 +3,7 @@ package com.example.instock;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class JPResponse {
+public class ItemResponse {
 
     @SerializedName("_id")
     @Expose
