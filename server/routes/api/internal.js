@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const mongoClient = require('mongodb').MongoClient;
+
+const constants = require('../../constants');
+
+const db = require('../../db');
+const itemsCollection = constants.COLLECTION_ITEMS;
+const storeHasCollection = constants.COLLECTION_STOREHAS;
+const usersCollection = constants.COLLECTION_USERS;
+
 router.use(express.json());
 
-var db;
-
-mongoClient.connect("mongodb://localhost:27017", { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
-    if (err) return console.log(err);
-    db = client.db('instock');
-})
 
 // Get all entries from the Items table
 router.get('/api/internal/items', (req, res) => {
-    db.collection("Items").find({}).toArray((err, result) => {
+    db.getDB().collection(itemsCollection).find({}).toArray((err, result) => {
         if (err) {
             res.status(400).send(err);
             return;
@@ -24,7 +25,7 @@ router.get('/api/internal/items', (req, res) => {
 
 // Get all entries from the StoreHas table
 router.get('/api/internal/store', (req, res) => {
-    db.collection("StoreHas").find({}).toArray((err, result) => {
+    db.getDB().collection(storeHasCollection).find({}).toArray((err, result) => {
         if (err) {
             res.status(400).send(err);
             return;
@@ -50,7 +51,7 @@ router.post('/api/internal/prepopulate', (req, res) => {
 
 // Empty the Items table
 router.delete('/api/internal/items', (req, res) => {
-    db.collection("Items").deleteMany({}, (err, result) => {
+    db.getDB().collection(itemsCollection).deleteMany({}, (err, result) => {
         if (err) {
             res.status(400).send(err);
             return;
@@ -62,7 +63,7 @@ router.delete('/api/internal/items', (req, res) => {
 
 // Empty the StoreHas table
 router.delete('/api/internal/items/store', (req, res) => {
-    db.collection("StoreHas").deleteMany({}, (err, result) => {
+    db.getDB().collection(storeHasCollection).deleteMany({}, (err, result) => {
         if (err) {
             res.status(400).send(err);
             return;
@@ -74,7 +75,7 @@ router.delete('/api/internal/items/store', (req, res) => {
 
  // Get all users
  router.get('/api/internal/users', (req, res) => {
-    db.collection("Users").find({}).toArray((err, result) => {
+    db.getDB().collection(usersCollection).find({}).toArray((err, result) => {
         if (err) {
             res.status(400).send(err);
             return;

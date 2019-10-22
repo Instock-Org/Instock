@@ -57,7 +57,7 @@ router.post('/', (req, res) => {
             res.status(400).send(err);
             return; 
         } else {
-            res.sendStatus(200);
+            res.status(200).send(result.ops[0]._id);
         }
     });
 });

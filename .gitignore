@@ -4,3 +4,4 @@ node_modules/
 # Don't track these files
 package.json
 package-lock.json
+.env

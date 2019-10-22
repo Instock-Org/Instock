@@ -1,22 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const mongoClient = require('mongodb').MongoClient;
-const ObjectId = require('mongodb').ObjectID;
+const constants = require('../../constants');
+
+const db = require('../../db');
+const storeHasCollection = constants.COLLECTION_STOREHAS;
+const itemsCollection = constants.COLLECTION_ITEMS;
+
 router.use(express.json());
 
-var db;
-
-mongoClient.connect("mongodb://localhost:27017", { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
-    if (err) return console.log(err);
-    db = client.db('instock');
-    db.collection("StoreHas").createIndex({storeId: 1, itemId: 1}, {unique: true});
-    db.collection("Items").createIndex({barcode: 1}, {unique: true});
-})
 
 // Gets all the items from a store
 // GET /api/items/store/{storeId}
 router.get('/api/items/store/:storeId', (req, res) => {
-    db.collection("StoreHas").find({
+    db.getDB().collection(storeHasCollection).find({
         "storeId": req.params.storeId
     }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
         res.status(200).send(result);
@@ -26,7 +22,7 @@ router.get('/api/items/store/:storeId', (req, res) => {
 // Adds an item to a store
 // POST /api/items/store/{storeId}
 router.post('/api/items/store/:storeId', (req, res) => {
-    db.collection("StoreHas").insertOne({
+    db.getDB().collection(storeHasCollection).insertOne({
         "storeId": req.params.storeId,
         "itemId": req.body.itemId,
         "quantity": req.body.quantity || 0,
@@ -45,13 +41,13 @@ router.post('/api/items/store/:storeId', (req, res) => {
 // PUT /api/items/store/{storeId}
 // TODO: Manually test
 router.put('/api/items/store/:storeId/:itemId', (req, res) => {
-    db.collection("StoreHas").updateOne({
+    db.getDB().collection(storeHasCollection).updateOne({
         "storeId": req.params.storeId,
         "itemId": req.body.itemId,
-    }, {
+    }, {$set: {
         "quantity": req.body.quantity || 0,
         "price": req.body.price || 0
-    }, (err, result) => {
+    }}, (err, result) => {
         if (err) {
             res.status(400).send(err);
             return;
@@ -64,7 +60,7 @@ router.put('/api/items/store/:storeId/:itemId', (req, res) => {
 // Removes items from a store
 // DELETE /api/items/store/{storeId}
 router.delete('/api/items/store/:storeId', (req, res) => {
-   db.collection("StoreHas").deleteMany({
+   db.getDB().collection(storeHasCollection).deleteMany({
        "storeId": req.params.storeId,
        "itemId": {$in: req.body.itemIds}
    }, (err, result) => {
@@ -87,7 +83,7 @@ router.get('/api/items', (req, res) => {
     //     search_term_keywords[key] = new RegExp('.*' + search_term + '.*', 'i');
     // });
     // console.log(search_term_keywords);
-    db.collection("Items").find({
+    db.getDB().collection(itemsCollection).find({
         "name": new RegExp('.*' + req.query.search_term + '.*', 'i')
         //$or: [{ name: { $in: search_term_keywords }}, { brand: { $in: search_term_keywords }}]
     }).toArray((err, result) => {
@@ -98,7 +94,7 @@ router.get('/api/items', (req, res) => {
 // Add item to items list
 // POST /api/items
 router.post('/api/items', (req, res) => {
-    db.collection("Items").insertOne({
+    db.getDB().collection(itemsCollection).insertOne({
         "name": req.body.name,
         // "brand": req.body.brand,
         "description": req.body.description,
@@ -118,16 +114,16 @@ router.post('/api/items', (req, res) => {
 // PUT /api/items/{itemId}
 // TODO: Manually test
 router.put('/api/items/:itemId', (req, res) => {
-    db.collection("Items").updateOne({
-        "_id": ObjectId(req.params.itemId)
+    db.getDB().collection(itemsCollection).updateOne({
+        "_id": db.getPrimaryKey(req.params.itemId)
     },
-    {
+    {$set: {
         "name": req.body.name,
         // "brand": req.body.brand,
         "description": req.body.description,
         "barcode": req.body.barcode,
         "units": req.body.units
-    }, (err, result) => {
+    }}, (err, result) => {
         if (err) {
             res.status(400).send(err);
             return;
@@ -142,10 +138,10 @@ router.put('/api/items/:itemId', (req, res) => {
 router.delete('/api/items', (req, res) => {
     let itemIds = [];
     req.body.itemIds.forEach( (value, key) => {
-        itemIds[key] = ObjectId(value);
+        itemIds[key] = db.getPrimaryKey(value);
     });
 
-    db.collection("Items").deleteMany({
+    db.getDB().collection(itemsCollection).deleteMany({
         "_id": {$in: itemIds}
     }, (err, result) => {
         if (err) {
