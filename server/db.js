@@ -23,6 +23,10 @@ const connect = (cb) => {
                 cb(err);
             else {
                 state.db = client.db(dbname);
+                state.db.collection(constants.COLLECTION_STOREHAS).createIndex({storeId: 1, itemId: 1}, {unique: true});
+                state.db.collection(constants.COLLECTION_ITEMS).createIndex({barcode: 1}, {unique: true});
+                state.db.collection(constants.COLLECTION_USERS).createIndex({email: 1, authType: 1}, {unique: true});
+                state.db.collection(constants.COLLECTION_USERSUBSCRIPTIONS).createIndex({userId: 1, storeId: 1, itemId: 1}, {unique: true});
                 cb();
             }
         })

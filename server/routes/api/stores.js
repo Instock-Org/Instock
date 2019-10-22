@@ -5,6 +5,9 @@ const constants = require('../../constants');
 const db = require('../../db');
 const collection = constants.COLLECTION_STORES;
 
+const maps = require('./maps');
+
+// console.log(maps.googleMapsClient);
 
 /**
  * GET requests
@@ -47,19 +50,34 @@ router.get('/:storeID', (req, res) => {
 router.post('/', (req, res) => {
     const userInput = req.body;
 
-    db.getDB().collection(collection).insertOne({
-        "address": userInput.address,
-        "city": userInput.city,
-        "province": userInput.province,
-        "name": userInput.name
-    }, (err, result) => {
-        if(err) {
+    var addressString = userInput.address 
+                        + " " + userInput.city 
+                        + " " + userInput.province;
+
+    // call google maps geocoding api
+    maps.googleMapsClient.geocode({address: addressString}).asPromise()
+        .then((response) => {
+            var results = response.json.results;
+            db.getDB().collection(collection).insertOne({
+                "address": userInput.address,
+                "city": userInput.city,
+                "province": userInput.province,
+                "name": userInput.name,
+                "lat": results[0].geometry.location.lat,
+                "lng": results[0].geometry.location.lng,
+                "place_id": results[0].place_id
+            }, (err, result) => {
+                if(err) {
+                    res.status(400).send(err);
+                    return; 
+                } else {
+                    res.status(200).send(result.ops[0]._id);
+                }
+            });
+        })
+        .catch((err) => {
             res.status(400).send(err);
-            return; 
-        } else {
-            res.sendStatus(200);
-        }
-    });
+        });
 });
 
 
