@@ -116,6 +116,7 @@ router.post('/feweststores', (req, res) => {
             db.getDB().collection(constants.COLLECTION_STOREHAS).find({
                 "storeId": { $in: storeIds },
                 "itemId": { $in: itemIds },
+                "quantity": { $gt: 0 }
             }, {projection: {_id: 0}}).toArray((storeHasItemErr, storeHasItem) => {
                 storeHasItem.forEach((storeItem, storeId) => {
                     storeItems[storeItem.storeId].push(storeItem.itemId);
@@ -151,11 +152,15 @@ router.post('/feweststores', (req, res) => {
                     const itemList = prunedStoreItems[itemStore];
                     itemList.forEach(storeItem => {
                         var itemToAdd = items.filter(item => item._id.toString() == storeItem.toString())[0];
+                        var storeHasItemFiltered = storeHasItem.filter(storeHas => storeHas.storeId.toString() == itemStore.toString() && storeHas.itemId.toString() == itemToAdd._id.toString())[0];
 
                         var storeToUpdate = storePickupList.filter(store => store._id.toString() == itemStore.toString())[0];
                         if (storeToUpdate.items === undefined) {
                             storeToUpdate.items = [];
                         }
+
+                        itemToAdd.quantity = storeHasItemFiltered.quantity;
+                        itemToAdd.price = storeHasItemFiltered.price;
                         storeToUpdate.items.push(itemToAdd);
                     })
                 }
