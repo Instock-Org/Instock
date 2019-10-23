@@ -62,10 +62,6 @@ router.post('/shoppingtrip', (req, res) => {
     const south_boundary_lat = longitude - (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
     const west_boundary_long = latitude  + (radius_km /  R_EARTH) * (180.0 / Math.PI);
     const east_boundary_long = latitude  - (radius_km / R_EARTH) * (180.0 / Math.PI);
-    console.log(west_boundary_long);
-    console.log(east_boundary_long);
-    console.log(south_boundary_lat);
-    console.log(north_boundary_lat);
     
     // Get item IDs by name
     db.getDB().collection(constants.COLLECTION_ITEMS).find({
@@ -94,31 +90,32 @@ router.post('/shoppingtrip', (req, res) => {
                 return;
             }
             var storeIds = stores.map(store => store._id);
-            console.log(storeIds);
-            console.log(itemIds);
-            
-            var itemFromStore = {};
-            // storeIds.forEach((store) => {
-            //     db.getDB().collection(constants.COLLECTION_STOREHAS).find({
-            //         "storeId": storeId,
-            //         "itemId": {$in: itemIds}
-            //     })
-            // })
+            var storeItemMapping = {};
+            // Initially no items per store
+            storeIds.forEach(storeId => {
+                storeItemMapping[storeId] = [];
+            })
+            console.log("Store IDs: " + storeIds);
+            console.log("Item IDs: " + itemIds);
 
             db.getDB().collection(constants.COLLECTION_STOREHAS).find({
                 "storeId": { $in: storeIds },
                 "itemId": { $in: itemIds },
             }, {projection: {_id: 0}}).toArray((storeHasItemErr, storeHasItem) => {
                 console.log(storeHasItem);
-                res.sendStatus(200);
+
                 // Put each item into sets (stores)
+                storeHasItem.forEach(value => {
+                    storeItemMapping[value.storeId.toString()].push(value.itemId.toString());
+                })
 
-                // Sort them by most to least
+                var storeMapObj = {
+                    storeItemMapping: storeItemMapping
+                }
 
-                // For each store, check if item has already been checked. If not, add store to visit
-            })
-
-           
+                console.log(storeMapObj);
+                res.status(200).send(storeMapObj);
+            });
         });
     });
     return;
