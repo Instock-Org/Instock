@@ -21,6 +21,11 @@ const COLLECTION_USERS = "Users";
 const COLLECTION_EMPLOYEES = "Employees";
 const COLLECTION_USERSUBSCRIPTIONS = "UserSubscriptions";
 
+/**
+ * Other constants
+ */
+const R_EARTH = 6378.0;
+
 module.exports = {
     API_KEY: process.env.API_KEY,
     PORT,
@@ -31,5 +36,6 @@ module.exports = {
     COLLECTION_ITEMS,
     COLLECTION_USERS,
     COLLECTION_EMPLOYEES,
-    COLLECTION_USERSUBSCRIPTIONS
+    COLLECTION_USERSUBSCRIPTIONS,
+    R_EARTH
 };
