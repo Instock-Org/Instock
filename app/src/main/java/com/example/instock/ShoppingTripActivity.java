@@ -3,6 +3,7 @@ package com.example.instock;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,6 +35,12 @@ public class ShoppingTripActivity extends AppCompatActivity {
         overridePendingTransition(R.transition.slide_from_right, R.transition.slide_to_left);
         setContentView(R.layout.activity_shopping_trip);
 
+        // Get stores list from intent
+        Intent intent = getIntent();
+        final Bundle args = intent.getBundleExtra("BUNDLE");
+        List<Store> stores = (List<Store>) args.getSerializable("STORES");
+//        Log.d("ShoppingTripActivity", stores.get(0).getName());
+
         storesListView = findViewById(R.id.trip_stores_list);
 
         mapsViewButton = findViewById(R.id.trip_maps_button);
@@ -41,6 +48,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ShoppingTripActivity.this, MapsActivity.class);
+                intent.putExtra("BUNDLE", args);
                 startActivity(intent);
             }
         });
@@ -61,7 +69,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
 
 
         expandableListView = (ExpandableListView) findViewById(R.id.trip_stores_list);
-        expandableListDetail = ExpandableListData.getData();
+        expandableListDetail = ExpandableListData.getData(stores);
         expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);

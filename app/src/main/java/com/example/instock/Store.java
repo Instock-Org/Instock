@@ -1,10 +1,11 @@
 package com.example.instock;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Store {
+public class Store implements Serializable {
 
     @SerializedName("_id")
     @Expose

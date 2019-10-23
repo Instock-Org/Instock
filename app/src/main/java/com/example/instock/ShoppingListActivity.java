@@ -25,6 +25,7 @@ import com.example.instock.db.TaskDbHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -167,10 +168,6 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         // TODO: Send the shoppinglist Json as a post request to the server.
         sendShoppingList(instockAPIs, shoppingList);
-
-        // Launch Shopping trip activity
-        Intent intent = new Intent(ShoppingListActivity.this, ShoppingTripActivity.class);
-        startActivity(intent);
     }
 
     private void sendShoppingList(InstockAPIs instockAPIs, JsonObject shoppingList) {
@@ -183,6 +180,14 @@ public class ShoppingListActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     FewestStoresResponse res = (FewestStoresResponse) response.body();
                     Log.d(TAG, res.getStores().get(0).getName());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("STORES", (Serializable)res.getStores());
+
+                    // Launch Shopping trip activity
+                    Intent intent = new Intent(ShoppingListActivity.this, ShoppingTripActivity.class);
+                    intent.putExtra("BUNDLE", bundle);
+                    startActivity(intent);
                 }
             }
             @Override

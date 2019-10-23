@@ -1,7 +1,9 @@
 package com.example.instock;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,6 +11,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -18,6 +22,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -36,11 +41,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        // Get stores list from intent
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        List<Store> stores = (List<Store>) args.getSerializable("STORES");
+//        Log.d("MapActivity", stores.get(0).getName());
+
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(49.2548294, -123.2365587);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker by Karn"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        for (Store store : stores) {
+            // Add a marker and move the camera
+            LatLng marker = new LatLng(store.getLat(), store.getLng());
+            mMap.addMarker(new MarkerOptions().position(marker).title(store.getName()));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        }
     }
 }
