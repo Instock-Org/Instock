@@ -18,13 +18,14 @@ public class UserViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_view);
 
         searchItemCardView = findViewById(R.id.user_look_up_card_view);
-        searchItemCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UserViewActivity.this, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
+        searchItemCardView.setClickable(false); // Remove once implemented
+//        searchItemCardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(UserViewActivity.this, SearchActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         listEntryCardView = findViewById(R.id.user_list_card_view);
         listEntryCardView.setOnClickListener(new View.OnClickListener() {

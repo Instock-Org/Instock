@@ -26,5 +26,8 @@
     <!-- Maps -->
     <string name="maps_title">Product Locations</string>
 
+    <!-- Shopping Trip -->
+    <string name="trip_map_button">Maps View</string>
+
 
 </resources>

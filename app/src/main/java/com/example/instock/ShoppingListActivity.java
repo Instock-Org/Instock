@@ -2,6 +2,7 @@ package com.example.instock;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -131,7 +132,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
 
     public void sendList() {
-        disableButton();
+        //disableButton();
 
         // Add items to a json array and then create a json object for this.
         JsonArray jsonarray = new JsonArray();
@@ -154,6 +155,10 @@ public class ShoppingListActivity extends AppCompatActivity {
         shoppingList.addProperty("latitude", latitude);
 
         // TODO: Send the shoppinglist Json as a post request to the server.
+
+        // Launch Shopping trip activity
+        Intent intent = new Intent(ShoppingListActivity.this, ShoppingTripActivity.class);
+        startActivity(intent);
     }
 
     public void deleteTask(View view) {
