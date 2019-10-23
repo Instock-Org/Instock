@@ -46,6 +46,84 @@ router.get('/:storeID', (req, res) => {
  * POST requests
  */
 
+// Given a shopping list and user's location, find all stores nearby that have the items on the shopping list in stock
+// ASSUMES NO AMBIGUITY AND EXACT MATCH
+router.post('/shoppingtrip', (req, res) => {
+    const shoppingList = req.body.shoppingList; 
+    const latitude = req.body.location.latitude || 49.262130;
+    const longitude = req.body.location.longitude || -123.250578;
+    const radius_km = req.body.radius || 5.0;
+    const R_EARTH = 6378.0
+
+    // Calculate long/lat bounds (north, south, west, east)
+    // Will assume square instead of radius
+    // TODO: Might need to parse to double
+    const north_boundary_lat = longitude + (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const south_boundary_lat = longitude - (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const west_boundary_long = latitude  + (radius_km /  R_EARTH) * (180.0 / Math.PI);
+    const east_boundary_long = latitude  - (radius_km / R_EARTH) * (180.0 / Math.PI);
+    console.log(west_boundary_long);
+    console.log(east_boundary_long);
+    console.log(south_boundary_lat);
+    console.log(north_boundary_lat);
+    
+    // Get item IDs by name
+    db.getDB().collection(constants.COLLECTION_ITEMS).find({
+        "name": { $in: shoppingList }
+    }).toArray((itemErr, items) => {
+        // Get nearby stores
+        console.log(items);
+        if (!items) {
+            res.sendStatus(404);
+            return;
+        }
+        var itemIds = items.map(item => item._id);
+        db.getDB().collection(collection).find({
+            "lat": {
+                $lt: south_boundary_lat,
+                $gt: north_boundary_lat
+            },
+            "lng": {
+                $lt: west_boundary_long,
+                $gt: east_boundary_long
+            }
+        }).toArray((storeErr, stores) => {
+            if (!stores) {
+                console.log(stores);
+                res.sendStatus(404);
+                return;
+            }
+            var storeIds = stores.map(store => store._id);
+            console.log(storeIds);
+            console.log(itemIds);
+            
+            var itemFromStore = {};
+            // storeIds.forEach((store) => {
+            //     db.getDB().collection(constants.COLLECTION_STOREHAS).find({
+            //         "storeId": storeId,
+            //         "itemId": {$in: itemIds}
+            //     })
+            // })
+
+            db.getDB().collection(constants.COLLECTION_STOREHAS).find({
+                "storeId": { $in: storeIds },
+                "itemId": { $in: itemIds },
+            }, {projection: {_id: 0}}).toArray((storeHasItemErr, storeHasItem) => {
+                console.log(storeHasItem);
+                res.sendStatus(200);
+                // Put each item into sets (stores)
+
+                // Sort them by most to least
+
+                // For each store, check if item has already been checked. If not, add store to visit
+            })
+
+           
+        });
+    });
+    return;
+});
+
 // Create a store object
 router.post('/', (req, res) => {
     const userInput = req.body;
