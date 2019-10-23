@@ -13,7 +13,7 @@ router.use(express.json());
 // GET /api/items/store/{storeId}
 router.get('/api/items/store/:storeId', (req, res) => {
     db.getDB().collection(storeHasCollection).find({
-        "storeId": req.params.storeId
+        "storeId": db.getPrimaryKey(req.params.storeId)
     }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
         res.status(200).send(result);
     })
@@ -23,8 +23,8 @@ router.get('/api/items/store/:storeId', (req, res) => {
 // POST /api/items/store/{storeId}
 router.post('/api/items/store/:storeId', (req, res) => {
     db.getDB().collection(storeHasCollection).insertOne({
-        "storeId": req.params.storeId,
-        "itemId": req.body.itemId,
+        "storeId": db.getPrimaryKey(req.params.storeId),
+        "itemId": db.getPrimaryKey(req.body.itemId),
         "quantity": req.body.quantity || 0,
         "price": req.body.price || 0
     }, (err, result) => {
@@ -42,8 +42,8 @@ router.post('/api/items/store/:storeId', (req, res) => {
 // TODO: Manually test
 router.put('/api/items/store/:storeId/:itemId', (req, res) => {
     db.getDB().collection(storeHasCollection).updateOne({
-        "storeId": req.params.storeId,
-        "itemId": req.body.itemId,
+        "storeId": db.getPrimaryKey(req.params.storeId),
+        "itemId": db.getPrimaryKey(req.body.itemId),
     }, {$set: {
         "quantity": req.body.quantity || 0,
         "price": req.body.price || 0

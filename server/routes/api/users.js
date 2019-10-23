@@ -74,7 +74,7 @@ router.delete('/api/users/:user_id', (req, res) => {
 // GET /api/users/subscriptions/{user_id}
 router.get('/api/users/subscriptions/:user_id', (req, res) => {
     db.getDB().collection(userSubscriptionsCollection).find({
-        "userId": req.params.user_id
+        "userId": db.getPrimaryKey(req.params.user_id)
     }, {projection: {_id: 0, userId: 0}}).toArray((err, result) => {
         if (err) {
             res.status(400).send(err);
@@ -89,9 +89,9 @@ router.get('/api/users/subscriptions/:user_id', (req, res) => {
 // POST /api/users/subscriptions
 router.post('/api/users/subscriptions', (req, res) => {
     db.getDB().collection(userSubscriptionsCollection).insertOne({
-        "userId": req.body.user_id,
-        "storeId": req.body.store_id,
-        "itemId": req.body.item_id
+        "userId": db.getPrimaryKey(req.body.user_id),
+        "storeId": db.getPrimaryKey(req.body.store_id),
+        "itemId": db.getPrimaryKey(req.body.item_id)
     }, (err, result) => {
         if (err) {
             res.status(400).send(err);
@@ -106,9 +106,9 @@ router.post('/api/users/subscriptions', (req, res) => {
 // DELETE /api/users/subscriptions/{user_id}/{store_id}/{item_id}
 router.delete('/api/users/subscriptions/:user_id/:store_id/:item_id', (req, res) => {
     db.getDB().collection(userSubscriptionsCollection).deleteOne({
-        "userId": req.params.user_id,
-        "storeId": req.params.store_id,
-        "itemId": req.params.item_id
+        "userId": db.getPrimaryKey(req.params.user_id),
+        "storeId": db.getPrimaryKey(req.params.store_id),
+        "itemId": db.getPrimaryKey(req.params.item_id)
     }, (err, result) => {
         if (err) {
             res.status(400).send(err);

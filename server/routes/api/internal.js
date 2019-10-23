@@ -23,6 +23,17 @@ router.get('/api/internal/items', (req, res) => {
     })
 });
 
+router.get('/api/internal/items/store', (req, res) => {
+    db.getDB().collection(storeHasCollection).find({}).toArray((err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
+        res.status(200).send(result);
+    })
+});
+
 // Get all entries from the StoreHas table
 router.get('/api/internal/store', (req, res) => {
     db.getDB().collection(storeHasCollection).find({}).toArray((err, result) => {
