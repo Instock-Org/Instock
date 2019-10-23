@@ -38,12 +38,12 @@ router.post('/api/items/store/:storeId', (req, res) => {
 });
 
 // Updates a store's availability on an item
-// PUT /api/items/store/{storeId}
+// PUT /api/items/store/{storeId}/{itemId}
 // TODO: Manually test
 router.put('/api/items/store/:storeId/:itemId', (req, res) => {
     db.getDB().collection(storeHasCollection).updateOne({
         "storeId": db.getPrimaryKey(req.params.storeId),
-        "itemId": db.getPrimaryKey(req.body.itemId),
+        "itemId": db.getPrimaryKey(req.params.itemId),
     }, {$set: {
         "quantity": req.body.quantity || 0,
         "price": req.body.price || 0
