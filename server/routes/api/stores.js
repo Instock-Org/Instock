@@ -76,12 +76,12 @@ router.post('/shoppingtrip', (req, res) => {
         var itemIds = items.map(item => item._id);
         db.getDB().collection(collection).find({
             "lat": {
-                $lt: south_boundary_lat,
-                $gt: north_boundary_lat
+                $gt: south_boundary_lat,
+                $lt: north_boundary_lat
             },
             "lng": {
-                $lt: west_boundary_long,
-                $gt: east_boundary_long
+                $gt: west_boundary_long,
+                $lt: east_boundary_long
             }
         }).toArray((storeErr, stores) => {
             if (stores.length == 0) {
@@ -120,6 +120,57 @@ router.post('/shoppingtrip', (req, res) => {
     });
     return;
 });
+
+
+// Endpoint for getting nearest stores
+router.post('/nearbyStores', (req, res) => {
+    // const userInput = req.body;
+
+    const latitude = req.body.location.latitude || 49.262130;
+    const longitude = req.body.location.longitude || -123.250578;
+    const radius_km = req.body.radius || 5.0;
+    const R_EARTH = 6378.0;
+
+    // Calculate long/lat bounds (north, south, west, east)
+    // Will assume square instead of radius
+    const north_boundary_lat = longitude + (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const south_boundary_lat = longitude - (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const west_boundary_long = latitude  + (radius_km /  R_EARTH) * (180.0 / Math.PI);
+    const east_boundary_long = latitude  - (radius_km / R_EARTH) * (180.0 / Math.PI);
+
+    db.getDB().collection(collection).find({
+        "lng": {
+            $gt: south_boundary_lat,
+            $lt: north_boundary_lat
+        },
+        "lat": {
+            $lt: west_boundary_long,
+            $gt: east_boundary_long
+        }
+    }).toArray((err, result) => {
+        if (result.length == 0) {
+            console.log(result);
+            res.sendStatus(404);
+            return;
+        }
+
+        var stores = result.map(obj => {
+            var store = {
+                storeName: obj.name,
+                address: obj.address,
+                city: obj.city,
+                province: obj.province,
+                location: {
+                    lat: obj.lat,
+                    lng: obj.lng
+                }
+            }
+
+            return store;
+        })
+        res.status(200).send(stores);
+    });
+})
 
 // Create a store object
 router.post('/', (req, res) => {
