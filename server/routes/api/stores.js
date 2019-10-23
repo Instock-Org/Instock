@@ -69,7 +69,7 @@ router.post('/shoppingtrip', (req, res) => {
     }).toArray((itemErr, items) => {
         // Get nearby stores
         console.log(items);
-        if (!items) {
+        if (items.length == 0) {
             res.sendStatus(404);
             return;
         }
@@ -84,7 +84,7 @@ router.post('/shoppingtrip', (req, res) => {
                 $gt: east_boundary_long
             }
         }).toArray((storeErr, stores) => {
-            if (!stores) {
+            if (stores.length == 0) {
                 console.log(stores);
                 res.sendStatus(404);
                 return;
