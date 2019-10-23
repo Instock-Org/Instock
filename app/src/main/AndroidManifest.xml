@@ -40,7 +40,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".APIActivity"/>
-        <activity android:name=".MainActivity"/>
 
         <service
             android:name=".MyFirebaseMessagingService"
