@@ -91,6 +91,26 @@ router.get('/api/items', (req, res) => {
     })
 });
 
+// Get items by item IDs
+// POST /api/items/multiple
+router.post('/api/items/multiple', (req, res) => {
+    var itemIds = [];
+    req.body.itemIds.forEach((value, key) => {
+        itemIds[key] = db.getPrimaryKey(value);
+    });
+
+    db.getDB().collection(itemsCollection).find({
+        "_id": {$in: itemIds}
+    }).toArray((err, result) => {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+
+        res.status(200).send(result);
+    })
+})
+
 // Add item to items list
 // POST /api/items
 router.post('/api/items', (req, res) => {
