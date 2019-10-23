@@ -32,14 +32,14 @@ public class APIActivity extends AppCompatActivity {
         final InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
 
 
-        api_button = findViewById(R.id.api_button);
-        api_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                getAllItems(instockAPIs);
-                addItem(instockAPIs);
-            }
-        });
+//        api_button = findViewById(R.id.api_button);
+//        api_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                getAllItems(instockAPIs);
+//                addItem(instockAPIs);
+//            }
+//        });
     }
 
     private void getAllItems(InstockAPIs instockAPIs) {

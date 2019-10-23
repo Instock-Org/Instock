@@ -29,6 +29,6 @@ public interface InstockAPIs {
     Post request to send shopping list
     */
     @Headers("Content-Type: application/json")
-    @POST("/api/items")
-    Call<String> sendShoppingList(@Body JsonObject body);
+    @POST("/api/stores/feweststores")
+    Call<FewestStoresResponse> sendShoppingList(@Body JsonObject body);
 }

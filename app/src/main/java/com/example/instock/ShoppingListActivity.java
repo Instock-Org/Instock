@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,14 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class ShoppingListActivity extends AppCompatActivity {
+
+    private final String TAG = "ShoppingListActivity";
 
     private TaskDbHelper mHelper;
     private ListView mTaskListView;
@@ -134,6 +142,9 @@ public class ShoppingListActivity extends AppCompatActivity {
     public void sendList() {
         //disableButton();
 
+        Retrofit retrofit = NetworkClient.getRetrofitClient();
+        InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
+
         // Add items to a json array and then create a json object for this.
         JsonArray jsonarray = new JsonArray();
         for (String item : this.taskList) {
@@ -151,14 +162,36 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         double longitude = -123.249411;
         double latitude = 49.261773;
-        shoppingList.addProperty("longitude", longitude);
-        shoppingList.addProperty("latitude", latitude);
+//        shoppingList.addProperty("longitude", longitude);
+//        shoppingList.addProperty("latitude", latitude);
 
         // TODO: Send the shoppinglist Json as a post request to the server.
+        sendShoppingList(instockAPIs, shoppingList);
 
         // Launch Shopping trip activity
         Intent intent = new Intent(ShoppingListActivity.this, ShoppingTripActivity.class);
         startActivity(intent);
+    }
+
+    private void sendShoppingList(InstockAPIs instockAPIs, JsonObject shoppingList) {
+        Call call = instockAPIs.sendShoppingList(shoppingList); // post request
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                Log.d(TAG, String.valueOf(response.code()));
+                if (response.body() != null) {
+                    FewestStoresResponse res = (FewestStoresResponse) response.body();
+                    Log.d(TAG, res.getStores().get(0).getName());
+                }
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                // Error callback
+                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "API request failed");
+            }
+        });
     }
 
     public void deleteTask(View view) {
