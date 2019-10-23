@@ -5,6 +5,7 @@
     <string name="start_title">In Stock</string>
     <string name="start_customer_login">Log In as Customer</string>
     <string name="start_employee_login">Log In as Employee</string>
+    <string name="title_activity_maps">Map</string>
 
     <!-- User View -->
     <string name="user_look_up">Look Up Item</string>
