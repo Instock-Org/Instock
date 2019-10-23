@@ -18,6 +18,7 @@ const COLLECTION_STORES = "Stores";
 const COLLECTION_STOREHAS = "StoreHas";
 const COLLECTION_ITEMS = "Items";
 const COLLECTION_USERS = "Users";
+const COLLECTION_EMPLOYEES = "Employees";
 const COLLECTION_USERSUBSCRIPTIONS = "UserSubscriptions";
 
 module.exports = {
@@ -29,5 +30,6 @@ module.exports = {
     COLLECTION_STOREHAS,
     COLLECTION_ITEMS,
     COLLECTION_USERS,
+    COLLECTION_EMPLOYEES,
     COLLECTION_USERSUBSCRIPTIONS
 };
