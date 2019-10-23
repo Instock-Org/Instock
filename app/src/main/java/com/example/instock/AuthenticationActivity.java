@@ -45,18 +45,18 @@ public class AuthenticationActivity extends AppCompatActivity {
         });
 
         // Google logout
-        signOut = (Button) findViewById(R.id.sign_out_button);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "Successfully signed out of google");
-                    }
-                });
-            }
-        });
+//        signOut = (Button) findViewById(R.id.sign_out_button);
+//        signOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                GoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        Log.d(TAG, "Successfully signed out of google");
+//                    }
+//                });
+//            }
+//        });
     }
 
     @Override
@@ -81,8 +81,8 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     private void onGoogleLoggedIn(GoogleSignInAccount account) {
-        Intent intent = new Intent(this, TestActivity.class);
-        intent.putExtra(TestActivity.GOOGLE_ACCOUNT, account);
+        Intent intent = new Intent(this, UserViewActivity.class);
+        //intent.putExtra(TestActivity.GOOGLE_ACCOUNT, account);
 
         startActivity(intent);
         finish();
