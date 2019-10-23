@@ -39,10 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".APIActivity">
-        <activity android:name=".UserViewActivity" />
-        <activity android:name=".AuthenticationActivity" />
-        <activity android:name=".StartActivity">
-        </activity>
+        <activity android:name=".APIActivity"/>
     </application>
 </manifest>
