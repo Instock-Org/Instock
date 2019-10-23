@@ -46,6 +46,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"/>
         <activity android:name=".APIActivity"/>
+        <activity android:name=".TestActivity"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
