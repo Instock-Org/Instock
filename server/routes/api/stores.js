@@ -58,11 +58,11 @@ router.post('/shoppingtrip', (req, res) => {
     // Calculate long/lat bounds (north, south, west, east)
     // Will assume square instead of radius
     // TODO: Might need to parse to double
-    const north_boundary_lat = longitude + (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const south_boundary_lat = longitude - (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const west_boundary_long = latitude  + (radius_km /  R_EARTH) * (180.0 / Math.PI);
-    const east_boundary_long = latitude  - (radius_km / R_EARTH) * (180.0 / Math.PI);
-    
+    const east_boundary_long = longitude + (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const west_boundary_long = longitude - (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const north_boundary_lat = latitude  + (radius_km /  R_EARTH) * (180.0 / Math.PI);
+    const south_boundary_lat = latitude  - (radius_km / R_EARTH) * (180.0 / Math.PI);
+
     // Get item IDs by name
     db.getDB().collection(constants.COLLECTION_ITEMS).find({
         "name": { $in: shoppingList }
@@ -76,12 +76,12 @@ router.post('/shoppingtrip', (req, res) => {
         var itemIds = items.map(item => item._id);
         db.getDB().collection(collection).find({
             "lat": {
-                $lt: south_boundary_lat,
-                $gt: north_boundary_lat
+                $lt: north_boundary_lat,
+                $gt: south_boundary_lat
             },
             "lng": {
-                $lt: west_boundary_long,
-                $gt: east_boundary_long
+                $lt: east_boundary_long,
+                $gt: west_boundary_long
             }
         }).toArray((storeErr, stores) => {
             if (stores.length == 0) {
