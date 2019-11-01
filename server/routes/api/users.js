@@ -13,7 +13,7 @@ router.get('/api/users/:user_id', (req, res) => {
     db.getDB().collection(usersCollection).find({
         "_id": db.getPrimaryKey(req.params.user_id),
     }).toArray((err, result) => {
-        res.status(200).send(result);
+        res.status(constants.RES_OK).send(result);
     })
 });
 
@@ -26,11 +26,11 @@ router.post('/api/users', (req, res) => {
         "authType": req.body.auth_type
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.status(200).send(result.ops[0]._id);
+        res.status(constants.RES_OK).send(result.ops[0]._id);
     })
 });
 
@@ -47,11 +47,11 @@ router.put('/api/users/:user_id', (req, res) => {
     }}, (err, result) => {
         if (err) {
             console.log(err);
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
 });
 
@@ -62,11 +62,11 @@ router.delete('/api/users/:user_id', (req, res) => {
         "_id": db.getPrimaryKey(req.params.user_id)
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
  
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
  });
 
@@ -77,11 +77,11 @@ router.get('/api/users/subscriptions/:user_id', (req, res) => {
         "userId": db.getPrimaryKey(req.params.user_id)
     }, {projection: {_id: 0, userId: 0}}).toArray((err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.status(200).send(result);
+        res.status(constants.RES_OK).send(result);
     })
 });
 
@@ -94,11 +94,11 @@ router.post('/api/users/subscriptions', (req, res) => {
         "itemId": db.getPrimaryKey(req.body.item_id)
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
 });
 
@@ -111,11 +111,11 @@ router.delete('/api/users/subscriptions/:user_id/:store_id/:item_id', (req, res)
         "itemId": db.getPrimaryKey(req.params.item_id)
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
 });
 

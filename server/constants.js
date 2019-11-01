@@ -22,9 +22,23 @@ const COLLECTION_EMPLOYEES = "Employees";
 const COLLECTION_USERSUBSCRIPTIONS = "UserSubscriptions";
 
 /**
+ * Response Constants
+ */
+const RES_OK = 200;
+const RES_BAD_REQUEST = 400;
+const RES_NOT_FOUND = 404;
+
+/**
  * Other constants
  */
 const R_EARTH = 6378.0;
+const DEFAULT_LATITIDUE = 49.262130;
+const DEFAULT_LONGITUDE = -123.250578;
+const DEFAULT_RADIUS_KM = 5.0;
+const MAX_LATITUDE = 90.0;
+const MIN_LATITUDE = -90.0;
+const MAX_LONGITUDE = 180.0;
+const MIN_LONGITUDE = -180.0;
 
 module.exports = {
     API_KEY: process.env.API_KEY,

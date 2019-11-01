@@ -12,7 +12,7 @@ router.use(express.json());
 router.get('/', (req, res) => {
     db.getDB().collection(employeesCollection).find({}).toArray((err, documents) => {
         if(err){
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return; 
         } else {
             res.json(documents);
@@ -28,7 +28,7 @@ router.get('/:userid', (req, res) => {
         userid : db.getPrimaryKey(userid)
     }).toArray((err, documents) => {
         if(err){
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return; 
         } else {
             res.json(documents);
@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
         "authType": userInput.auth_type
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         } else {
             var userid = result.ops[0]._id;
@@ -64,10 +64,10 @@ router.post('/', (req, res) => {
                 "role": role
             }, (err, result) => {
                 if(err) {
-                    res.status(400).send(err);
+                    res.status(constants.RES_BAD_REQUEST).send(err);
                     return;
                 } else {
-                    res.status(200).send(userid);
+                    res.status(constants.RES_OK).send(userid);
                 }
             });
         }

@@ -7,8 +7,6 @@ const collection = constants.COLLECTION_STORES;
 
 const maps = require('./maps');
 
-// console.log(maps.googleMapsClient);
-
 /**
  * GET requests
  */
@@ -17,7 +15,7 @@ const maps = require('./maps');
 router.get('/', (req, res) => {
     db.getDB().collection(collection).find({}).toArray((err, documents) => {
         if(err){
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return; 
         } else {
             res.json(documents);
@@ -33,7 +31,7 @@ router.get('/:storeID', (req, res) => {
         _id : db.getPrimaryKey(storeID)
     }).toArray((err, documents) => {
         if(err){
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return; 
         } else {
             res.json(documents);
@@ -50,18 +48,18 @@ router.get('/:storeID', (req, res) => {
 // ASSUMES NO AMBIGUITY ON ITEMS: EXACT MATCH ONLY (NOT CASE SENSITIVE)
 router.post('/feweststores', (req, res) => {
     const shoppingList = req.body.shoppingList || []; 
-    const latitude = req.body.location ? req.body.location.latitude || 49.262130 : 49.262130;
-    const longitude = req.body.location ? req.body.location.longitude || -123.250578 : -123.250578;
-    const radiusKm = req.body.radius || 5.0;
+    const latitude = req.body.location ? req.body.location.latitude : constants.DEFAULT_LATITUDE;
+    const longitude = req.body.location ? req.body.location.longitude : constants.DEFAULT_LONGITUDE;
+    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS;
 
     // Input checking
     if (shoppingList.length == 0) {
-        res.sendStatus(404);
+        res.sendStatus(constants.RES_NOT_FOUND);
         return;
     }
 
-    if (latitude > 90.0 || latitude < -90.0 ||  longitude > 180.0 || longitude < -180.0) {
-        res.sendStatus(400);
+    if (latitude > constants.MAX_LATITUDE || latitude < constants.MIN_LATITUDE ||  longitude > constants.MAX_LONGITUDE || longitude < constants.MIN_LONGITUDE) {
+        res.sendStatus(constants.RES_BAD_REQUEST);
         return;
     }
 
@@ -85,7 +83,7 @@ router.post('/feweststores', (req, res) => {
     }).toArray((itemErr, items) => {
         // Get nearby stores
         if (items.length == 0) {
-            res.sendStatus(404);
+            res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
         var itemIds = items.map(item => item._id);
@@ -100,7 +98,7 @@ router.post('/feweststores', (req, res) => {
             }
         }).toArray((storeErr, stores) => {
             if (stores.length == 0) {
-                res.sendStatus(404);
+                res.sendStatus(constants.RES_NOT_FOUND);
                 return;
             }
 
@@ -185,7 +183,7 @@ router.post('/feweststores', (req, res) => {
 
                 // Send response to client
                 const response = { stores: storePickupList };
-                res.status(200).send(response);
+                res.status(constants.RES_OK).send(response);
             });
         });
     });
@@ -195,19 +193,16 @@ router.post('/feweststores', (req, res) => {
 
 // Endpoint for getting nearest stores
 router.post('/nearbyStores', (req, res) => {
-    // const userInput = req.body;
-
-    const latitude = req.body.location.latitude || 49.262130;
-    const longitude = req.body.location.longitude || -123.250578;
-    const radius_km = req.body.radius || 5.0;
-    const R_EARTH = 6378.0;
+    const latitude = req.body.location.latitude || constants.DEFAULT_LATITUDE;
+    const longitude = req.body.location.longitude || constants.DEFAULT_LONGITUDE;
+    const radius_km = req.body.radius || constants.DEFAULT_RADIUS;
 
     // Calculate long/lat bounds (north, south, west, east)
     // Will assume square instead of radius
-    const east_boundary_long = longitude + (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const west_boundary_long = longitude - (radius_km / R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const north_boundary_lat = latitude  + (radius_km /  R_EARTH) * (180.0 / Math.PI);
-    const south_boundary_lat = latitude  - (radius_km / R_EARTH) * (180.0 / Math.PI);
+    const east_boundary_long = longitude + (radius_km / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const west_boundary_long = longitude - (radius_km / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const north_boundary_lat = latitude  + (radius_km / constants.R_EARTH) * (180.0 / Math.PI);
+    const south_boundary_lat = latitude  - (radius_km / constants.R_EARTH) * (180.0 / Math.PI);
 
     db.getDB().collection(collection).find({
         "lat": {
@@ -221,7 +216,7 @@ router.post('/nearbyStores', (req, res) => {
     }).toArray((err, result) => {
         if (result.length == 0) {
             console.log(result);
-            res.sendStatus(404);
+            res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
 
@@ -239,7 +234,7 @@ router.post('/nearbyStores', (req, res) => {
 
             return store;
         })
-        res.status(200).send(stores);
+        res.status(constants.RES_OK).send(stores);
     });
 })
 
@@ -265,15 +260,15 @@ router.post('/', (req, res) => {
                 "place_id": results[0].place_id
             }, (err, result) => {
                 if(err) {
-                    res.status(400).send(err);
+                    res.status(constants.RES_BAD_REQUEST).send(err);
                     return; 
                 } else {
-                    res.status(200).send(result.ops[0]._id);
+                    res.status(constants.RES_OK).send(result.ops[0]._id);
                 }
             });
         })
         .catch((err) => {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
         });
 });
 
