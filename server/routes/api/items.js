@@ -15,7 +15,7 @@ router.get('/api/items/store/:storeId', (req, res) => {
     db.getDB().collection(storeHasCollection).find({
         "storeId": db.getPrimaryKey(req.params.storeId)
     }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
-        res.status(200).send(result);
+        res.status(constants.RES_OK).send(result);
     })
 });
 
@@ -29,17 +29,16 @@ router.post('/api/items/store/:storeId', (req, res) => {
         "price": req.body.price || 0
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
 });
 
 // Updates a store's availability on an item
 // PUT /api/items/store/{storeId}/{itemId}
-// TODO: Manually test
 router.put('/api/items/store/:storeId/:itemId', (req, res) => {
     db.getDB().collection(storeHasCollection).updateOne({
         "storeId": db.getPrimaryKey(req.params.storeId),
@@ -49,11 +48,11 @@ router.put('/api/items/store/:storeId/:itemId', (req, res) => {
         "price": req.body.price || 0
     }}, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
 });
 
@@ -65,29 +64,21 @@ router.delete('/api/items/store/:storeId', (req, res) => {
        "itemId": {$in: req.body.itemIds}
    }, (err, result) => {
        if (err) {
-           res.status(400).send(err);
+           res.status(constants.RES_BAD_REQUEST).send(err);
            return;
        }
 
-       res.sendStatus(200);
+       res.sendStatus(constants.RES_OK);
    })
 });
 
-// Gets items by name or brand
-// GET /api/items?search_term="string"
-// Returns if exact match only, case insensitive
+// Gets items by name or brand. Returns results only if exact match, case insensitive
+// GET /api/items?search_term=example+string
 router.get('/api/items', (req, res) => {
-    // Commented code would return results as long as it matches one word
-    // let search_term_keywords = req.body.search_term.split(" ");
-    // search_term_keywords.forEach( (search_term, key) => {
-    //     search_term_keywords[key] = new RegExp('.*' + search_term + '.*', 'i');
-    // });
-    // console.log(search_term_keywords);
     db.getDB().collection(itemsCollection).find({
         "name": new RegExp('.*' + req.query.search_term + '.*', 'i')
-        //$or: [{ name: { $in: search_term_keywords }}, { brand: { $in: search_term_keywords }}]
     }).toArray((err, result) => {
-        res.status(200).send(result);
+        res.status(constants.RES_OK).send(result);
     })
 });
 
@@ -103,11 +94,11 @@ router.post('/api/items/multiple', (req, res) => {
         "_id": {$in: itemIds}
     }).toArray((err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.status(200).send(result);
+        res.status(constants.RES_OK).send(result);
     })
 })
 
@@ -116,40 +107,37 @@ router.post('/api/items/multiple', (req, res) => {
 router.post('/api/items', (req, res) => {
     db.getDB().collection(itemsCollection).insertOne({
         "name": req.body.name,
-        // "brand": req.body.brand,
         "description": req.body.description,
         "barcode": req.body.barcode,
         "units": req.body.units
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.status(200).send(result.ops[0]._id);
+        res.status(constants.RES_OK).send(result.ops[0]._id);
     })
 });
 
 // Update item
 // PUT /api/items/{itemId}
-// TODO: Manually test
 router.put('/api/items/:itemId', (req, res) => {
     db.getDB().collection(itemsCollection).updateOne({
         "_id": db.getPrimaryKey(req.params.itemId)
     },
     {$set: {
         "name": req.body.name,
-        // "brand": req.body.brand,
         "description": req.body.description,
         "barcode": req.body.barcode,
         "units": req.body.units
     }}, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
 
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
 })
 
@@ -165,11 +153,11 @@ router.delete('/api/items', (req, res) => {
         "_id": {$in: itemIds}
     }, (err, result) => {
         if (err) {
-            res.status(400).send(err);
+            res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
  
-        res.sendStatus(200);
+        res.sendStatus(constants.RES_OK);
     })
  });
 
