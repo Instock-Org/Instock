@@ -1,3 +1,11 @@
+# Don't track content of these folders
+node_modules/
+
+# Don't track these files
+package.json
+package-lock.json
+.env
+
 *.iml
 .gradle
 /local.properties
