@@ -1,6 +1,6 @@
-const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const constants = require('./constants');
+const MongoClient = require("mongodb").MongoClient;
+const ObjectID = require("mongodb").ObjectID;
+const constants = require("./constants");
 
 const dbname = constants.DB_NAME;
 const url = constants.MONGODB_URL;

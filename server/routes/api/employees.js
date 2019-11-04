@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const constants = require('../../constants');
+const constants = require("../../constants");
 
-const db = require('../../db');
+const db = require("../../db");
 const employeesCollection = constants.COLLECTION_EMPLOYEES;
 const usersCollection = constants.COLLECTION_USERS;
 
 router.use(express.json());
 
 // Get all emplyees and their details. 
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
     db.getDB().collection(employeesCollection).find({}).toArray((err, documents) => {
         if(err){
             res.status(constants.RES_BAD_REQUEST).send(err);
@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 });
 
 // Get details for a specific employee
-router.get('/:userid', (req, res) => {
+router.get("/:userid", (req, res) => {
     const userid = req.params.userid;
 
     db.getDB().collection(employeesCollection).find({
@@ -42,7 +42,7 @@ router.get('/:userid', (req, res) => {
  */
 
 // Create a employee object
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
     const userInput = req.body;
 
     const storeid = userInput.storeid;
@@ -80,7 +80,7 @@ router.post('/', (req, res) => {
  */
 
 // Update all details for a specific employee
-router.put('/:userid', (req, res) => {
+router.put("/:userid", (req, res) => {
     const userid = req.params.userid;
     const userInput = req.body;
 
@@ -105,7 +105,7 @@ router.put('/:userid', (req, res) => {
  * DELETE requests
  */
 // Delete an employee with store id "userid"
-router.delete('/:storeID', (req, res) => {
+router.delete("/:storeID", (req, res) => {
     const storeID = req.params.storeID;
 
     db.getDB().collection(collection).findOneAndDelete(

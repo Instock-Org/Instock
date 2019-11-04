@@ -1,20 +1,11 @@
-const constants = require('../../constants');
+const constants = require("../../constants");
 const baseURL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
 const key = "&key=" + constants.API_KEY;
-// const https = require('https');
 
-const googleMapsClient = require('@google/maps').createClient({
+const googleMapsClient = require("@google/maps").createClient({
     key: constants.API_KEY,
     Promise: Promise
 });
-
-// const geocodeWithURL = (address) => {
-//     var addressString = address.split(' ').join('+');
-//     var fetchURL = baseURL + addressString + key;
-//     console.log(https.get(fetchURL));
-// }
-
-// geocodeWithURL("6183 125 St. Surrey BC");
 
 const geocode = (googleMapsClient, address) => {
     // this.address = address;
