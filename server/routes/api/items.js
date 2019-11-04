@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const constants = require('../../constants');
+const constants = require("../../constants");
 
-const db = require('../../db');
+const db = require("../../db");
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const itemsCollection = constants.COLLECTION_ITEMS;
 
@@ -11,7 +11,7 @@ router.use(express.json());
 
 // Gets all the items from a store
 // GET /api/items/store/{storeId}
-router.get('/api/items/store/:storeId', (req, res) => {
+router.get("/api/items/store/:storeId", (req, res) => {
     db.getDB().collection(storeHasCollection).find({
         "storeId": db.getPrimaryKey(req.params.storeId)
     }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
@@ -21,7 +21,7 @@ router.get('/api/items/store/:storeId', (req, res) => {
 
 // Adds an item to a store
 // POST /api/items/store/{storeId}
-router.post('/api/items/store/:storeId', (req, res) => {
+router.post("/api/items/store/:storeId", (req, res) => {
     db.getDB().collection(storeHasCollection).insertOne({
         "storeId": db.getPrimaryKey(req.params.storeId),
         "itemId": db.getPrimaryKey(req.body.itemId),
@@ -39,7 +39,7 @@ router.post('/api/items/store/:storeId', (req, res) => {
 
 // Updates a store's availability on an item
 // PUT /api/items/store/{storeId}/{itemId}
-router.put('/api/items/store/:storeId/:itemId', (req, res) => {
+router.put("/api/items/store/:storeId/:itemId", (req, res) => {
     db.getDB().collection(storeHasCollection).updateOne({
         "storeId": db.getPrimaryKey(req.params.storeId),
         "itemId": db.getPrimaryKey(req.params.itemId),
@@ -58,7 +58,7 @@ router.put('/api/items/store/:storeId/:itemId', (req, res) => {
 
 // Removes items from a store
 // DELETE /api/items/store/{storeId}
-router.delete('/api/items/store/:storeId', (req, res) => {
+router.delete("/api/items/store/:storeId", (req, res) => {
    db.getDB().collection(storeHasCollection).deleteMany({
        "storeId": req.params.storeId,
        "itemId": {$in: req.body.itemIds}
@@ -74,9 +74,9 @@ router.delete('/api/items/store/:storeId', (req, res) => {
 
 // Gets items by name or brand. Returns results only if exact match, case insensitive
 // GET /api/items?search_term=example+string
-router.get('/api/items', (req, res) => {
+router.get("/api/items", (req, res) => {
     db.getDB().collection(itemsCollection).find({
-        "name": new RegExp('.*' + req.query.search_term + '.*', 'i')
+        "name": new RegExp(".*" + req.query.search_term + ".*", "i")
     }).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
     })
@@ -84,7 +84,7 @@ router.get('/api/items', (req, res) => {
 
 // Get items by item IDs
 // POST /api/items/multiple
-router.post('/api/items/multiple', (req, res) => {
+router.post("/api/items/multiple", (req, res) => {
     var itemIds = [];
     req.body.itemIds.forEach((value, key) => {
         itemIds[key] = db.getPrimaryKey(value);
@@ -104,7 +104,7 @@ router.post('/api/items/multiple', (req, res) => {
 
 // Add item to items list
 // POST /api/items
-router.post('/api/items', (req, res) => {
+router.post("/api/items", (req, res) => {
     db.getDB().collection(itemsCollection).insertOne({
         "name": req.body.name,
         "description": req.body.description,
@@ -122,7 +122,7 @@ router.post('/api/items', (req, res) => {
 
 // Update item
 // PUT /api/items/{itemId}
-router.put('/api/items/:itemId', (req, res) => {
+router.put("/api/items/:itemId", (req, res) => {
     db.getDB().collection(itemsCollection).updateOne({
         "_id": db.getPrimaryKey(req.params.itemId)
     },
@@ -143,7 +143,7 @@ router.put('/api/items/:itemId', (req, res) => {
 
 // Deletes items
 // DELETE /api/items
-router.delete('/api/items', (req, res) => {
+router.delete("/api/items", (req, res) => {
     let itemIds = [];
     req.body.itemIds.forEach( (value, key) => {
         itemIds[key] = db.getPrimaryKey(value);

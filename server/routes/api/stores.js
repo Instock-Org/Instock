@@ -1,18 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const constants = require('../../constants');
+const constants = require("../../constants");
 
-const db = require('../../db');
+const db = require("../../db");
 const collection = constants.COLLECTION_STORES;
 
-const maps = require('./maps');
+const maps = require("./maps");
 
 /**
  * GET requests
  */
 
 // Get all stores and their details. 
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
     db.getDB().collection(collection).find({}).toArray((err, documents) => {
         if(err){
             res.status(constants.RES_BAD_REQUEST).send(err);
@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 });
 
 // Get details for a specific store
-router.get('/:storeID', (req, res) => {
+router.get("/:storeID", (req, res) => {
     const storeID = req.params.storeID;
 
     db.getDB().collection(collection).find({
@@ -46,7 +46,7 @@ router.get('/:storeID', (req, res) => {
 
 // Given a shopping list and user's location, find all stores nearby that have the items on the shopping list in stock
 // ASSUMES NO AMBIGUITY ON ITEMS: EXACT MATCH ONLY (NOT CASE SENSITIVE)
-router.post('/feweststores', (req, res) => {
+router.post("/feweststores", (req, res) => {
     const shoppingList = req.body.shoppingList || []; 
     const latitude = req.body.location ? req.body.location.latitude : constants.DEFAULT_LATITUDE;
     const longitude = req.body.location ? req.body.location.longitude : constants.DEFAULT_LONGITUDE;
@@ -74,7 +74,7 @@ router.post('/feweststores', (req, res) => {
 
     // Convert each item on shopping list to regex to make it case insensitive
     shoppingList.forEach((searchTerm, key) => {
-        shoppingList[key] = new RegExp(searchTerm, 'i');
+        shoppingList[key] = new RegExp(searchTerm, "i");
     });
 
     // Get item IDs by name
@@ -192,7 +192,7 @@ router.post('/feweststores', (req, res) => {
 
 
 // Endpoint for getting nearest stores
-router.post('/nearbyStores', (req, res) => {
+router.post("/nearbyStores", (req, res) => {
     const latitude = req.body.location.latitude || constants.DEFAULT_LATITUDE;
     const longitude = req.body.location.longitude || constants.DEFAULT_LONGITUDE;
     const radius_km = req.body.radius || constants.DEFAULT_RADIUS;
@@ -239,7 +239,7 @@ router.post('/nearbyStores', (req, res) => {
 })
 
 // Create a store object
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
     const userInput = req.body;
 
     var addressString = userInput.address 
@@ -278,7 +278,7 @@ router.post('/', (req, res) => {
  */
 
 // Update all details for a specific store
-router.put('/:storeID', (req, res) => {
+router.put("/:storeID", (req, res) => {
     const storeID = req.params.storeID;
     const userInput = req.body;
 
@@ -305,7 +305,7 @@ router.put('/:storeID', (req, res) => {
  * DELETE requests
  */
 // Delete a store with store id "storeID"
-router.delete('/:storeID', (req, res) => {
+router.delete("/:storeID", (req, res) => {
     const storeID = req.params.storeID;
 
     db.getDB().collection(collection).findOneAndDelete(

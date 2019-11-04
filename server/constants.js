@@ -1,7 +1,7 @@
 /**
  * This file holds all the constants for ther server.
  */
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
 /**
