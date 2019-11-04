@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StartActivity">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/user_look_up_card_view"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="@dimen/home_side_margins"
+        android:layout_marginLeft="@dimen/home_side_margins"
+        card_view:cardBackgroundColor="@color/seaGreen"
+        card_view:cardCornerRadius="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/user_list_card_view"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/room_type_one_text"
+            android:text="@string/user_look_up"
+            android:textStyle="bold"
+            android:textSize="@dimen/room_type_text_side"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/user_list_card_view"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="@dimen/home_side_margins"
+        android:layout_marginLeft="@dimen/home_side_margins"
+        card_view:cardBackgroundColor="@color/seaGreen"
+        card_view:cardCornerRadius="4dp"
+        app:layout_constraintTop_toBottomOf="@id/user_look_up_card_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/room_type_two_text"
+            android:text="@string/user_list"
+            android:textStyle="bold"
+            android:textSize="@dimen/room_type_text_side"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

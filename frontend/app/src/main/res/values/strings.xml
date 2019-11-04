@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">InStock</string>
+
+    <!--Start-->
+    <string name="start_title">In Stock</string>
+    <string name="start_customer_login">Log In as Customer</string>
+    <string name="start_employee_login">Log In as Employee</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- User View -->
+    <string name="user_look_up">Look Up Item</string>
+    <string name="user_list">Shopping Wizard</string>
+    <string name="user_title">User Options</string>
+
+    <!-- Search -->
+    <string name="search_find">Find Item</string>
+    <string name="search_hint">Search for Products</string>
+
+    <!-- Shopping List -->
+    <string name="list_title">Shopping Wizard</string>
+    <string name="list_enter">Enter Shopping List</string>
+    <string name="list_send_button">Send List</string>
+
+    <!-- Product -->
+    <string name="product_name">Product Name</string>
+
+    <!-- Maps -->
+    <string name="maps_title">Product Locations</string>
+
+    <!-- Shopping Trip -->
+    <string name="trip_map_button">Maps View</string>
+
+</resources>
