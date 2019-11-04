@@ -53,19 +53,6 @@ public class ShoppingTripActivity extends AppCompatActivity {
             }
         });
 
-
-//        if (mAdapter == null) {
-//            mAdapter = new ArrayAdapter<>(this,
-//                    R.layout.item_trip,
-//                    R.id.trip_item_title,
-//                    stores);
-//            storesListView.setAdapter(mAdapter);
-//        } else {
-//            mAdapter.clear();
-//            mAdapter.addAll(stores);
-//            mAdapter.notifyDataSetChanged();
-//        }
-
         expandableListView = (ExpandableListView) findViewById(R.id.trip_stores_list);
         expandableListDetail = ExpandableListData.getData(stores);
         expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
