@@ -161,8 +161,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 //        double longitude = location.getLongitude();
 //        double latitude = location.getLatitude();
 
-        double longitude = -123.249411;
-        double latitude = 49.261773;
+//        double longitude = -123.249411;
+//        double latitude = 49.261773;
 //        shoppingList.addProperty("longitude", longitude);
 //        shoppingList.addProperty("latitude", latitude);
 
@@ -170,6 +170,12 @@ public class ShoppingListActivity extends AppCompatActivity {
         sendShoppingList(instockAPIs, shoppingList);
     }
 
+    /**
+     * Send the user's shopping list and get back fewest and nearest stores that contain their list items
+     *
+     * @param instockAPIs
+     * @param shoppingList
+     */
     private void sendShoppingList(InstockAPIs instockAPIs, JsonObject shoppingList) {
         Call call = instockAPIs.sendShoppingList(shoppingList); // post request
 

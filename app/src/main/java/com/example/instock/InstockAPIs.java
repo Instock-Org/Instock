@@ -19,14 +19,14 @@ public interface InstockAPIs {
     Call<List<ItemResponse>> getItem(@Query("search_term") String term);
 
     /*
-    Post request to add a new item to the catalogue
+    Post request to add a new item to the database
     */
     @Headers("Content-Type: application/json")
     @POST("/api/items")
     Call<String> addItem(@Body JsonObject body);
 
     /*
-    Post request to send shopping list
+    Post request to send shopping list to the backend
     */
     @Headers("Content-Type: application/json")
     @POST("/api/stores/feweststores")

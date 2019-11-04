@@ -36,15 +36,20 @@ public class APIActivity extends AppCompatActivity {
 //        api_button.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-////                getAllItems(instockAPIs);
-//                addItem(instockAPIs);
+
 //            }
 //        });
     }
 
-    private void getAllItems(InstockAPIs instockAPIs) {
+    /**
+     * Returns all items matching the search term
+     *
+     * @param instockAPIs
+     * @param term
+     */
+    private void getAllItems(InstockAPIs instockAPIs, String term) {
         // Invoke the method corresponding to the HTTP request which will return a Call object. This Call object will used to send the actual network request with the specified parameters
-        Call call = instockAPIs.getItem("banana"); // get request
+        Call call = instockAPIs.getItem(term); // get request
 
         // This is the line which actually sends a network request. Calling enqueue() executes a call asynchronously. It has two callback listeners which will invoked on the main thread
         call.enqueue(new Callback() {
@@ -67,13 +72,22 @@ public class APIActivity extends AppCompatActivity {
         });
     }
 
-    private void addItem(InstockAPIs instockAPIs) {
+    /**
+     * Adds an item with the specified details to the Instock item database
+     *
+     * @param instockAPIs
+     * @param name
+     * @param description
+     * @param barcode
+     * @param units
+     */
+    private void addItem(InstockAPIs instockAPIs, String name, String description, String barcode, String units) {
         // JSON body
         JsonObject body = new JsonObject();
-        body.addProperty("name", "cookies");
-        body.addProperty("description", "its a cookie");
-        body.addProperty("barcode", "11114");
-        body.addProperty("units", "1 unit");
+        body.addProperty("name", name);
+        body.addProperty("description", description);
+        body.addProperty("barcode", barcode);
+        body.addProperty("units", units);
 
 
         Call call = instockAPIs.addItem(body); // post request
