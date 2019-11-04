@@ -66,8 +66,6 @@ public class ShoppingTripActivity extends AppCompatActivity {
 //            mAdapter.notifyDataSetChanged();
 //        }
 
-
-
         expandableListView = (ExpandableListView) findViewById(R.id.trip_stores_list);
         expandableListDetail = ExpandableListData.getData(stores);
         expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
@@ -77,9 +75,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-//                Toast.makeText(getApplicationContext(),
-//                        expandableListTitle.get(groupPosition) + " List Expanded.",
-//                        Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -87,9 +83,6 @@ public class ShoppingTripActivity extends AppCompatActivity {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-//                Toast.makeText(getApplicationContext(),
-//                        expandableListTitle.get(groupPosition) + " List Collapsed.",
-//                        Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -99,14 +92,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-//                Toast.makeText(
-//                        getApplicationContext(),
-//                        expandableListTitle.get(groupPosition)
-//                                + " -> "
-//                                + expandableListDetail.get(
-//                                expandableListTitle.get(groupPosition)).get(
-//                                childPosition), Toast.LENGTH_SHORT
-//                ).show();
+
                 return false;
             }
         });

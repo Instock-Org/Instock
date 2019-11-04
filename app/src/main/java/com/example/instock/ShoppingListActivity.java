@@ -155,7 +155,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         shoppingList.add("shoppingList", jsonarray);
 
         // Include coordinates of users current location.
-        // Uncomment and fix later when using real location.
+        // TODO: Uncomment and fix this later when using other locations.
 //        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 //        double longitude = location.getLongitude();
