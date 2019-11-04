@@ -86,7 +86,7 @@ router.post("/feweststores", (req, res) => {
             res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
-        var itemIds = items.map(item => item._id);
+        var itemIds = items.map((item) => item._id);
         db.getDB().collection(collection).find({
             "lat": {
                 $lt: northBoundaryLat,
@@ -102,10 +102,10 @@ router.post("/feweststores", (req, res) => {
                 return;
             }
 
-            var storeIds = stores.map(store => store._id);
+            var storeIds = stores.map((store) => store._id);
             var storeItems = [];
             var prunedStoreItems = [];
-            stores.forEach(store => {
+            stores.forEach((store) => {
                 storePickupList.push(store);
                 storeItems[store._id] = [];
             })
@@ -121,7 +121,7 @@ router.post("/feweststores", (req, res) => {
                 });
 
                 // Sort store with most items to fewest
-                var storeItemsSorted = Object.keys(storeItems).map(key => {
+                var storeItemsSorted = Object.keys(storeItems).map((key) => {
                     return [key, storeItems[key]];
                 }).sort((a, b) => {
                     return b[1].length - a[1].length;
@@ -130,11 +130,11 @@ router.post("/feweststores", (req, res) => {
                 // Remove redundant items. Apply greedy algorithm so that we check the stores that carry the most items first
                 var checkedItems = [];
 
-                storeItemsSorted.forEach(storeEntry => {
+                storeItemsSorted.forEach((storeEntry) => {
                     const itemStore = storeEntry[0];
                     const itemList = storeEntry[1];
 
-                    itemList.forEach(item => {
+                    itemList.forEach((item) => {
                         if (!checkedItems.includes(item.toString())) {
                             checkedItems.push(item.toString());
                             if (prunedStoreItems[itemStore] === undefined) {
@@ -148,11 +148,11 @@ router.post("/feweststores", (req, res) => {
                 // Add item object to the stores collection objects
                 for (itemStore in prunedStoreItems) {
                     const itemList = prunedStoreItems[itemStore];
-                    itemList.forEach(storeItem => {
-                        var itemToAdd = items.filter(item => item._id.toString() == storeItem.toString())[0];
-                        var storeHasItemFiltered = storeHasItem.filter(storeHas => storeHas.storeId.toString() == itemStore.toString() && storeHas.itemId.toString() == itemToAdd._id.toString())[0];
+                    itemList.forEach((storeItem) => {
+                        var itemToAdd = items.filter((item) => item._id.toString() == storeItem.toString())[0];
+                        var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() == itemStore.toString() && storeHas.itemId.toString() == itemToAdd._id.toString())[0];
 
-                        var storeToUpdate = storePickupList.filter(store => store._id.toString() == itemStore.toString())[0];
+                        var storeToUpdate = storePickupList.filter((store) => store._id.toString() == itemStore.toString())[0];
                         if (storeToUpdate.items === undefined) {
                             storeToUpdate.items = [];
                         }
@@ -177,7 +177,7 @@ router.post("/feweststores", (req, res) => {
                 })
 
                 // Delete the stores identified above
-                positionsToDelete.forEach(key =>{
+                positionsToDelete.forEach((key) =>{
                     storePickupList.splice(key, 1);
                 })
 
@@ -220,7 +220,7 @@ router.post("/nearbyStores", (req, res) => {
             return;
         }
 
-        var stores = result.map(obj => {
+        var stores = result.map((obj) => {
             var store = {
                 storeName: obj.name,
                 address: obj.address,
