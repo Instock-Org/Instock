@@ -146,7 +146,7 @@ router.post("/feweststores", (req, res) => {
                 });
 
                 // Add item object to the stores collection objects
-                for (itemStore in prunedStoreItems) {
+                for (const itemStore in prunedStoreItems) {
                     const itemList = prunedStoreItems[itemStore];
                     itemList.forEach((storeItem) => {
                         var itemToAdd = items.filter((item) => item._id.toString() === storeItem.toString())[0];

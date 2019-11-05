@@ -108,7 +108,7 @@ router.put("/:userid", (req, res) => {
 router.delete("/:storeID", (req, res) => {
     const storeID = req.params.storeID;
 
-    db.getDB().collection(collection).findOneAndDelete(
+    db.getDB().collection(employeesCollection).findOneAndDelete(
         {_id : db.getPrimaryKey(storeID)}, 
     (err, result) => {
         if(err)

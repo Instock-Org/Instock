@@ -8,8 +8,5 @@ const googleMapsClient = require("@google/maps").createClient({
 });
 
 module.exports = {
-    geocode,
-    reverseGeocodeLatLng,
-    reverseGeocodePlaceId,
     googleMapsClient
 };
