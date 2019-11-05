@@ -36,8 +36,6 @@ public class ShoppingTripActivity extends AppCompatActivity {
         List<Store> stores = (List<Store>) args.getSerializable("STORES");
 //        Log.d("ShoppingTripActivity", stores.get(0).getName());
 
-        ListView storesListView = findViewById(R.id.trip_stores_list);
-
         Button mapsViewButton = findViewById(R.id.trip_maps_button);
         mapsViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
