@@ -52,7 +52,7 @@ router.get("/:storeID", (req, res) => {
 router.post("/feweststores", (req, res) => {
     
     
-    const shoppingList = req.body.shoppingList || []; 
+    var shoppingList = req.body.shoppingList || []; 
     const latitude = req.body.location ? req.body.location.latitude : constants.DEFAULT_LATITUDE;
     const longitude = req.body.location ? req.body.location.longitude : constants.DEFAULT_LONGITUDE;
     const radiusKm = req.body.radius || constants.DEFAULT_RADIUS_KM;
@@ -68,7 +68,9 @@ router.post("/feweststores", (req, res) => {
         return;
     }
 
-    shoppingList.sort();
+    // Mutate the array to help out with caching so that shopping list won't be redundant
+    shoppingList.sort()
+    shoppingList = shoppingList.map(keyword => keyword.toLowerCase());
     
     // This combination of inputs will be used for Redis to identify if it has been searched before
     const redisKey = JSON.stringify({
