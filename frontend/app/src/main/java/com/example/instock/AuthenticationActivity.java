@@ -20,8 +20,6 @@ public class AuthenticationActivity extends AppCompatActivity {
     private final String TAG = "AuthenticationActivity";
 
     private GoogleSignInClient GoogleSignInClient;
-    private SignInButton googleSignInButton;
-    private Button signOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         GoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInButton = findViewById(R.id.sign_in_button);
+        SignInButton googleSignInButton = findViewById(R.id.sign_in_button);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

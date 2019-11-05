@@ -8,16 +8,13 @@ import android.view.View;
 
 public class UserViewActivity extends AppCompatActivity {
 
-    private CardView searchItemCardView;
-    private CardView listEntryCardView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.transition.slide_from_right, R.transition.slide_to_left);
         setContentView(R.layout.activity_user_view);
 
-        searchItemCardView = findViewById(R.id.user_look_up_card_view);
+        CardView searchItemCardView = findViewById(R.id.user_look_up_card_view);
         searchItemCardView.setClickable(false); // Remove once implemented
 //        searchItemCardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -27,7 +24,7 @@ public class UserViewActivity extends AppCompatActivity {
 //            }
 //        });
 
-        listEntryCardView = findViewById(R.id.user_list_card_view);
+        CardView listEntryCardView = findViewById(R.id.user_list_card_view);
         listEntryCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

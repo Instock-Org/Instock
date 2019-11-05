@@ -15,8 +15,6 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<Store> stores = (List<Store>) args.getSerializable("STORES");
 //        Log.d("MapActivity", stores.get(0).getName());
 
-        mMap = googleMap;
+        GoogleMap mMap = googleMap;
 
         for (Store store : stores) {
             // Add a marker and move the camera
