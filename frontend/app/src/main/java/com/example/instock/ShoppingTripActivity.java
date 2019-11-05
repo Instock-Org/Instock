@@ -62,7 +62,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-
+                Log.d("ShoppingTripActivity", "reached onGroupExpand");
             }
         });
 
@@ -70,7 +70,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-
+                Log.d("ShoppingTripActivity", "reached onGroupCollapse");
             }
         });
 

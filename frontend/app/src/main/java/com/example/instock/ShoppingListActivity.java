@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.instock.db.TaskContract;
+import com.example.instock.db.TaskContractUtil;
 import com.example.instock.db.TaskDbHelper;
 
 import com.google.gson.JsonArray;
@@ -85,8 +85,8 @@ public class ShoppingListActivity extends AppCompatActivity {
                                 String task = String.valueOf(taskEditText.getText());
                                 SQLiteDatabase db = mHelper.getWritableDatabase();
                                 ContentValues values = new ContentValues();
-                                values.put(TaskContract.TaskEntry.COL_TASK_TITLE, task);
-                                db.insertWithOnConflict(TaskContract.TaskEntry.TABLE,
+                                values.put(TaskContractUtil.TaskEntry.COL_TASK_TITLE, task);
+                                db.insertWithOnConflict(TaskContractUtil.TaskEntry.TABLE,
                                         null,
                                         values,
                                         SQLiteDatabase.CONFLICT_REPLACE);
@@ -108,11 +108,11 @@ public class ShoppingListActivity extends AppCompatActivity {
         taskList = new ArrayList<>();
 
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
-                new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
+        Cursor cursor = db.query(TaskContractUtil.TaskEntry.TABLE,
+                new String[]{TaskContractUtil.TaskEntry._ID, TaskContractUtil.TaskEntry.COL_TASK_TITLE},
                 null, null, null, null, null);
         while (cursor.moveToNext()) {
-            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
+            int idx = cursor.getColumnIndex(TaskContractUtil.TaskEntry.COL_TASK_TITLE);
             taskList.add(cursor.getString(idx));
         }
 
@@ -210,8 +210,8 @@ public class ShoppingListActivity extends AppCompatActivity {
         TextView taskTextView = (TextView) parent.findViewById(R.id.item_title);
         String task = String.valueOf(taskTextView.getText());
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        db.delete(TaskContract.TaskEntry.TABLE,
-                TaskContract.TaskEntry.COL_TASK_TITLE + " = ?",
+        db.delete(TaskContractUtil.TaskEntry.TABLE,
+                TaskContractUtil.TaskEntry.COL_TASK_TITLE + " = ?",
                 new String[]{task});
         db.close();
         updateUI();

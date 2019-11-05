@@ -74,13 +74,16 @@ public class AuthenticationActivity extends AppCompatActivity {
                         Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
                     }
                     break;
+
+                default:
+                    Log.d(TAG, "Didn't receive correct code");
             }
         }
     }
 
     private void onGoogleLoggedIn(GoogleSignInAccount account) {
         Intent intent = new Intent(this, UserViewActivity.class);
-        //intent.putExtra(TestActivity.GOOGLE_ACCOUNT, account);
+        Log.d(TAG, account.getEmail());
 
         startActivity(intent);
         finish();

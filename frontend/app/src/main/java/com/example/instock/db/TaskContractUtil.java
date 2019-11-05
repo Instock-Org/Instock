@@ -2,7 +2,7 @@ package com.example.instock.db;
 
 import android.provider.BaseColumns;
 
-public class TaskContract {
+public class TaskContractUtil {
     public static final String DB_NAME = "com.aziflaj.todolist.db";
     public static final int DB_VERSION = 1;
 
