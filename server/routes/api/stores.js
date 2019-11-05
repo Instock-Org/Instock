@@ -215,7 +215,6 @@ router.post("/nearbyStores", (req, res) => {
         }
     }).toArray((err, result) => {
         if (result.length === 0) {
-            console.log(result);
             res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
@@ -312,7 +311,7 @@ router.delete("/:storeID", (req, res) => {
         {_id : db.getPrimaryKey(storeID)}, 
     (err, result) => {
         if(err)
-            console.log(err);
+            res.sendStatus(constants.RES_INTERNAL_ERR);
         else {
             res.json(result);
         }
