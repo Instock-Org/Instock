@@ -15,12 +15,14 @@ const state = {
 };
 
 const connect = (cb) => {
-    if(state.db)
+    if(state.db) {
         cb();
+    }
     else  {
         MongoClient.connect(url, mongoOptions, (err, client)=>{
-            if(err)
+            if(err) {
                 cb(err);
+            }
             else {
                 state.db = client.db(dbname);
                 state.db.collection(constants.COLLECTION_STOREHAS).createIndex({storeId: 1, itemId: 1}, {unique: true});
