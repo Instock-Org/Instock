@@ -292,7 +292,7 @@ router.put("/:storeID", (req, res) => {
         {returnOriginal : false}, 
     (err, result) => {
         if(err) {
-            res.sendStatus(RES_BAD_REQUEST);
+            res.sendStatus(constants.RES_BAD_REQUEST);
         }
         else {
             res.json(result);
