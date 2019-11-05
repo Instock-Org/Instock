@@ -14,12 +14,12 @@ public class TestActivity extends AppCompatActivity {
     private final String TAG = "TestActivity";
     public static final String GOOGLE_ACCOUNT = "google_account";
 
-    TextView emailInfoTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+
+        TextView emailInfoTextView;
 
         emailInfoTextView = (TextView) findViewById(R.id.email_info);
 

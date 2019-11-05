@@ -18,17 +18,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ShoppingTripActivity extends AppCompatActivity {
-
-    ExpandableListView expandableListView;
-    ExpandableListAdapter expandableListAdapter;
-    List<String> expandableListTitle;
-    HashMap<String, List<String>> expandableListDetail;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.transition.slide_from_right, R.transition.slide_to_left);
         setContentView(R.layout.activity_shopping_trip);
+
+        ExpandableListView expandableListView;
+        ExpandableListAdapter expandableListAdapter;
+        List<String> expandableListTitle;
+        HashMap<String, List<String>> expandableListDetail;
 
         // Get stores list from intent
         Intent intent = getIntent();
