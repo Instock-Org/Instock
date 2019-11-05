@@ -137,7 +137,7 @@ router.post("/feweststores", (req, res) => {
                     itemList.forEach((item) => {
                         if (!checkedItems.includes(item.toString())) {
                             checkedItems.push(item.toString());
-                            if (prunedStoreItems[itemStore] === undefined) {
+                            if (typeof prunedStoreItems[itemStore] === undefined) {
                                 prunedStoreItems[itemStore] = [];
                             }
                             prunedStoreItems[itemStore].push(item);
@@ -153,7 +153,7 @@ router.post("/feweststores", (req, res) => {
                         var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() === itemStore.toString() && storeHas.itemId.toString() === itemToAdd._id.toString())[0];
 
                         var storeToUpdate = storePickupList.filter((store) => store._id.toString() === itemStore.toString())[0];
-                        if (storeToUpdate.items === undefined) {
+                        if (typeof storeToUpdate.items === undefined) {
                             storeToUpdate.items = [];
                         }
 
@@ -166,7 +166,7 @@ router.post("/feweststores", (req, res) => {
                 // Identify stores that we can remove (i.e. the ones with no items to pick up)
                 var positionsToDelete = [];
                 storePickupList.forEach((store, key) => {
-                    if (store.items === undefined) {
+                    if (typeof store.items === undefined) {
                         positionsToDelete.push(key);
                     }
                 })
