@@ -111,8 +111,9 @@ router.delete("/:storeID", (req, res) => {
     db.getDB().collection(employeesCollection).findOneAndDelete(
         {_id : db.getPrimaryKey(storeID)}, 
     (err, result) => {
-        if(err)
+        if(err) {
             res.sendStatus(constants.RES_INTERNAL_ERR);
+        }
         else {
             res.json(result);
         }
