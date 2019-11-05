@@ -3,10 +3,8 @@ package com.example.instock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
