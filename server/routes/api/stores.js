@@ -262,7 +262,7 @@ router.post("/nearbyStores", (req, res) => {
             };
 
             return store;
-        })
+        });
         res.status(constants.RES_OK).send(stores);
     });
 });

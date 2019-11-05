@@ -139,7 +139,7 @@ router.put("/api/items/:itemId", (req, res) => {
 
         res.sendStatus(constants.RES_OK);
     });
-})
+});
 
 // Deletes items
 // DELETE /api/items

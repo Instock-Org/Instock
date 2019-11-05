@@ -33,7 +33,7 @@ const connect = (cb) => {
             }
         });
     }
-}
+};
 
 const getPrimaryKey = (_id) => {
     return objectId(_id);
