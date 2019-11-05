@@ -108,7 +108,7 @@ router.post("/feweststores", (req, res) => {
             stores.forEach((store) => {
                 storePickupList.push(store);
                 storeItems[store._id] = [];
-            })
+            });
 
             // Get items that store carries and is on user's shopping list
             db.getDB().collection(constants.COLLECTION_STOREHAS).find({
@@ -142,7 +142,7 @@ router.post("/feweststores", (req, res) => {
                             }
                             prunedStoreItems[itemStore].push(item);
                         }
-                    })
+                    });
                 });
 
                 // Add item object to the stores collection objects
@@ -161,7 +161,7 @@ router.post("/feweststores", (req, res) => {
                             itemToAdd.quantity = storeHasItemFiltered.quantity;
                             itemToAdd.price = storeHasItemFiltered.price;
                             storeToUpdate.items.push(itemToAdd);
-                        })
+                        });
                     }
                 }
 
@@ -171,17 +171,17 @@ router.post("/feweststores", (req, res) => {
                     if (!store.items) {
                         positionsToDelete.push(key);
                     }
-                })
+                });
 
                 // Sort in reverse order to prevent indexing problems during actual deletion
                 positionsToDelete.sort((a,b) => {
                     return b - a;
-                })
+                });
 
                 // Delete the stores identified above
                 positionsToDelete.forEach((key) => {
                     storePickupList.splice(key, 1);
-                })
+                });
 
                 // Send response to client
                 const response = { stores: storePickupList };
