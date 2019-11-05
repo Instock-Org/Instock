@@ -70,7 +70,7 @@ router.post("/feweststores", (req, res) => {
 
     // Mutate the array to help out with caching so that shopping list won't be redundant
     shoppingList.sort();
-    shoppingList = shoppingList.map((keyword) => { keyword.toLowerCase() });
+    shoppingList = shoppingList.map((keyword) => { keyword.toLowerCase(); });
     
     // This combination of inputs will be used for Redis to identify if it has been searched before
     const redisKey = JSON.stringify({
