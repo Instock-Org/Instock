@@ -195,23 +195,23 @@ router.post("/feweststores", (req, res) => {
 router.post("/nearbyStores", (req, res) => {
     const latitude = req.body.location.latitude || constants.DEFAULT_LATITUDE;
     const longitude = req.body.location.longitude || constants.DEFAULT_LONGITUDE;
-    const radius_km = req.body.radius || constants.DEFAULT_RADIUS;
+    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS;
 
     // Calculate long/lat bounds (north, south, west, east)
     // Will assume square instead of radius
-    const east_boundary_long = longitude + (radius_km / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const west_boundary_long = longitude - (radius_km / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const north_boundary_lat = latitude  + (radius_km / constants.R_EARTH) * (180.0 / Math.PI);
-    const south_boundary_lat = latitude  - (radius_km / constants.R_EARTH) * (180.0 / Math.PI);
+    const eastBoundaryLong = longitude + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const westBoundaryLong = longitude - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const northBoundaryLat = latitude  + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
+    const southBoundaryLat = latitude  - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
 
     db.getDB().collection(collection).find({
         "lat": {
-            $lt: north_boundary_lat,
-            $gt: south_boundary_lat
+            $lt: northBoundaryLat,
+            $gt: southBoundaryLat
         },
         "lng": {
-            $lt: east_boundary_long,
-            $gt: west_boundary_long
+            $lt: eastBoundaryLong,
+            $gt: westBoundaryLong
         }
     }).toArray((err, result) => {
         if (result.length == 0) {
