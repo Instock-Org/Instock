@@ -9,7 +9,7 @@ const storeHasCollection = constants.COLLECTION_STOREHAS;
 const usersCollection = constants.COLLECTION_USERS;
 const authCollection = constants.COLLECTION_AUTH;
 
-const TokenGenerator = require('uuid-token-generator');
+const TokenGenerator = require("uuid-token-generator");
 const tokgen2 = new TokenGenerator(256, TokenGenerator.BASE62);
 
 router.use(express.json());
@@ -90,11 +90,11 @@ router.delete("/api/internal/items/store", (req, res) => {
 router.post("/api/internal/auth", (req, res) => {
     const userInput = req.body;
 
-    var token = tokgen2.generate() + '-' + userInput.clientId;
+    var token = tokgen2.generate() + "-" + userInput.clientId;
 
     db.getDB().collection(authCollection).insertOne({
         "clientId": userInput.clientId,
-        "token": token,
+        token,
         "timestamp": Date.now()
     }, (err, result) => {
         if(err) {

@@ -23,8 +23,8 @@ router.get("/", (req, res) => {
     var token = req.query.token;
 
     db.getDB().collection(authCollection).find({
-        clientId: clientId,
-        token: token
+        clientId,
+        token
     }).toArray((err, result) => {
         if (result.length === 0) {
             res.status(constants.RES_NOT_FOUND).json({
