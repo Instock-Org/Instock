@@ -75,6 +75,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
                 default:
                     Log.d(TAG, "Didn't receive correct code");
+                    break;
             }
         }
     }
