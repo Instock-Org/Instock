@@ -20,7 +20,7 @@ router.get("/api/internal/items", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 router.get("/api/internal/items/store", (req, res) => {
@@ -31,7 +31,7 @@ router.get("/api/internal/items/store", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 // Get all entries from the StoreHas table
@@ -43,7 +43,7 @@ router.get("/api/internal/store", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 // Empty the Items table
@@ -55,7 +55,7 @@ router.delete("/api/internal/items", (req, res) => {
         }
  
         res.sendStatus(constants.RES_OK);
-    })
+    });
  });
 
 // Empty the StoreHas table
@@ -67,7 +67,7 @@ router.delete("/api/internal/items/store", (req, res) => {
         }
  
         res.sendStatus(constants.RES_OK);
-    })
+    });
  });
 
  // Get all users
@@ -79,7 +79,7 @@ router.delete("/api/internal/items/store", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 module.exports = router;

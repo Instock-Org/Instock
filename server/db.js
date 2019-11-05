@@ -31,17 +31,17 @@ const connect = (cb) => {
                 state.db.collection(constants.COLLECTION_USERSUBSCRIPTIONS).createIndex({userId: 1, storeId: 1, itemId: 1}, {unique: true});
                 cb();
             }
-        })
+        });
     }
 }
 
 const getPrimaryKey = (_id) => {
     return objectId(_id);
-}
+};
 
 const getDB = () => {
     return state.db;
-}
+};
 
 module.exports = {
     getDB,
