@@ -137,7 +137,7 @@ router.post("/feweststores", (req, res) => {
                     itemList.forEach((item) => {
                         if (!checkedItems.includes(item.toString())) {
                             checkedItems.push(item.toString());
-                            if (prunedStoreItems[itemStore] === undefined) {
+                            if (typeof prunedStoreItems[itemStore] === undefined) {
                                 prunedStoreItems[itemStore] = [];
                             }
                             prunedStoreItems[itemStore].push(item);
@@ -147,26 +147,28 @@ router.post("/feweststores", (req, res) => {
 
                 // Add item object to the stores collection objects
                 for (const itemStore in prunedStoreItems) {
-                    const itemList = prunedStoreItems[itemStore];
-                    itemList.forEach((storeItem) => {
-                        var itemToAdd = items.filter((item) => item._id.toString() === storeItem.toString())[0];
-                        var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() === itemStore.toString() && storeHas.itemId.toString() === itemToAdd._id.toString())[0];
+                    if ({}.hasOwnProperty.call(prunedStoreItems, itemStore)) {
+                        const itemList = prunedStoreItems[itemStore];
+                        itemList.forEach((storeItem) => {
+                            var itemToAdd = items.filter((item) => item._id.toString() === storeItem.toString())[0];
+                            var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() === itemStore.toString() && storeHas.itemId.toString() === itemToAdd._id.toString())[0];
 
-                        var storeToUpdate = storePickupList.filter((store) => store._id.toString() === itemStore.toString())[0];
-                        if (storeToUpdate.items === undefined) {
-                            storeToUpdate.items = [];
-                        }
+                            var storeToUpdate = storePickupList.filter((store) => store._id.toString() === itemStore.toString())[0];
+                            if (typeof storeToUpdate.items === undefined) {
+                                storeToUpdate.items = [];
+                            }
 
-                        itemToAdd.quantity = storeHasItemFiltered.quantity;
-                        itemToAdd.price = storeHasItemFiltered.price;
-                        storeToUpdate.items.push(itemToAdd);
-                    })
+                            itemToAdd.quantity = storeHasItemFiltered.quantity;
+                            itemToAdd.price = storeHasItemFiltered.price;
+                            storeToUpdate.items.push(itemToAdd);
+                        })
+                    }
                 }
 
                 // Identify stores that we can remove (i.e. the ones with no items to pick up)
                 var positionsToDelete = [];
                 storePickupList.forEach((store, key) => {
-                    if (store.items === undefined) {
+                    if (typeof store.items === undefined) {
                         positionsToDelete.push(key);
                     }
                 })
@@ -292,7 +294,7 @@ router.put("/:storeID", (req, res) => {
         {returnOriginal : false}, 
     (err, result) => {
         if(err) {
-            res.sendStatus(RES_BAD_REQUEST);
+            res.sendStatus(constants.RES_BAD_REQUEST);
         }
         else {
             res.json(result);
