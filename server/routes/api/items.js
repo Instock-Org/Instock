@@ -100,7 +100,7 @@ router.post("/api/items/multiple", (req, res) => {
 
         res.status(constants.RES_OK).send(result);
     });
-})
+});
 
 // Add item to items list
 // POST /api/items
