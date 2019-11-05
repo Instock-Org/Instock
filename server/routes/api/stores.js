@@ -4,6 +4,8 @@ const constants = require("../../constants");
 
 const db = require("../../db");
 const collection = constants.COLLECTION_STORES;
+const authCollection = constants.COLLECTION_AUTH;
+const tokenTimeout = constants.TOKEN_TIMEOUT;
 
 const maps = require("./maps");
 
@@ -16,14 +18,39 @@ const redis = redisClient(constants.REDIS_PORT, "localhost");
 
 // Get all stores and their details. 
 router.get("/", (req, res) => {
-    db.getDB().collection(collection).find({}).toArray((err, documents) => {
-        if(err){
-            res.status(constants.RES_BAD_REQUEST).send(err);
+
+    var clientId = req.query.clientId;
+    var token = req.query.token;
+
+    db.getDB().collection(authCollection).find({
+        clientId: clientId,
+        token: token
+    }).toArray((err, result) => {
+        if (result.length === 0) {
+            res.status(constants.RES_NOT_FOUND).json({
+                "Error": "Invalid client id or token..."
+            });
+            return;
+        }
+
+        var oldTimestamp = result[0].timestamp;
+        if(Math.floor((Date.now() - oldTimestamp)/1000) > tokenTimeout){
+            res.status(constants.RES_INTERNAL_ERR).json({
+                "Error": "Invalid token..."
+            });
             return; 
         } else {
-            res.json(documents);
+            db.getDB().collection(collection).find({}).toArray((err, documents) => {
+                if(err){
+                    res.status(constants.RES_BAD_REQUEST).send(err);
+                    return; 
+                } else {
+                    res.json(documents);
+                }
+            });
         }
     });
+
 });
 
 // Get details for a specific store

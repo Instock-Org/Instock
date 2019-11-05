@@ -28,7 +28,6 @@ router.get("/token", (req, res) => {
         var oldTimestamp = result[0].timestamp;
         
         if(Math.floor((Date.now() - oldTimestamp)/1000) > tokenTimeout) {
-            console.log("hello");
             var token = tokgen2.generate() + '-' + clientId;
 
             db.getDB().collection(authCollection).findOneAndUpdate(
