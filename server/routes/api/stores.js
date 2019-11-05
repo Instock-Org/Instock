@@ -147,20 +147,22 @@ router.post("/feweststores", (req, res) => {
 
                 // Add item object to the stores collection objects
                 for (const itemStore in prunedStoreItems) {
-                    const itemList = prunedStoreItems[itemStore];
-                    itemList.forEach((storeItem) => {
-                        var itemToAdd = items.filter((item) => item._id.toString() === storeItem.toString())[0];
-                        var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() === itemStore.toString() && storeHas.itemId.toString() === itemToAdd._id.toString())[0];
+                    if ({}.hasOwnProperty.call(prunedStoreItems, itemStore)) {
+                        const itemList = prunedStoreItems[itemStore];
+                        itemList.forEach((storeItem) => {
+                            var itemToAdd = items.filter((item) => item._id.toString() === storeItem.toString())[0];
+                            var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() === itemStore.toString() && storeHas.itemId.toString() === itemToAdd._id.toString())[0];
 
-                        var storeToUpdate = storePickupList.filter((store) => store._id.toString() === itemStore.toString())[0];
-                        if (typeof storeToUpdate.items === undefined) {
-                            storeToUpdate.items = [];
-                        }
+                            var storeToUpdate = storePickupList.filter((store) => store._id.toString() === itemStore.toString())[0];
+                            if (typeof storeToUpdate.items === undefined) {
+                                storeToUpdate.items = [];
+                            }
 
-                        itemToAdd.quantity = storeHasItemFiltered.quantity;
-                        itemToAdd.price = storeHasItemFiltered.price;
-                        storeToUpdate.items.push(itemToAdd);
-                    })
+                            itemToAdd.quantity = storeHasItemFiltered.quantity;
+                            itemToAdd.price = storeHasItemFiltered.price;
+                            storeToUpdate.items.push(itemToAdd);
+                        })
+                    }
                 }
 
                 // Identify stores that we can remove (i.e. the ones with no items to pick up)
