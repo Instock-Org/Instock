@@ -11,7 +11,7 @@ router.use(express.json());
 // Get all emplyees and their details. 
 router.get("/", (req, res) => {
     db.getDB().collection(employeesCollection).find({}).toArray((err, documents) => {
-        if(err){
+        if(err) {
             res.status(constants.RES_BAD_REQUEST).send(err);
             return; 
         } else {
@@ -27,7 +27,7 @@ router.get("/:userid", (req, res) => {
     db.getDB().collection(employeesCollection).find({
         userid : db.getPrimaryKey(userid)
     }).toArray((err, documents) => {
-        if(err){
+        if(err) {
             res.status(constants.RES_BAD_REQUEST).send(err);
             return; 
         } else {
@@ -59,9 +59,9 @@ router.post("/", (req, res) => {
         } else {
             var userid = result.ops[0]._id;
             db.getDB().collection(employeesCollection).insertOne({
-                "userid": userid,
-                "storeid": storeid,
-                "role": role
+                userid,
+                storeid,
+                role
             }, (err, result) => {
                 if(err) {
                     res.status(constants.RES_BAD_REQUEST).send(err);
@@ -92,8 +92,9 @@ router.put("/:userid", (req, res) => {
         }}, 
         {returnOriginal : false}, 
     (err, result) => {
-        if(err)
-            console.log(err);
+        if(err) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
+        }
         else {
             res.json(result);
         }

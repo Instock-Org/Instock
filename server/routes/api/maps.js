@@ -4,7 +4,7 @@ const key = "&key=" + constants.API_KEY;
 
 const googleMapsClient = require("@google/maps").createClient({
     key: constants.API_KEY,
-    Promise: Promise
+    Promise
 });
 
 module.exports = {

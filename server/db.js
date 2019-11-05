@@ -19,7 +19,7 @@ const connect = (cb) => {
         cb();
     }
     else  {
-        MongoClient.connect(url, mongoOptions, (err, client)=>{
+        MongoClient.connect(url, mongoOptions, (err, client) => {
             if(err) {
                 cb(err);
             }

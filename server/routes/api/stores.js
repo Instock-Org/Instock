@@ -177,7 +177,7 @@ router.post("/feweststores", (req, res) => {
                 })
 
                 // Delete the stores identified above
-                positionsToDelete.forEach((key) =>{
+                positionsToDelete.forEach((key) => {
                     storePickupList.splice(key, 1);
                 })
 
@@ -291,8 +291,9 @@ router.put("/:storeID", (req, res) => {
         }}, 
         {returnOriginal : false}, 
     (err, result) => {
-        if(err)
-            console.log(err);
+        if(err) {
+            res.sendStatus(RES_BAD_REQUEST);
+        }
         else {
             res.json(result);
         }
