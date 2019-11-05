@@ -8,6 +8,7 @@ dotenv.config();
  * App Constants
  */
 const PORT = process.env.PORT || 8081;
+const REDIS_PORT = process.env.REDIS_PORT || 6379;
 
 /**
  * Database Constants
@@ -44,6 +45,7 @@ const MIN_LONGITUDE = -180.0;
 module.exports = {
     API_KEY: process.env.API_KEY,
     PORT,
+    REDIS_PORT,
     DB_NAME,
     MONGODB_URL,
     COLLECTION_STORES,
