@@ -7,8 +7,8 @@ const collection = constants.COLLECTION_STORES;
 
 const maps = require("./maps");
 
-const redisClient = require('redis').createClient;
-const redis = redisClient(constants.REDIS_PORT, 'localhost');
+const redisClient = require("redis").createClient;
+const redis = redisClient(constants.REDIS_PORT, "localhost");
 
 /**
  * GET requests
@@ -69,15 +69,15 @@ router.post("/feweststores", (req, res) => {
     }
 
     // Mutate the array to help out with caching so that shopping list won't be redundant
-    shoppingList.sort()
-    shoppingList = shoppingList.map(keyword => keyword.toLowerCase());
+    shoppingList.sort();
+    shoppingList = shoppingList.map((keyword) => { keyword.toLowerCase() });
     
     // This combination of inputs will be used for Redis to identify if it has been searched before
     const redisKey = JSON.stringify({
-        "shoppingList": shoppingList,
-        "latitude": latitude,
-        "longitude": longitude,
-        "radiusKm": radiusKm
+        shoppingList,
+        latitude,
+        longitude,
+        radiusKm
     });
 
     redis.get(redisKey, (rediserr, reply) => {
@@ -210,7 +210,7 @@ router.post("/feweststores", (req, res) => {
 
                         // Send response to client and store in Redis
                         const response = { stores: storePickupList };
-                        redis.set(redisKey, JSON.stringify(response), () => {})
+                        redis.set(redisKey, JSON.stringify(response), () => {});
                         res.status(constants.RES_OK).send(response);
                     });
                 });
