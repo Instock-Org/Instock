@@ -15,8 +15,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class APIActivity extends AppCompatActivity {
-    //    private final String TAG = "APIActivity";
-    //    private Button api_button;
+//    private final String TAG = "APIActivity";
+//    private Button api_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
