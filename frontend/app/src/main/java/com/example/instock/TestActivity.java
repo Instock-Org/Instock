@@ -15,7 +15,6 @@ public class TestActivity extends AppCompatActivity {
     public static final String GOOGLE_ACCOUNT = "google_account";
 
     TextView emailInfoTextView;
-    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class TestActivity extends AppCompatActivity {
         GoogleSignInAccount googleSignInAccount = getIntent().getParcelableExtra(GOOGLE_ACCOUNT);
         emailInfoTextView.setText(googleSignInAccount.getEmail());
 
-        backButton = (Button) findViewById(R.id.back_button);
+        Button backButton = (Button) findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Code here executes on main thread after user presses button

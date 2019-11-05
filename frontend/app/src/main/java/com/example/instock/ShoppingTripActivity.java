@@ -19,11 +19,6 @@ import java.util.List;
 
 public class ShoppingTripActivity extends AppCompatActivity {
 
-    private ArrayAdapter<String> mAdapter;
-    private ListView storesListView;
-    private ArrayList<String> stores = new ArrayList<>();
-    private Button mapsViewButton;
-
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableListTitle;
@@ -41,9 +36,9 @@ public class ShoppingTripActivity extends AppCompatActivity {
         List<Store> stores = (List<Store>) args.getSerializable("STORES");
 //        Log.d("ShoppingTripActivity", stores.get(0).getName());
 
-        storesListView = findViewById(R.id.trip_stores_list);
+        ListView storesListView = findViewById(R.id.trip_stores_list);
 
-        mapsViewButton = findViewById(R.id.trip_maps_button);
+        Button mapsViewButton = findViewById(R.id.trip_maps_button);
         mapsViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

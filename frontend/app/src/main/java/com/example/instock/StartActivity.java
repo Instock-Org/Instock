@@ -16,9 +16,6 @@ import com.google.firebase.iid.InstanceIdResult;
 public class StartActivity extends AppCompatActivity {
     private final String TAG = "StartActivity";
 
-    private CardView customerLoginCardView;
-    private CardView employeeLoginCardView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +23,7 @@ public class StartActivity extends AppCompatActivity {
 
         initPushNotifications();
 
-        customerLoginCardView = findViewById(R.id.start_login_user);
+        CardView customerLoginCardView = findViewById(R.id.start_login_user);
         customerLoginCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,7 +34,7 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        employeeLoginCardView = findViewById(R.id.start_login_employee);
+        CardView employeeLoginCardView = findViewById(R.id.start_login_employee);
         employeeLoginCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
