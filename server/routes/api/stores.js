@@ -186,7 +186,7 @@ router.post("/feweststores", (req, res) => {
                                     itemToAdd.quantity = storeHasItemFiltered.quantity;
                                     itemToAdd.price = storeHasItemFiltered.price;
                                     storeToUpdate.items.push(itemToAdd);
-                                })
+                                });
                             }
                         }
 
