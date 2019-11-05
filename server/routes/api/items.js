@@ -16,7 +16,7 @@ router.get("/api/items/store/:storeId", (req, res) => {
         "storeId": db.getPrimaryKey(req.params.storeId)
     }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 // Adds an item to a store
@@ -34,7 +34,7 @@ router.post("/api/items/store/:storeId", (req, res) => {
         }
 
         res.sendStatus(constants.RES_OK);
-    })
+    });
 });
 
 // Updates a store's availability on an item
@@ -53,7 +53,7 @@ router.put("/api/items/store/:storeId/:itemId", (req, res) => {
         }
 
         res.sendStatus(constants.RES_OK);
-    })
+    });
 });
 
 // Removes items from a store
@@ -69,7 +69,7 @@ router.delete("/api/items/store/:storeId", (req, res) => {
        }
 
        res.sendStatus(constants.RES_OK);
-   })
+   });
 });
 
 // Gets items by name or brand. Returns results only if exact match, case insensitive
@@ -79,7 +79,7 @@ router.get("/api/items", (req, res) => {
         "name": new RegExp(".*" + req.query.search_term + ".*", "i")
     }).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 // Get items by item IDs
@@ -99,7 +99,7 @@ router.post("/api/items/multiple", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result);
-    })
+    });
 })
 
 // Add item to items list
@@ -117,7 +117,7 @@ router.post("/api/items", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result.ops[0]._id);
-    })
+    });
 });
 
 // Update item
@@ -138,7 +138,7 @@ router.put("/api/items/:itemId", (req, res) => {
         }
 
         res.sendStatus(constants.RES_OK);
-    })
+    });
 })
 
 // Deletes items
@@ -158,7 +158,7 @@ router.delete("/api/items", (req, res) => {
         }
  
         res.sendStatus(constants.RES_OK);
-    })
+    });
  });
 
 module.exports = router;

@@ -231,13 +231,13 @@ router.post("/nearbyStores", (req, res) => {
                     lat: obj.lat,
                     lng: obj.lng
                 }
-            }
+            };
 
             return store;
         })
         res.status(constants.RES_OK).send(stores);
     });
-})
+});
 
 // Create a store object
 router.post("/", (req, res) => {

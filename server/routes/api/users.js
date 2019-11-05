@@ -14,7 +14,7 @@ router.get("/api/users/:user_id", (req, res) => {
         "_id": db.getPrimaryKey(req.params.user_id),
     }).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 // Add a single user
@@ -30,7 +30,7 @@ router.post("/api/users", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result.ops[0]._id);
-    })
+    });
 });
 
 // Update user
@@ -50,7 +50,7 @@ router.put("/api/users/:user_id", (req, res) => {
         }
 
         res.sendStatus(constants.RES_OK);
-    })
+    });
 });
 
 // Deletes a single user by user_id
@@ -65,7 +65,7 @@ router.delete("/api/users/:user_id", (req, res) => {
         }
  
         res.sendStatus(constants.RES_OK);
-    })
+    });
  });
 
 // Get user subscriptions
@@ -80,7 +80,7 @@ router.get("/api/users/subscriptions/:user_id", (req, res) => {
         }
 
         res.status(constants.RES_OK).send(result);
-    })
+    });
 });
 
 // Add item to subscription
@@ -97,7 +97,7 @@ router.post("/api/users/subscriptions", (req, res) => {
         }
 
         res.sendStatus(constants.RES_OK);
-    })
+    });
 });
 
 // Delete item from subscription
@@ -114,7 +114,7 @@ router.delete("/api/users/subscriptions/:user_id/:store_id/:item_id", (req, res)
         }
 
         res.sendStatus(constants.RES_OK);
-    })
+    });
 });
 
 module.exports = router;
