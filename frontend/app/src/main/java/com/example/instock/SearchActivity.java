@@ -15,7 +15,7 @@ public class SearchActivity extends AppCompatActivity {
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+//            String query = intent.getStringExtra(SearchManager.QUERY);
             //doSearch(query);
             // TODO: Send the item string to the backend and get list of items.
         }

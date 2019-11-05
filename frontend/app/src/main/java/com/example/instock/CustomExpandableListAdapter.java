@@ -38,15 +38,16 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final String expandedListText = (String) getChild(listPosition, expandedListPosition);
+        View convertViewUpdated = convertView;
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_trip, null);
+            convertViewUpdated = layoutInflater.inflate(R.layout.item_trip, null);
         }
-        TextView expandedListTextView = (TextView) convertView
+        TextView expandedListTextView = (TextView) convertViewUpdated
                 .findViewById(R.id.expandable_list_item);
         expandedListTextView.setText(expandedListText);
-        return convertView;
+        return convertViewUpdated;
     }
 
     @Override
@@ -74,16 +75,17 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String listTitle = (String) getGroup(listPosition);
+        View convertViewUpdated = convertView;
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.trip_list_group, null);
+            convertViewUpdated = layoutInflater.inflate(R.layout.trip_list_group, null);
         }
-        TextView listTitleTextView = (TextView) convertView
+        TextView listTitleTextView = (TextView) convertViewUpdated
                 .findViewById(R.id.trip_list_title);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
-        return convertView;
+        return convertViewUpdated;
     }
 
     @Override
