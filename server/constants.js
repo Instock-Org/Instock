@@ -21,6 +21,7 @@ const COLLECTION_ITEMS = "Items";
 const COLLECTION_USERS = "Users";
 const COLLECTION_EMPLOYEES = "Employees";
 const COLLECTION_USERSUBSCRIPTIONS = "UserSubscriptions";
+const COLLECTION_AUTH = "Auth";
 
 /**
  * Response Constants
@@ -41,6 +42,7 @@ const MAX_LATITUDE = 90.0;
 const MIN_LATITUDE = -90.0;
 const MAX_LONGITUDE = 180.0;
 const MIN_LONGITUDE = -180.0;
+const TOKEN_TIMEOUT = 10; // 5 mins - 300 seconds
 
 module.exports = {
     API_KEY: process.env.API_KEY,
@@ -54,6 +56,7 @@ module.exports = {
     COLLECTION_USERS,
     COLLECTION_EMPLOYEES,
     COLLECTION_USERSUBSCRIPTIONS,
+    COLLECTION_AUTH,
     R_EARTH,
     DEFAULT_LATITUDE,
     DEFAULT_LONGITUDE,
@@ -65,5 +68,6 @@ module.exports = {
     RES_OK,
     RES_BAD_REQUEST,
     RES_NOT_FOUND,
-    RES_INTERNAL_ERR
+    RES_INTERNAL_ERR,
+    TOKEN_TIMEOUT
 };

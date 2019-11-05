@@ -7,6 +7,10 @@ const db = require("../../db");
 const itemsCollection = constants.COLLECTION_ITEMS;
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const usersCollection = constants.COLLECTION_USERS;
+const authCollection = constants.COLLECTION_AUTH;
+
+const TokenGenerator = require("uuid-token-generator");
+const tokgen2 = new TokenGenerator(256, TokenGenerator.BASE62);
 
 router.use(express.json());
 
@@ -80,6 +84,27 @@ router.delete("/api/internal/items/store", (req, res) => {
 
         res.status(constants.RES_OK).send(result);
     });
+});
+
+// Create an auth token and client
+router.post("/api/internal/auth", (req, res) => {
+    const userInput = req.body;
+
+    var token = tokgen2.generate() + "-" + userInput.clientId;
+
+    db.getDB().collection(authCollection).insertOne({
+        "clientId": userInput.clientId,
+        token,
+        "timestamp": Date.now()
+    }, (err, result) => {
+        if(err) {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+            return; 
+        } else {
+            res.status(constants.RES_OK).send(result.ops[0].token);
+        }
+    });
+
 });
 
 module.exports = router;
