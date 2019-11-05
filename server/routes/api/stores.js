@@ -50,7 +50,7 @@ router.post("/feweststores", (req, res) => {
     const shoppingList = req.body.shoppingList || []; 
     const latitude = req.body.location ? req.body.location.latitude : constants.DEFAULT_LATITUDE;
     const longitude = req.body.location ? req.body.location.longitude : constants.DEFAULT_LONGITUDE;
-    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS;
+    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS_KM;
 
     // Input checking
     if (shoppingList.length === 0) {
@@ -195,7 +195,7 @@ router.post("/feweststores", (req, res) => {
 router.post("/nearbyStores", (req, res) => {
     const latitude = req.body.location.latitude || constants.DEFAULT_LATITUDE;
     const longitude = req.body.location.longitude || constants.DEFAULT_LONGITUDE;
-    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS;
+    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS_KM;
 
     // Calculate long/lat bounds (north, south, west, east)
     // Will assume square instead of radius
