@@ -112,7 +112,7 @@ router.delete("/:storeID", (req, res) => {
         {_id : db.getPrimaryKey(storeID)}, 
     (err, result) => {
         if(err)
-            console.log(err);
+            res.sendStatus(constants.RES_INTERNAL_ERR);
         else {
             res.json(result);
         }

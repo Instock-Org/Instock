@@ -19,7 +19,6 @@ router.get("/api/users/:user_id", (req, res) => {
 
 // Add a single user
 router.post("/api/users", (req, res) => {
-    console.log("POST /api/users");
     db.getDB().collection(usersCollection).insertOne({
         "email": req.body.email,
         "password": req.body.password,
@@ -46,7 +45,6 @@ router.put("/api/users/:user_id", (req, res) => {
         "authType": req.body.auth_type
     }}, (err, result) => {
         if (err) {
-            console.log(err);
             res.status(constants.RES_BAD_REQUEST).send(err);
             return;
         }
