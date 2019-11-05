@@ -6,7 +6,7 @@ const db = require("../../db");
 const authCollection = constants.COLLECTION_AUTH;
 const tokenTimeout = constants.TOKEN_TIMEOUT;
 
-const TokenGenerator = require('uuid-token-generator');
+const TokenGenerator = require("uuid-token-generator");
 const tokgen2 = new TokenGenerator(256, TokenGenerator.BASE62);
 
 router.use(express.json());
@@ -18,7 +18,7 @@ router.get("/token", (req, res) => {
     var clientId = req.query.clientId;
 
     db.getDB().collection(authCollection).find({
-        "clientId": (clientId)
+        clientId
     }).toArray((err, result) => {
         if (result.length === 0) {
             res.sendStatus(constants.RES_NOT_FOUND);
@@ -28,13 +28,13 @@ router.get("/token", (req, res) => {
         var oldTimestamp = result[0].timestamp;
         
         if(Math.floor((Date.now() - oldTimestamp)/1000) > tokenTimeout) {
-            var token = tokgen2.generate() + '-' + clientId;
+            var token = tokgen2.generate() + "-" + clientId;
 
             db.getDB().collection(authCollection).findOneAndUpdate(
-                {clientId : clientId}, 
+                {clientId}, 
                 {$set : {
-                    clientId: clientId,
-                    token: token,
+                    clientId,
+                    token,
                     timestamp: Date.now()
                 }}, 
                 {returnOriginal : false}, 
