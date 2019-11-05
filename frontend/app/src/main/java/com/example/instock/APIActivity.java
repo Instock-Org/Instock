@@ -2,17 +2,17 @@ package com.example.instock;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
+//import android.util.Log;
+//import android.widget.Button;
 
-import com.google.gson.JsonObject;
+//import com.google.gson.JsonObject;
 
-import java.util.List;
+//import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+//import retrofit2.Call;
+//import retrofit2.Callback;
+//import retrofit2.Response;
+//import retrofit2.Retrofit;
 
 public class APIActivity extends AppCompatActivity {
 //    private final String TAG = "APIActivity";
