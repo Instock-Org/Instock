@@ -50,8 +50,6 @@ router.get("/:storeID", (req, res) => {
 // Given a shopping list and user's location, find all stores nearby that have the items on the shopping list in stock
 // ASSUMES NO AMBIGUITY ON ITEMS: EXACT MATCH ONLY (NOT CASE SENSITIVE)
 router.post("/feweststores", (req, res) => {
-    
-    
     var shoppingList = req.body.shoppingList || []; 
     const latitude = req.body.location ? req.body.location.latitude : constants.DEFAULT_LATITUDE;
     const longitude = req.body.location ? req.body.location.longitude : constants.DEFAULT_LONGITUDE;
@@ -70,7 +68,7 @@ router.post("/feweststores", (req, res) => {
 
     // Mutate the array to help out with caching so that shopping list won't be redundant
     shoppingList.sort();
-    shoppingList = shoppingList.map((keyword) => { keyword.toLowerCase(); });
+    shoppingList = shoppingList.map((keyword) => keyword.toLowerCase());
     
     // This combination of inputs will be used for Redis to identify if it has been searched before
     const redisKey = JSON.stringify({
@@ -83,9 +81,11 @@ router.post("/feweststores", (req, res) => {
     redis.get(redisKey, (rediserr, reply) => {
         if (rediserr) {
             res.status(constants.RES_INTERNAL_ERR);
+            return;
         }
         else if (reply) {
             res.status(constants.RES_OK).send(JSON.parse(reply)); // exists in cache
+            return;
         }
         else {
             // Calculate long/lat bounds (north, south, west, east)
