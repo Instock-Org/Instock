@@ -53,7 +53,7 @@ router.post("/feweststores", (req, res) => {
     const radiusKm = req.body.radius || constants.DEFAULT_RADIUS;
 
     // Input checking
-    if (shoppingList.length == 0) {
+    if (shoppingList.length === 0) {
         res.sendStatus(constants.RES_NOT_FOUND);
         return;
     }
@@ -82,7 +82,7 @@ router.post("/feweststores", (req, res) => {
         "name": { $in: shoppingList }
     }).toArray((itemErr, items) => {
         // Get nearby stores
-        if (items.length == 0) {
+        if (items.length === 0) {
             res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
@@ -97,7 +97,7 @@ router.post("/feweststores", (req, res) => {
                 $gt: westBoundaryLong
             }
         }).toArray((storeErr, stores) => {
-            if (stores.length == 0) {
+            if (stores.length === 0) {
                 res.sendStatus(constants.RES_NOT_FOUND);
                 return;
             }
@@ -149,10 +149,10 @@ router.post("/feweststores", (req, res) => {
                 for (itemStore in prunedStoreItems) {
                     const itemList = prunedStoreItems[itemStore];
                     itemList.forEach((storeItem) => {
-                        var itemToAdd = items.filter((item) => item._id.toString() == storeItem.toString())[0];
-                        var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() == itemStore.toString() && storeHas.itemId.toString() == itemToAdd._id.toString())[0];
+                        var itemToAdd = items.filter((item) => item._id.toString() === storeItem.toString())[0];
+                        var storeHasItemFiltered = storeHasItem.filter((storeHas) => storeHas.storeId.toString() === itemStore.toString() && storeHas.itemId.toString() === itemToAdd._id.toString())[0];
 
-                        var storeToUpdate = storePickupList.filter((store) => store._id.toString() == itemStore.toString())[0];
+                        var storeToUpdate = storePickupList.filter((store) => store._id.toString() === itemStore.toString())[0];
                         if (storeToUpdate.items === undefined) {
                             storeToUpdate.items = [];
                         }
@@ -214,7 +214,7 @@ router.post("/nearbyStores", (req, res) => {
             $gt: westBoundaryLong
         }
     }).toArray((err, result) => {
-        if (result.length == 0) {
+        if (result.length === 0) {
             console.log(result);
             res.sendStatus(constants.RES_NOT_FOUND);
             return;
