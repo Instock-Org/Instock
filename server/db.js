@@ -1,5 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
-const ObjectID = require("mongodb").ObjectID;
+const objectId = require("mongodb").ObjectID;
 const constants = require("./constants");
 
 const dbname = constants.DB_NAME;
@@ -36,7 +36,7 @@ const connect = (cb) => {
 }
 
 const getPrimaryKey = (_id) => {
-    return ObjectID(_id);
+    return objectId(_id);
 }
 
 const getDB = () => {
