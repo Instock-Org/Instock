@@ -22,3 +22,5 @@ db.connect((err) => {
         app.listen(PORT, () => {});
     }
 });
+
+module.exports = app;

@@ -8,15 +8,18 @@ const itemsCollection = constants.COLLECTION_ITEMS;
 
 router.use(express.json());
 
-
 // Gets all the items from a store
 // GET /api/items/store/{storeId}
 router.get("/api/items/store/:storeId", (req, res) => {
-    db.getDB().collection(storeHasCollection).find({
-        "storeId": db.getPrimaryKey(req.params.storeId)
-    }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
-        res.status(constants.RES_OK).send(result);
-    });
+    try {
+        db.getDB().collection(storeHasCollection).find({
+            "storeId": db.getPrimaryKey(req.params.storeId)
+        }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
+            res.status(constants.RES_OK).send(result);
+        });
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
 });
 
 // Adds an item to a store
