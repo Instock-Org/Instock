@@ -76,6 +76,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add_item:
                 final EditText taskEditText = new EditText(this);
+                taskEditText.setId(R.id.add_edit_text);
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle("Add a new item")
                         .setView(taskEditText)
