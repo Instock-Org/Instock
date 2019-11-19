@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - "stable"
-before_install:
+before_script:
   - ls
   - cd server
   - ls
