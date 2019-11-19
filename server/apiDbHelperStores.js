@@ -8,7 +8,11 @@ const storeHasCollection = constants.COLLECTION_STOREHAS;
 const itemsCollection = constants.COLLECTION_ITEMS;
 const storesCollection = constants.COLLECTION_STORES;
 
-const complexLogic = async (shoppingList, res) => {
+const complexLogic = async (shoppingList, boundaries, res) => {
+    const eastBoundaryLong = boundaries[0];
+    const westBoundaryLong = boundaries[1];
+    const northBoundaryLat = boundaries[2];
+    const southBoundaryLat = boundaries[3];
     db.getDB().collection(itemsCollection).find({
         "name": { $in: shoppingList }
     }).toArray((itemErr, items) => {

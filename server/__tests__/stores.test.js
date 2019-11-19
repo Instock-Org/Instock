@@ -2,9 +2,43 @@ const app = require('../server');
 const constants = require('../constants');
 const supertest = require('supertest');
 const request = supertest(app);
+const storesHelper = require('../storesHelper');
 
 jest.mock('../apiDbHelperStores');
+describe("StoresHelper methods", () => {
+    test("isValidCoordinates - Invalid coordinates should return false", () => {
+        const latitude = 200.123;
+        const longitude = 200.123;
+        expect(storesHelper.isValidCoordinates(latitude, longitude)).toBe(false);
+    });
 
+    test("isValidCoordinates - Valid coordinates should return true", () => {
+        const latitude = 49.123;
+        const longitude = -123.123;
+        expect(storesHelper.isValidCoordinates(latitude, longitude)).toBe(true);
+    });
+
+    test("getBoundaryCoordinates - Invalid coordinates should return empty array", () => {
+        const latitude = 200.123;
+        const longitude = -123.123;
+        const radius = 10;
+        expect(storesHelper.getBoundaryCoordinates(latitude, longitude, radius)).toStrictEqual([]);
+    });
+
+    test("getBoundaryCoordinates - Valid coordinates should return array with coordinates", () => {
+        const latitude = 49.123;
+        const longitude = -123.123;
+        const radius = 10;
+
+        const eastBoundaryLong = longitude + (radius / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+        const westBoundaryLong = longitude - (radius / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+        const northBoundaryLat = latitude + (radius / constants.R_EARTH) * (180.0 / Math.PI);
+        const southBoundaryLat = latitude - (radius / constants.R_EARTH) * (180.0 / Math.PI);
+    
+        const expectedReturn = [eastBoundaryLong, westBoundaryLong, northBoundaryLat, southBoundaryLat];
+        expect(storesHelper.getBoundaryCoordinates(latitude, longitude, radius)).toStrictEqual(expectedReturn);
+    });
+});
 describe('POST /api/stores/feweststores (Complex Logic)', () => {
     test('Empty shopping list should return not found', (res) => {
         const body = {}; //uses default value empty shopping list
