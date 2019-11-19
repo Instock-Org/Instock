@@ -3,6 +3,8 @@ const constants = require("./constants");
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const itemsCollection = constants.COLLECTION_ITEMS;
 
+/* START OF ITEMS ENDPOINTS MONGODB HELPERS */
+
 const getItemsByStore = async (storeId, res) => {
     db.getDB().collection(storeHasCollection).find({
         storeId
@@ -29,11 +31,11 @@ const postItemsByStore = async (storeId, itemId, quantity, price, res) => {
 
 const putItemAtStoreId = async (storeId, itemId, quantity, price, res) => {
     db.getDB().collection(storeHasCollection).updateOne({
-        "storeId": db.getPrimaryKey(req.params.storeId),
-        "itemId": db.getPrimaryKey(req.params.itemId),
+        storeId,
+        itemId
     }, {$set: {
-        "quantity": req.body.quantity || 0,
-        "price": req.body.price || 0
+        quantity,
+        price
     }}, (err, result) => {
         if (err) {
             res.status(constants.RES_BAD_REQUEST).send(err);
@@ -44,6 +46,19 @@ const putItemAtStoreId = async (storeId, itemId, quantity, price, res) => {
     });
 }
 
+const deleteItemsFromStore = async (storeId, itemIds, res) => {
+    db.getDB().collection(storeHasCollection).deleteMany({
+        storeId,
+        "itemId": {$in: itemIds}
+    }, (err, result) => {
+        if (err) {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+            return;
+        }
+ 
+        res.sendStatus(constants.RES_OK);
+    });
+}
 const getItemsBySearchTerm = async (regex, res) => {
     db.getDB().collection(itemsCollection).find({
         "name": regex
@@ -52,9 +67,77 @@ const getItemsBySearchTerm = async (regex, res) => {
     });
 };
 
+const getMultipleItemsAtStore = async (itemIds, res) => {
+    db.getDB().collection(itemsCollection).find({
+        "_id": {$in: itemIds}
+    }).toArray((err, result) => {
+        if (err) {
+            res.status(constants.RES_INTERNAL_ERR).send(err);
+            return;
+        }
+
+        res.status(constants.RES_OK).send(result);
+    });
+};
+
+const postItem = async (name, description, barcode, units, res) => {
+    db.getDB().collection(itemsCollection).insertOne({
+        name,
+        description,
+        barcode,
+        units
+    }, (err, result) => {
+        if (err) {
+            res.status(constants.RES_INTERNAL_ERR).send(err);
+            return;
+        }
+
+        res.status(constants.RES_OK).send(result.ops[0]._id);
+    });
+};
+
+const putItem = async (itemId, name, description, barcode, units, res) => {
+    db.getDB().collection(itemsCollection).updateOne({
+        "_id": itemId
+    },
+    {$set: {
+        name,
+        description,
+        barcode,
+        units
+    }}, (err, result) => {
+        if (err) {
+            res.status(constants.RES_INTERNAL_ERR).send(err);
+            return;
+        }
+
+        res.sendStatus(constants.RES_OK);
+    });
+};
+
+const deleteItems = async (itemIds, res) => {
+    db.getDB().collection(itemsCollection).deleteMany({
+        "_id": {$in: itemIds}
+    }, (err, result) => {
+        if (err) {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+            return;
+        }
+ 
+        res.sendStatus(constants.RES_OK);
+    });
+};
+
+/* END OF ITEMS ENDPOINTS MONGODB HELPERS */
+
 module.exports = {
     getItemsByStore,
     postItemsByStore,
     putItemAtStoreId,
-    getItemsBySearchTerm
+    deleteItemsFromStore,
+    getItemsBySearchTerm,
+    getMultipleItemsAtStore,
+    postItem,
+    putItem,
+    deleteItems
 }

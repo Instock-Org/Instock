@@ -37,4 +37,22 @@ describe('Tests for /items endpoints', () => {
             .expect(200, res)
             .expect(resItems, res.body);
     });
+
+    test('Retrieving items by search term', (res) => {
+        // TODO: Move into a separate sample response body file
+        let resItems = [
+            {
+                _id: "111122223333444455556666",
+                name: "apple pie",
+                description: "Home made apple pie",
+                barcode: "002642638034",
+                units: "500g"
+            }
+        ];
+
+        request.get('/api/items?search_term=apple+pie')
+            .set("Accept", "application/json")
+            .expect(200, res)
+            .expect(resItems, res.body);
+    });
 });
