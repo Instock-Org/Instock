@@ -10,7 +10,11 @@ const storesCollection = constants.COLLECTION_STORES;
 const authCollection = constants.COLLECTION_AUTH;
 const tokenTimeout = constants.TOKEN_TIMEOUT;
 
-const complexLogic = async (shoppingList, res) => {
+const complexLogic = async (shoppingList, boundaries, res) => {
+    const eastBoundaryLong = boundaries[0];
+    const westBoundaryLong = boundaries[1];
+    const northBoundaryLat = boundaries[2];
+    const southBoundaryLat = boundaries[3];
     db.getDB().collection(itemsCollection).find({
         "name": { $in: shoppingList }
     }).toArray((itemErr, items) => {

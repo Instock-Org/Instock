@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
+const storesHelper = require("../../storesHelper");
 
 const db = require("../../db");
 const collection = constants.COLLECTION_STORES;
@@ -30,7 +31,7 @@ const complexLogic = async (req, res) => {
         return;
     }
 
-    if (latitude > constants.MAX_LATITUDE || latitude < constants.MIN_LATITUDE ||  longitude > constants.MAX_LONGITUDE || longitude < constants.MIN_LONGITUDE) {
+    if (!storesHelper.isValidCoordinates(latitude, longitude)) {
         res.sendStatus(constants.RES_BAD_REQUEST);
         return;
     }
@@ -59,11 +60,7 @@ const complexLogic = async (req, res) => {
         else {
             // Calculate long/lat bounds (north, south, west, east)
             // Will assume square instead of circle
-            const eastBoundaryLong = longitude + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-            const westBoundaryLong = longitude - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-            const northBoundaryLat = latitude + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
-            const southBoundaryLat = latitude - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
-
+            const boundaries = storesHelper.getBoundaryCoordinates(latitude, longitude, radiusKm);
             var storePickupList = [];
 
             // Convert each item on shopping list to regex to make it case insensitive
@@ -72,7 +69,7 @@ const complexLogic = async (req, res) => {
             });
 
             // Get item IDs by name
-            dbHelper.complexLogic(shoppingList, res);
+            dbHelper.complexLogic(shoppingList, boundaries, res);
         }
     });
     return;
