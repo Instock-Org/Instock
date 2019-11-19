@@ -3,7 +3,7 @@ const router = express.Router();
 const constants = require("../../constants");
 
 const db = require("../../db");
-const dbHelper = require("../../apiDbHelper");
+const dbHelper = require("../../apiDbHelperItems");
 
 router.use(express.json());
 
@@ -11,8 +11,8 @@ router.use(express.json());
 // GET /api/items/store/{storeId}
 const getItemsByStore = async (req, res) => {
     try {
-        let storeId = db.getPrimaryKey(req.params.storeId);
-        
+        const storeId = db.getPrimaryKey(req.params.storeId);
+
         dbHelper.getItemsByStore(storeId, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
@@ -23,10 +23,15 @@ const getItemsByStore = async (req, res) => {
 // POST /api/items/store/{storeId}
 const postItemsByStore = async (req, res) => {
     try {
-        let storeId = db.getPrimaryKey(req.params.storeId);
-        let itemId = db.getPrimaryKey(req.body.itemId);
-        let quantity = req.body.quantity || 0;
-        let price = req.body.price || 0;
+        if (!req.params.storeId || !req.body.itemId) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
+            return;
+        }
+
+        const storeId = db.getPrimaryKey(req.params.storeId);
+        const itemId = db.getPrimaryKey(req.body.itemId);      
+        const quantity = req.body.quantity || 0;
+        const price = req.body.price || 0;
 
         dbHelper.postItemsByStore(storeId, itemId, quantity, price, res);
     } catch (error) {
@@ -38,12 +43,13 @@ const postItemsByStore = async (req, res) => {
 // PUT /api/items/store/{storeId}/{itemId}
 const putItemAtStoreId = async (req, res) => {
     try {
-        let storeId = db.getPrimaryKey(req.params.storeId);
-        let itemId = db.getPrimaryKey(req.params.itemId);
-        let quantity = req.body.quantity || 0;
-        let price = req.body.price || 0;
+        const storeId = db.getPrimaryKey(req.params.storeId);
+        const itemId = db.getPrimaryKey(req.params.itemId);
+        // Maybe we should disallow empty values
+        const quantity = req.body.quantity || 0;
+        const price = req.body.price || 0;
 
-        dbHelper.putItemAtStoreId(storeId, itemId, quantity, price);
+        dbHelper.putItemAtStoreId(storeId, itemId, quantity, price, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     };
@@ -53,8 +59,8 @@ const putItemAtStoreId = async (req, res) => {
 // DELETE /api/items/store/{storeId}
 const deleteItemsFromStore = async (req, res) => {
     try {
-        let storeId = req.params.storeId;
-        let itemIds = req.body.itemIds;
+        const storeId = req.params.storeId;
+        const itemIds = req.body.itemIds;
 
         dbHelper.deleteItemsFromStore(storeId, itemIds, res);
     } catch (error) {
@@ -66,7 +72,7 @@ const deleteItemsFromStore = async (req, res) => {
 // GET /api/items?search_term=example+string
 const getItemsBySearchTerm = async (req, res) => {
     try {
-        let regex = new RegExp(".*" + req.query.search_term + ".*", "i");
+        const regex = new RegExp(".*" + req.query.search_term + ".*", "i");
 
         dbHelper.getItemsBySearchTerm(regex, res);
     } catch (error) {
@@ -76,14 +82,14 @@ const getItemsBySearchTerm = async (req, res) => {
 
 // Get items by item IDs
 // POST /api/items/multiple
-const getMultipleItemsAtStore = async (req, res) => {
+const getMultipleItems = async (req, res) => {
     try {
-        var itemIds = [];
+        let itemIds = [];
         req.body.itemIds.forEach((value, key) => {
             itemIds[key] = db.getPrimaryKey(value);
         });
 
-        dbHelper.getMultipleItemsAtStore(itemIds, res);
+        dbHelper.getMultipleItems(itemIds, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
@@ -93,11 +99,16 @@ const getMultipleItemsAtStore = async (req, res) => {
 // POST /api/items
 const postItem = (req, res) => {
     try {
-        let name = req.body.name;
-        let description = req.body.description;
-        let barcode = req.body.barcode;
-        let units = req.body.units;
+        const name = req.body.name;
+        const description = req.body.description;
+        const barcode = req.body.barcode;
+        const units = req.body.units;
 
+        if (!name || !description || !barcode || !units) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
+            return;
+        }
+        
         dbHelper.postItem(name, description, barcode, units, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
@@ -108,13 +119,18 @@ const postItem = (req, res) => {
 // PUT /api/items/{itemId}
 const putItem = async (req, res) => {
     try {
-        let itemId = db.getPrimaryKey(req.params.itemId);
-        let name = req.body.name;
-        let description = req.body.description;
-        let barcode = req.body.barcode;
-        let units = req.body.units;
+        const itemId = db.getPrimaryKey(req.params.itemId);
+        const name = req.body.name;
+        const description = req.body.description;
+        const barcode = req.body.barcode;
+        const units = req.body.units;
 
-        dbHelper.putItem(itemId, name, description, barcode, units);
+        if (!name || !description || !barcode || !units){
+            res.sendStatus(constants.RES_BAD_REQUEST);
+            return;
+        }
+
+        dbHelper.putItem(itemId, name, description, barcode, units, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
@@ -141,7 +157,7 @@ router.post("/api/items/store/:storeId", postItemsByStore);
 router.put("/api/items/store/:storeId/:itemId", putItemAtStoreId);
 router.delete("/api/items/store/:storeId", deleteItemsFromStore);
 router.get("/api/items", getItemsBySearchTerm);
-router.post("/api/items/multiple", getMultipleItemsAtStore);
+router.post("/api/items/multiple", getMultipleItems);
 router.post("/api/items", postItem);
 router.put("/api/items/:itemId", putItem);
 router.delete("/api/items", deleteItems);
