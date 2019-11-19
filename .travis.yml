@@ -4,6 +4,7 @@ node_js:
 before_script:
   - ls
   - cd server
+  - ls
   - npm install
 script:
   - npm test
