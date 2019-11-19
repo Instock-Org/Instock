@@ -99,3 +99,127 @@ describe('POST /api/stores/feweststores (Complex Logic)', () => {
             .expect(expectedResponse, res.body);
     });
 })
+
+describe('GET /api/stores/ ', () => {
+    test('No client id or token specified', (res) => {
+        request.get('/api/stores')
+            .set("Accept", "application/json")
+            .expect({
+                "Error": "Invalid client id or token..."
+            }, res);
+    });
+
+    test('No token specified', (res) => {
+        request.get('/api/stores')
+            .set("Accept", "application/json")
+            .query({
+                "clientId": 12345
+            })
+            .expect({
+                "Error": "Invalid token..."
+            }, res);
+    });
+
+    test('Successful Request', (res) => {
+
+        request.get('/api/stores')
+            .set("Accept", "application/json")
+            .query({
+                "clientId": 12345,
+                "token": "ABC"
+            })
+            .expect([
+                {
+                    "_id": "1234",
+                    "address": "ABC",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "name": "Store A",
+                    "lat": 49,
+                    "lng": -123,
+                    "place_id": "AB"
+                },
+                {
+                    "_id": "12345",
+                    "address": "ABCD",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "name": "Store B",
+                    "lat": 49,
+                    "lng": -123,
+                    "place_id": "ABC"
+                },
+            ], res);
+    });
+});
+
+describe('GET /api/stores/:storeid ', () => {
+    test('Invalid store id specified', (res) => {
+        request.get('/api/stores/123')
+            .set("Accept", "application/json")
+            .expect({
+                "Error": "Invalid store id..."
+            }, res);
+    });
+
+    test('Successful Get specific store Request', (res) => {
+
+        request.get('/api/stores/1234')
+            .set("Accept", "application/json")
+            .expect([
+                {
+                    "_id": "1234",
+                    "address": "ABC",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "name": "Store A",
+                    "lat": 49,
+                    "lng": -123,
+                    "place_id": "AB"
+                }
+            ], res);
+    });
+});
+
+describe('POST /api/stores/nearbyStores ', () => {
+    test('Error: No stores within radius', (res) => {
+        const body = {
+            "location": {
+                "latitude": 49.262130,
+                "longtitude": -123.250578
+            },
+            "radius": 1.0
+        }
+
+        request.post('/api/stores/nearbyStores')
+            .set("Accept", "application/json")
+            .send(body)
+            .expect(constants.RES_NOT_FOUND, res);
+    });
+
+    test('Success: One store within radius', (res) => {
+        const body = {
+            "location": {
+                "latitude": 49.262130,
+                "longtitude": -123.250578
+            },
+            "radius": 2.0
+        }
+
+        request.post('/api/stores/nearbyStores')
+            .set("Accept", "application/json")
+            .send(body)
+            .expect([
+                {
+                    "storeName": "Save On Foods",
+                    "address": "5945 Berton Ave.",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "location": {
+                        "lat": 49.2548294,
+                        "lng": -123.2365587
+                    }
+                }
+            ], res);
+    });
+});

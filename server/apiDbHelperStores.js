@@ -7,6 +7,8 @@ const redis = redisClient(constants.REDIS_PORT, "localhost");
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const itemsCollection = constants.COLLECTION_ITEMS;
 const storesCollection = constants.COLLECTION_STORES;
+const authCollection = constants.COLLECTION_AUTH;
+const tokenTimeout = constants.TOKEN_TIMEOUT;
 
 const complexLogic = async (shoppingList, res) => {
     db.getDB().collection(itemsCollection).find({
@@ -123,6 +125,89 @@ const complexLogic = async (shoppingList, res) => {
     });
 }
 
+const getAllStores = async (clientId, token, res) => {
+    db.getDB().collection(authCollection).find({
+        clientId,
+        token
+    }).toArray((err, result) => {
+        if (result.length === 0) {
+            res.status(constants.RES_NOT_FOUND).json({
+                "Error": "Invalid client id or token..."
+            });
+            return;
+        }
+
+        var oldTimestamp = result[0].timestamp;
+        if(Math.floor((Date.now() - oldTimestamp)/1000) > tokenTimeout){
+            res.status(constants.RES_INTERNAL_ERR).json({
+                "Error": "Invalid token..."
+            });
+            return; 
+        } else {
+            db.getDB().collection(storesCollection).find({}).toArray((err, documents) => {
+                if(err){
+                    res.status(constants.RES_BAD_REQUEST).send(err);
+                    return; 
+                } else {
+                    res.json(documents);
+                }
+            });
+        }
+    });
+}
+
+const getSpecificStore = async (storeID, res) => {
+    db.getDB().collection(storesCollection).find({
+        _id : db.getPrimaryKey(storeID)
+    }).toArray((err, documents) => {
+        if(err){
+            res.status(constants.RES_BAD_REQUEST).json({
+                "Error": "Invalid store id..."
+            });
+            return; 
+        } else {
+            res.json(documents);
+        }
+    });
+}
+
+const nearbyStores = async (northBoundaryLat, southBoundaryLat, eastBoundaryLong, westBoundaryLong, res) => {
+    db.getDB().collection(storesCollection).find({
+        "lat": {
+            $lt: northBoundaryLat,
+            $gt: southBoundaryLat
+        },
+        "lng": {
+            $lt: eastBoundaryLong,
+            $gt: westBoundaryLong
+        }
+    }).toArray((err, result) => {
+        if (result.length === 0) {
+            res.sendStatus(constants.RES_NOT_FOUND);
+            return;
+        }
+
+        var stores = result.map((obj) => {
+            var store = {
+                storeName: obj.name,
+                address: obj.address,
+                city: obj.city,
+                province: obj.province,
+                location: {
+                    lat: obj.lat,
+                    lng: obj.lng
+                }
+            };
+
+            return store;
+        });
+        res.status(constants.RES_OK).send(stores);
+    });
+}
+
 module.exports = {
-    complexLogic
+    complexLogic,
+    getAllStores,
+    getSpecificStore,
+    nearbyStores
 }

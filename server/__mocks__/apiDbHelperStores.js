@@ -57,6 +57,98 @@ const complexLogic = async (shoppingList, res) => {
     res.status(constants.RES_OK).send(sampleResponse);
 }
 
+const getAllStores = async (clientId, token, res) => {
+
+    if(!clientId) {
+        res.status(constants.RES_NOT_FOUND).json({
+            "Error": "Invalid client id or token..."
+        });
+        return;
+    } else if (!token) {
+        res.status(constants.RES_NOT_FOUND).json({
+            "Error": "Invalid token..."
+        });
+        return;
+    } else {
+        res.json(
+            [
+                {
+                    "_id": "1234",
+                    "address": "ABC",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "name": "Store A",
+                    "lat": 49,
+                    "lng": -123,
+                    "place_id": "AB"
+                },
+                {
+                    "_id": "12345",
+                    "address": "ABCD",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "name": "Store B",
+                    "lat": 49,
+                    "lng": -123,
+                    "place_id": "ABC"
+                },
+            ]
+        );
+    }
+}
+
+const getSpecificStore = async (storeID, res) => {
+    if(storeID !== "1234") {
+        res.status(constants.RES_NOT_FOUND).json({
+            "Error": "Invalid store id..."
+        });
+        return;
+    } else {
+        res.json(
+            [
+                {
+                    "_id": "1234",
+                    "address": "ABC",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "name": "Store A",
+                    "lat": 49,
+                    "lng": -123,
+                    "place_id": "AB"
+                }
+            ]
+        );
+    }
+}
+
+const nearbyStores = async (northBoundaryLat, southBoundaryLat, eastBoundaryLong, westBoundaryLong, res) => {
+    if(northBoundaryLat >= 49.2548294 
+        && southBoundaryLat <= 49.2548294 
+        && eastBoundaryLong >= -123.2365587 
+        && westBoundaryLong <= -123.2365587) {
+
+            res.json([
+                {
+                    "storeName": "Save On Foods",
+                    "address": "5945 Berton Ave.",
+                    "city": "Vancouver",
+                    "province": "BC",
+                    "location": {
+                        "lat": 49.2548294,
+                        "lng": -123.2365587
+                    }
+                }
+            ]);
+
+    } else {
+        res.sendStatus(constants.RES_NOT_FOUND);
+        return;
+    }
+}
+
 module.exports = {
-    complexLogic
+    complexLogic,
+    getAllStores,
+    getSpecificStore,
+    nearbyStores
 }
