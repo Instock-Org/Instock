@@ -153,7 +153,7 @@ describe('POST /api/items/multiple', () => {
     });
 });
 
-describe('POST', () => {
+describe('POST /api/items', () => {
     test('Missing values should return bad request', (res) => {
         const body = {};
 

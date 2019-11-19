@@ -31,7 +31,7 @@ describe('POST /api/stores/feweststores (Complex Logic)', () => {
             .expect(constants.RES_BAD_REQUEST, res);
     });
 
-    test('Valid inputs return something', (res) => {
+    test('Valid inputs return results', (res) => {
         const body = {
             "shoppingList": ["cookies", "apple", "banana", "butter"],
 	        "radius": 15
