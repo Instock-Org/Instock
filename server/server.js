@@ -17,7 +17,8 @@ app.use("/", require("./routes/api/users"));
 
 db.connect((err) => {
     if(err) {
-        process.exit(1);
+        // process.exit(1);
+        // Do nothing
     } else {
         app.listen(PORT, () => {});
     }
