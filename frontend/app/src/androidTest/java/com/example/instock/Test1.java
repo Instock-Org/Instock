@@ -45,6 +45,7 @@ public class Test1 {
 
     @Test
     public void addItemButtonEnabled() {
+        onView(withId(R.id.action_add_item)).check(matches(isDisplayed()));
         onView(withId(R.id.action_add_item)).check(matches(isEnabled()));
     }
 
@@ -54,6 +55,7 @@ public class Test1 {
         onView(withId(R.id.action_add_item)).perform(click());
         onView(withId(R.id.add_edit_text)).perform(click()).perform(typeText("apple"));
         onView(withText("ADD")).inRoot(isDialog()).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.list_send_button)).check(matches(isDisplayed()));
         onView(withId(R.id.list_send_button)).check(matches(isEnabled()));
     }
 
@@ -70,6 +72,7 @@ public class Test1 {
         onView(withId(R.id.list_send_button)).check(matches(isEnabled()));
         onView(withId(R.id.list_send_button)).perform(click());
 
+        onView(withId(R.id.trip_maps_button)).check(matches(isDisplayed()));
         onView(withId(R.id.trip_maps_button)).check(matches(isEnabled()));
     }
 
