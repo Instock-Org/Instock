@@ -3,5 +3,6 @@ node_js:
   - "stable"
 before_script: 
   - cd server
+  - npm install
 script:
   - npm test
