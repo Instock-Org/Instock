@@ -1,6 +1,8 @@
 const app = require('../server');
+const constants = require('../constants');
 const supertest = require('supertest');
 const request = supertest(app);
+
 jest.mock('../apiDbHelperItems');
 
 // TODO: Move test request objects into a new folder? Some of these are duplicated in the mocks
@@ -19,7 +21,7 @@ describe('GET /api/items/store/{storeId}', () => {
 
         request.get('/api/items/store/43dabc123456123456abcdef')
             .set("Accept", "application/json")
-            .expect(200, res)
+            .expect(constants.RES_OK, res)
             .expect(resItems, res.body);
     });
 });
@@ -35,7 +37,7 @@ describe('POST /api/items/store/{storeId}', () => {
         request.post('/api/items/store/43dabc123456123456abcdef')
             .send(reqBody)
             .set("Accept", "application/json")
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 
     test('Adding item into store - test default values', (res) => {
@@ -46,7 +48,7 @@ describe('POST /api/items/store/{storeId}', () => {
         request.post('/api/items/store/43dabc123456123456abcdef')
             .send(reqBody)
             .set("Accept", "application/json")
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 
     test('Adding item into store - missing itemId', (res) => {
@@ -58,7 +60,7 @@ describe('POST /api/items/store/{storeId}', () => {
         request.post('/api/items/store/43dabc123456123456abcdef')
             .send(reqBody)
             .set("Accept", "application/json")
-            .expect(400, res);
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 });
 
@@ -72,7 +74,7 @@ describe('PUT /api/items/store/{storeId}/{itemId}', () => {
         request.put('/api/items/store/abcdefabcdefabcdefabcdef/111122223333444455556666')
             .set("Accept", "application/json")
             .send(reqBody)
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 
     test('Any missing values should still succeed', (res) => {
@@ -81,7 +83,7 @@ describe('PUT /api/items/store/{storeId}/{itemId}', () => {
         request.put('/api/items/store/abcdefabcdefabcdefabcdef/111122223333444455556666')
             .set("Accept", "application/json")
             .send(reqBody)
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 });
 
@@ -94,7 +96,7 @@ describe('DELETE /api/items/store/{storeId}', () => {
         request.delete('/api/items/store/abcdefabcdefabcdefabcdef')
             .set("Accept", "application/json")
             .send(deleteList)
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     })
 });
 
@@ -112,7 +114,7 @@ describe('GET /api/items?search_term=example+string', () => {
 
         request.get('/api/items?search_term=apple+pie')
             .set("Accept", "application/json")
-            .expect(200, res)
+            .expect(constants.RES_OK, res)
             .expect(resItems, res.body);
     });
 });
@@ -146,7 +148,7 @@ describe('POST /api/items/multiple', () => {
         request.post('/api/items/multiple')
             .set("Accept", "application/json")
             .send(body)
-            .expect(200, res)
+            .expect(constants.RES_OK, res)
             .expect(returned_items, res.body);
     });
 });
@@ -158,7 +160,7 @@ describe('POST', () => {
         request.post('/api/items')
             .set("Accept", "application/json")
             .send(body)
-            .expect(400, res);
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 
     test('Completed fields and non-duplicated items should succeed', (res) => {
@@ -174,7 +176,7 @@ describe('POST', () => {
         request.post('/api/items')
             .set("Accept", "application/json")
             .send(body)
-            .expect(200, res)
+            .expect(constants.RES_OK, res)
             .expect(EXPECTED_ITEM_ID, res.body)
     });
 
@@ -189,7 +191,7 @@ describe('POST', () => {
         request.post('/api/items')
             .set("Accept", "application/json")
             .send(body)
-            .expect(400, res);
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 });
 
@@ -200,7 +202,7 @@ describe('PUT /api/items/{itemId}', () => {
         request.put('/api/items/12345678abcdef12345678ab')
             .set("Accept", "application/json")
             .send(body)
-            .expect(400, res);
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 
     test('Filled in values should succeed', (res) => {
@@ -214,7 +216,7 @@ describe('PUT /api/items/{itemId}', () => {
         request.put('/api/items/12345678abcdef12345678ab')
             .set("Accept", "application/json")
             .send(body)
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 });
 
@@ -227,7 +229,7 @@ describe('DELETE /api/items/{itemId}', () => {
         request.delete('/api/items')
             .set("Accept", "application/json")
             .send(deleteList)
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 
     test('Nonempty list should respond with OK', (res) => {
@@ -241,6 +243,6 @@ describe('DELETE /api/items/{itemId}', () => {
         request.delete('/api/items')
             .set("Accept", "application/json")
             .send(deleteList)
-            .expect(200, res);
+            .expect(constants.RES_OK, res);
     });
 });
