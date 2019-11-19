@@ -20,8 +20,21 @@ describe('Tests for /items endpoints', () => {
     });
 
     test('Retrieving a list of items that a store carries', (res) => {
+        // TODO: Move into a separate sample response body file
+        const resItems = [
+            {
+                storeId: "43dabc123456123456abcdef",
+                itemId: "abcfedabcfed654321123456"
+            },
+            {
+                storeId: "43dabc123456123456abcdef",
+                itemId: "111122223333444455556666"
+            }
+        ];
+
         request.get('/api/items/store/43dabc123456123456abcdef')
             .set("Accept", "application/json")
-            .expect(200, res);
+            .expect(200, res)
+            .expect(resItems, res.body);
     });
 });

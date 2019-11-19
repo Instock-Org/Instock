@@ -13,7 +13,8 @@ router.use(express.json());
 // GET /api/items/store/{storeId}
 const getItemsByStore = async (req, res) => {
     try {
-        await dbHelper.getItemsByStore(req, res);
+        let storeId = db.getPrimaryKey(req.params.storeId);
+        await dbHelper.getItemsByStore(storeId, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
@@ -35,21 +36,16 @@ const postItemsByStore = async (req, res) => {
 
 // Updates a store's availability on an item
 // PUT /api/items/store/{storeId}/{itemId}
-const pushItemAtStoreId = async (req, res) => {
-    db.getDB().collection(storeHasCollection).updateOne({
-        "storeId": db.getPrimaryKey(req.params.storeId),
-        "itemId": db.getPrimaryKey(req.params.itemId),
-    }, {$set: {
-        "quantity": req.body.quantity || 0,
-        "price": req.body.price || 0
-    }}, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
-
-        res.sendStatus(constants.RES_OK);
-    });
+const putItemAtStoreId = async (req, res) => {
+    try {
+        let storeId = db.getPrimaryKey(req.params.storeId);
+        let itemId = db.getPrimaryKey(req.params.itemId);
+        let quantity = req.body.quantity || 0;
+        let price = req.body.price || 0;
+        await dbHelper.putItemAtStoreId(storeId, itemId, quantity, price);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    };
 };
 
 // Removes items from a store
@@ -157,7 +153,7 @@ const deleteItems = async (req, res) => {
 // Endpoints
 router.get("/api/items/store/:storeId", getItemsByStore);
 router.post("/api/items/store/:storeId", postItemsByStore);
-router.put("/api/items/store/:storeId/:itemId", pushItemAtStoreId);
+router.put("/api/items/store/:storeId/:itemId", putItemAtStoreId);
 router.delete("/api/items/store/:storeId", deleteItemsFromStore);
 router.get("/api/items", getItemsBySearchTerm);
 router.post("/api/items/multiple", getMultipleItemsAtStore);
