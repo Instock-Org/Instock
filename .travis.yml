@@ -2,9 +2,9 @@ language: node_js
 node_js:
   - "stable"
 before_script:
-  - ls
   - cd server
-  - ls
   - npm install
+  - npm install express --save
+  - npm install --save-dev jest
 script:
   - npm test
