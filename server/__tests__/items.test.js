@@ -2,7 +2,8 @@ const app = require('../server');
 const supertest = require('supertest');
 const request = supertest(app);
 
-jest.mock('../routes/api/items');
+//jest.mock('../routes/api/items');
+jest.mock('../apiDbHelper');
 
 describe('Tests for /items endpoints', () => {
     test('Adding an item to a store', (res) => {
