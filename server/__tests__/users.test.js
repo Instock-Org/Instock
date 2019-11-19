@@ -134,7 +134,7 @@ describe('POST /api/users/subscriptions', () => {
     });
 
     describe('DELETE /api/users/subscriptions/{userId}/{storeId}/{itemId}', () => {
-        test('Should return OK endpoint is reached regardless of item is deleted or not', (res) => {
+        test('Should return OK if endpoint is reached regardless of item is deleted or not', (res) => {
             request.delete("/api/users/subscriptions/abcdefabcdef123456123456/abcdefabcdef123456123456/abcdefabcdef123456123456")
                 .set("Accept", "application/json")
                 .expect(constants.RES_OK, res)
