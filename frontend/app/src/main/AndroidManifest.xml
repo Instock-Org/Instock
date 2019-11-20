@@ -3,7 +3,7 @@
     package="com.example.instock">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,10 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-
-        <activity android:name=".ShoppingTripActivity"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".SearchTestActivity"></activity>
+        <activity android:name=".ShoppingTripActivity" />
         <activity android:name=".ShoppingListActivity" />
 
         <meta-data
@@ -44,14 +44,14 @@
         </activity>
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"/>
-        <activity android:name=".APIActivity"/>
-        <activity android:name=".TestActivity"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".APIActivity" />
+        <activity android:name=".TestActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-            
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
@@ -60,4 +60,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>
