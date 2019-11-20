@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.instock"
-        minSdkVersion 15
+        minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
+
+    androidTestCompile("com.android.support.test.uiautomator:uiautomator-v18:2.1.1", {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
 
     apply plugin: 'com.google.gms.google-services'
 }
