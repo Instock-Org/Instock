@@ -78,6 +78,21 @@ const getMultipleItems = async (itemIds, res) => {
     });
 };
 
+const getAllItems = async (req, res) => {
+    db.getDB().collection(itemsCollection).find({}).toArray((err, result) => {
+        if (err) {
+            res.status(constants.RES_INTERNAL_ERR).send(err);
+            return;
+        } else {
+            var itemNamesArr = result.map(obj => {
+                return obj.name;
+            })
+
+            res.status(constants.RES_OK).send(itemNamesArr);
+        }
+    });
+};
+
 const postItem = async (name, description, barcode, units, res) => {
     db.getDB().collection(itemsCollection).insertOne({
         name,
@@ -135,5 +150,6 @@ module.exports = {
     getMultipleItems,
     postItem,
     putItem,
-    deleteItems
+    deleteItems,
+    getAllItems
 }

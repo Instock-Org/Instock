@@ -68,6 +68,7 @@ const deleteItemsFromStore = async (req, res) => {
     }
  };
 
+
 // Gets items by name or brand. Returns results only if exact match, case insensitive
 // GET /api/items?search_term=example+string
 const getItemsBySearchTerm = async (req, res) => {
@@ -79,6 +80,14 @@ const getItemsBySearchTerm = async (req, res) => {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
 };
+
+const getAllItems = async (req, res) => {
+    try {
+        dbHelper.getAllItems(req, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+}
 
 // Get items by item IDs
 // POST /api/items/multiple
@@ -157,6 +166,7 @@ router.post("/api/items/store/:storeId", postItemsByStore);
 router.put("/api/items/store/:storeId/:itemId", putItemAtStoreId);
 router.delete("/api/items/store/:storeId", deleteItemsFromStore);
 router.get("/api/items", getItemsBySearchTerm);
+router.get("/api/items/all", getAllItems);
 router.post("/api/items/multiple", getMultipleItems);
 router.post("/api/items", postItem);
 router.put("/api/items/:itemId", putItem);
