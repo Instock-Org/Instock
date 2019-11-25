@@ -9,25 +9,25 @@ const getUserById = async (userId, res) => {
         authType: "email"
     }];
 
-    res.status(200).send(response);
+    res.status(constants.RES_OK).send(response);
 }
 
 const postOneUser = async (email, password, authType, res) => {
-    res.sendStatus(200);
+    res.sendStatus(constants.RES_OK);
 }
 
 const putUserById = async (userId, email, password, authType, res) => {
-    res.sendStatus(200);
+    res.sendStatus(constants.RES_OK);
 }
 
 const deleteUserById = async (userId, res) => {
-    res.sendStatus(200);
+    res.sendStatus(constants.RES_OK);
 }
 
 const getUserSubscriptions = async (userId, res) => {
     if (userId == "abcdefabcdefabcdefabcdef") {
         const response = [];
-        res.status(200).send(response)
+        res.status(constants.RES_OK).send(response)
     }
     else {
         const response = [{
@@ -37,16 +37,16 @@ const getUserSubscriptions = async (userId, res) => {
             storeId: "abcdefabcdef123123123123",
             itemId: "123456123456123456123456"
         }];
-        res.status(200).send(response)
+        res.status(constants.RES_OK).send(response)
     }
 }
 
 const postItemToSubscription = async (userId, storeId, itemId, res) => {
-    res.sendStatus(200);
+    res.sendStatus(constants.RES_OK);
 }
 
 const deleteItemFromSubscription = async (userId, storeId, itemId, res) => {
-    res.sendStatus(200);
+    res.sendStatus(constants.RES_OK);
 }
 
 module.exports = {
