@@ -1,7 +1,17 @@
 const db = require("./db");
 const constants = require("./constants");
 const storeHasCollection = constants.COLLECTION_STOREHAS;
+const storesCollection = constants.COLLECTION_STORES;
 const itemsCollection = constants.COLLECTION_ITEMS;
+
+// Firebase and cloud messaging setup
+var admin = require("firebase-admin");
+var serviceAccount = require("./instock-1571623676921-firebase-adminsdk-d81uj-ae5ddf39de.json");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://instock-1571623676921.firebaseio.com"
+});
+
 
 const getItemsByStore = async (storeId, res) => {
     db.getDB().collection(storeHasCollection).find({
@@ -141,6 +151,57 @@ const deleteItems = async (itemIds, res) => {
     });
 };
 
+const postRestockItemNotifs = async(storeId, itemId, res) => {
+    db.getDB().collection(itemsCollection).find({
+        "_id": db.getPrimaryKey(itemId)
+    }).toArray((itemerr, item) => {
+
+        if (!item.length){
+            res.sendStatus(constants.RES_BAD_REQUEST);
+            return;
+        }
+        
+        db.getDB().collection(storesCollection).find({
+            "_id": db.getPrimaryKey(storeId)
+        }).toArray((storeerr, store) => {
+            if (!store.length){
+                res.sendStatus(constants.RES_BAD_REQUEST);
+                return;
+            }
+            var itemName = item[0].name;
+            var storeName = store[0].name;
+            
+            var registrationToken = 'dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV';
+        
+            var message = {
+                token: registrationToken,
+                notification: {
+                    title: "Item Restock Notification!",
+                    body: itemName + " has been re-stocked at " + storeName + "!"
+                }
+            };
+
+            try {
+                // Send a message to the device corresponding to the provided
+                // registration token.
+                admin.messaging().send(message)
+                .then((response) => {
+                    // Response is a message ID string.
+                    res.sendStatus(constants.RES_OK);
+                    return;
+                })
+                .catch((error) => {
+                    res.status(constants.RES_INTERNAL_ERR).send(error);
+                    return;
+                });
+            } catch (error) {
+                res.status(constants.RES_INTERNAL_ERR).send(error);
+                return;
+            }
+        });
+    });
+};
+
 module.exports = {
     getItemsByStore,
     postItemsByStore,
@@ -151,5 +212,6 @@ module.exports = {
     postItem,
     putItem,
     deleteItems,
-    getAllItems
+    getAllItems,
+    postRestockItemNotifs
 }

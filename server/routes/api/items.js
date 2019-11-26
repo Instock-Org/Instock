@@ -160,6 +160,12 @@ const deleteItems = async (req, res) => {
     }
 };
 
+const postRestockItemNotifs = async (req, res) => {
+    let storeId = req.params.storeId;
+    let itemId = req.params.itemId;
+
+    dbHelper.postRestockItemNotifs(storeId, itemId, res);
+};
 // Endpoints
 router.get("/api/items/store/:storeId", getItemsByStore);
 router.post("/api/items/store/:storeId", postItemsByStore);
@@ -171,5 +177,6 @@ router.post("/api/items/multiple", getMultipleItems);
 router.post("/api/items", postItem);
 router.put("/api/items/:itemId", putItem);
 router.delete("/api/items", deleteItems);
+router.post("/api/items/restockNotifs/:storeId/:itemId", postRestockItemNotifs);
 
 module.exports = router;
