@@ -1,6 +1,7 @@
 package com.example.instock;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -52,5 +53,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(marker).title(store.getName()));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
         }
+
+        String uri = "https://www.google.com/maps/dir/?api=1&origin=Madrid,Spain&destination=Barcelona,Spain&waypoints=Zaragoza,Spain%7CHuesca,Spain&travelmode=driving&dir_action=navigate";
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        i.setPackage("com.google.android.apps.maps");
+        startActivity(i);
     }
 }
