@@ -36,7 +36,7 @@ public class CustomListAdapter extends ArrayAdapter {
 
         storeNameTextView.setText(storesList.get(position));
         stockCountTextView.setText(stockList.get(position));
-        pricetTextView.setText(priceList.get(position));
+//        pricetTextView.setText(priceList.get(position));
 
         return rowView;
     };
