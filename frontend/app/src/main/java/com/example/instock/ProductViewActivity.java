@@ -48,20 +48,21 @@ public class ProductViewActivity extends AppCompatActivity {
 
                     ArrayList<String> storesList = new ArrayList<>();
                     ArrayList<String> stockList = new ArrayList<>();
+                    ArrayList<String> priceList = new ArrayList<>();
 
                     for (ItemStore store : res.getStores()) {
                         storesList.add(store.getName());
                         stockList.add(String.valueOf(store.getQuantity()));
                     }
 
-                    CustomListAdapter adapter = new CustomListAdapter(ProductViewActivity.this, storesList, stockList);
+                    CustomListAdapter adapter = new CustomListAdapter(ProductViewActivity.this, storesList, stockList, priceList);
 
                     ListView storesListView = findViewById(R.id.availability_stores_list);
                     storesListView.setAdapter(adapter);
 
                     itemNameTextView = findViewById(R.id.item_name);
                     itemNameTextView.setText(itemName);
-                    priceAmountTextView = findViewById(R.id.price_amount);
+                   // priceAmountTextView = findViewById(R.id.price_amount);
 //                    priceAmountTextView.setText();
 
                     // TODO: set real price amount
@@ -98,14 +99,19 @@ public class ProductViewActivity extends AppCompatActivity {
 //        stockList.add("2");
 //        stockList.add("3");
 //
-//        CustomListAdapter adapter = new CustomListAdapter(this, storesList, stockList);
+//        ArrayList<String> priceList = new ArrayList<>();
+//        priceList.add("$1.99");
+//        priceList.add("$2.50");
+//        priceList.add("$3.99");
+//        priceList.add("$1.50");
+//
+//        CustomListAdapter adapter = new CustomListAdapter(this, storesList, stockList, priceList);
 //
 //        ListView storesListView = findViewById(R.id.availability_stores_list);
 //        storesListView.setAdapter(adapter);
 //
 //        itemNameTextView = findViewById(R.id.item_name);
 //        itemNameTextView.setText(itemName);
-//        priceAmountTextView = findViewById(R.id.price_amount);
 //
 //        // TODO: set real price amount
 //

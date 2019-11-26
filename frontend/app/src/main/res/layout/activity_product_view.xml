@@ -28,25 +28,6 @@
         app:layout_constraintTop_toTopOf="@id/item_label"/>
 
     <TextView
-        android:id="@+id/price_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/price_label"
-        android:textSize="24dp"
-        android:paddingHorizontal="@dimen/activity_horizontal_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_label"/>
-
-    <TextView
-        android:id="@+id/price_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:paddingHorizontal="@dimen/activity_horizontal_margin"
-        app:layout_constraintLeft_toRightOf="@id/price_label"
-        app:layout_constraintTop_toTopOf="@id/price_label"/>
-
-    <TextView
         android:id="@+id/availability_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,7 +36,7 @@
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/price_label"/>
+        app:layout_constraintTop_toBottomOf="@id/item_label"/>
 
     <TextView
         android:id="@+id/store_count_label"
