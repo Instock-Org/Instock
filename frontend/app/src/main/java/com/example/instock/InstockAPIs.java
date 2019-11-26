@@ -38,4 +38,10 @@ public interface InstockAPIs {
     @GET("/api/items/all")
     Call<List<String>> getAllItems();
 
+    /*
+    Get request to fetch all stores that carry an item
+    */
+    @GET("api/stores/item")
+    Call<ItemStoreListResponse> getStoresForItem(@Query("search_term") String term);
+
 }

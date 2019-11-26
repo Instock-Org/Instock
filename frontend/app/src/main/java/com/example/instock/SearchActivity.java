@@ -40,7 +40,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         productListView = findViewById(R.id.product_list_view);
 
-        // TODO: Replace this with the real list of products from server.
         Retrofit retrofit = NetworkClient.getRetrofitClient();
         final InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
 
