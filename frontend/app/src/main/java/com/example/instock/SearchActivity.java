@@ -2,8 +2,10 @@ package com.example.instock;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,10 +13,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    private final String TAG = "SearchActivity";
 
     private MenuItem menuItemSearch;
     private SearchView productSearchView;
@@ -30,21 +39,50 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         productListView = findViewById(R.id.product_list_view);
 
         // TODO: Replace this with the real list of products from server.
-        List<String> productList = new ArrayList<String>();
-        productList.add("Apple");
-        productList.add("Banana");
-        productList.add("Milk");
-        productList.add("Eggs");
-        productList.add("Bread");
-        productList.add("Yogurt");
+        Retrofit retrofit = NetworkClient.getRetrofitClient();
+        InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
+
+        Call call = instockAPIs.getAllItems(); // get request
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                Log.d(TAG, String.valueOf(response.code()));
+                if (response.body() != null) {
+                    List<String> res = (List<String>) response.body();
+                    List<String> productList = new ArrayList<String>(res);
+
+                    // List adapter
+                    productListAdapter = new ArrayAdapter<String>(
+                            SearchActivity.this,
+                            android.R.layout.simple_list_item_1,
+                            productList );
+
+                    productListView.setAdapter(productListAdapter);
+                }
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                // Error callback
+                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "API request failed");
+            }
+        });
+
+//        productList.add("Apple");
+//        productList.add("Banana");
+//        productList.add("Milk");
+//        productList.add("Eggs");
+//        productList.add("Bread");
+//        productList.add("Yogurt");
 
         // List adapter
-        productListAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                productList );
-
-        productListView.setAdapter(productListAdapter);
+//        productListAdapter = new ArrayAdapter<String>(
+//                this,
+//                android.R.layout.simple_list_item_1,
+//                productList );
+//
+//        productListView.setAdapter(productListAdapter);
     }
 
     @Override

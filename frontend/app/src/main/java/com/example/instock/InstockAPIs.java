@@ -31,4 +31,11 @@ public interface InstockAPIs {
     @Headers("Content-Type: application/json")
     @POST("/api/stores/feweststores")
     Call<FewestStoresResponse> sendShoppingList(@Body JsonObject body);
+
+    /*
+    Get request to fetch all items in the db
+    */
+    @GET("/api/items/all")
+    Call<List<String>> getAllItems();
+
 }
