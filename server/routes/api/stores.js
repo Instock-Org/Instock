@@ -97,6 +97,31 @@ router.get("/:storeID", (req, res) => {
  * POST requests
  */
 
+
+// Get shortest path
+router.post("/shortestPath", (req, res) => {
+    const waypoints = req.body.waypoints;
+    const origin = req.body.origin;
+    const destination = req.body.destination;
+
+    // call google maps directions api
+    maps.googleMapsClient.directions({
+        origin,
+        waypoints,
+        destination,
+        optimize: true
+    }).asPromise()
+        .then((response) => {
+            var overview_polyline = response.json.routes[0].overview_polyline;
+	    res.status(constants.RES_OK).send(overview_polyline);
+        })
+        .catch((err) => {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+        });
+    
+});
+
+
 // Given a shopping list and user's location, find all stores nearby that have the items on the shopping list in stock
 // ASSUMES NO AMBIGUITY ON ITEMS: EXACT MATCH ONLY (NOT CASE SENSITIVE)
 router.post("/feweststores", complexLogic);
