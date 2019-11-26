@@ -94,8 +94,8 @@ const getAllItems = async (req, res) => {
 const getMultipleItems = async (req, res) => {
     try {
         let itemIds = [];
-        req.body.itemIds.forEach((value, key) => {
-            itemIds[key] = db.getPrimaryKey(value);
+        req.body.itemIds.forEach((value) => {
+            itemIds.push(db.getPrimaryKey(value));
         });
 
         dbHelper.getMultipleItems(itemIds, res);
