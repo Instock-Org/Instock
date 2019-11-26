@@ -1,10 +1,10 @@
-const app = require('../server');
-const constants = require('../constants');
-const supertest = require('supertest');
+const app = require("../server");
+const constants = require("../constants");
+const supertest = require("supertest");
 const request = supertest(app);
-const storesHelper = require('../storesHelper');
+const storesHelper = require("../storesHelper");
 
-jest.mock('../apiDbHelperStores');
+jest.mock("../apiDbHelperStores");
 describe("StoresHelper methods", () => {
     test("isValidCoordinates - Invalid coordinates should return false", () => {
         const latitude = 200.123;
@@ -39,17 +39,17 @@ describe("StoresHelper methods", () => {
         expect(storesHelper.getBoundaryCoordinates(latitude, longitude, radius)).toStrictEqual(expectedReturn);
     });
 });
-describe('POST /api/stores/feweststores (Complex Logic)', () => {
-    test('Empty shopping list should return not found', (res) => {
+describe("POST /api/stores/feweststores (Complex Logic)", () => {
+    test("Empty shopping list should return not found", (res) => {
         const body = {}; //uses default value empty shopping list
 
-        request.post('/api/stores/feweststores')
+        request.post("/api/stores/feweststores")
             .set("Accept", "application/json")
             .send(body)
             .expect(constants.RES_NOT_FOUND, res);
     });
 
-    test('Invalid coordinates should return bad request', (res) => {
+    test("Invalid coordinates should return bad request", (res) => {
         const body = {
             shoppingList: ["apple"],
             location: {
@@ -59,13 +59,13 @@ describe('POST /api/stores/feweststores (Complex Logic)', () => {
             radius: 2
         }
 
-        request.post('/api/stores/feweststores')
+        request.post("/api/stores/feweststores")
             .set("Accept", "application/json")
             .send(body)
             .expect(constants.RES_BAD_REQUEST, res);
     });
 
-    test('Valid inputs return results', (res) => {
+    test("Valid inputs return results", (res) => {
         const body = {
             "shoppingList": ["cookies", "apple", "banana", "butter"],
 	        "radius": 15
@@ -126,25 +126,25 @@ describe('POST /api/stores/feweststores (Complex Logic)', () => {
 
         // Probably the dumbest test ever but I don't want to spend an eternity refactoring this the
         // night before it's due
-        request.post('/api/stores/feweststores')
+        request.post("/api/stores/feweststores")
             .set("Accept", "application/json")
             .send(body)
             .expect(constants.RES_OK, res)
             .expect(expectedResponse, res.body);
     });
-})
+});
 
-describe('GET /api/stores/ ', () => {
-    test('No client id or token specified', (res) => {
-        request.get('/api/stores')
+describe("GET /api/stores/ ", () => {
+    test("No client id or token specified", (res) => {
+        request.get("/api/stores")
             .set("Accept", "application/json")
             .expect({
                 "Error": "Invalid client id or token..."
             }, res);
     });
 
-    test('No token specified', (res) => {
-        request.get('/api/stores')
+    test("No token specified", (res) => {
+        request.get("/api/stores")
             .set("Accept", "application/json")
             .query({
                 "clientId": 12345
@@ -154,9 +154,9 @@ describe('GET /api/stores/ ', () => {
             }, res);
     });
 
-    test('Successful Request', (res) => {
+    test("Successful Request", (res) => {
 
-        request.get('/api/stores')
+        request.get("/api/stores")
             .set("Accept", "application/json")
             .query({
                 "clientId": 12345,
@@ -187,18 +187,18 @@ describe('GET /api/stores/ ', () => {
     });
 });
 
-describe('GET /api/stores/:storeid ', () => {
-    test('Invalid store id specified', (res) => {
-        request.get('/api/stores/123')
+describe("GET /api/stores/:storeid ", () => {
+    test("Invalid store id specified", (res) => {
+        request.get("/api/stores/123")
             .set("Accept", "application/json")
             .expect({
                 "Error": "Invalid store id..."
             }, res);
     });
 
-    test('Successful Get specific store Request', (res) => {
+    test("Successful Get specific store Request", (res) => {
 
-        request.get('/api/stores/1234')
+        request.get("/api/stores/1234")
             .set("Accept", "application/json")
             .expect([
                 {
@@ -215,8 +215,8 @@ describe('GET /api/stores/:storeid ', () => {
     });
 });
 
-describe('POST /api/stores/nearbyStores ', () => {
-    test('Error: No stores within radius', (res) => {
+describe("POST /api/stores/nearbyStores ", () => {
+    test("Error: No stores within radius", (res) => {
         const body = {
             "location": {
                 "latitude": 49.262130,
@@ -225,22 +225,22 @@ describe('POST /api/stores/nearbyStores ', () => {
             "radius": 1.0
         }
 
-        request.post('/api/stores/nearbyStores')
+        request.post("/api/stores/nearbyStores")
             .set("Accept", "application/json")
             .send(body)
             .expect(constants.RES_NOT_FOUND, res);
     });
 
-    test('Success: One store within radius', (res) => {
+    test("Success: One store within radius", (res) => {
         const body = {
             "location": {
                 "latitude": 49.262130,
                 "longtitude": -123.250578
             },
             "radius": 2.0
-        }
+        };
 
-        request.post('/api/stores/nearbyStores')
+        request.post("/api/stores/nearbyStores")
             .set("Accept", "application/json")
             .send(body)
             .expect([

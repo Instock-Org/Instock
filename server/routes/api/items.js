@@ -52,7 +52,7 @@ const putItemAtStoreId = async (req, res) => {
         dbHelper.putItemAtStoreId(storeId, itemId, quantity, price, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
-    };
+    }
 };
 
 // Removes items from a store
@@ -87,7 +87,7 @@ const getAllItems = async (req, res) => {
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
-}
+};
 
 // Get items by item IDs
 // POST /api/items/multiple

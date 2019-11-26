@@ -20,10 +20,10 @@ const postItemsByStore = async (storeId, itemId, quantity, price, res) => {
     // Just check for valid inputs
     if (storeId && itemId && quantity >= 0 && price >= 0) {
         res.sendStatus(constants.RES_OK);
+        return;
     }
-    else {
-        res.sendStatus(constants.RES_BAD_REQUEST);
-    }
+
+    res.sendStatus(constants.RES_BAD_REQUEST);
 };
 
 const putItemAtStoreId = async (storeId, itemId, quantity, price, res) => {
@@ -63,7 +63,7 @@ const getItemsBySearchTerm = async (regex, res) => {
 
 // TODO: Needs fixing
 const getMultipleItems = async (itemIds, res) => {
-    const all_items = [
+    const allItems = [
         {
             _id: "111122223333444455556666",
             name: "apple pie",
@@ -87,21 +87,21 @@ const getMultipleItems = async (itemIds, res) => {
         }
     ];
 
-    let returned_items = [];
-    all_items.forEach((item) => {
+    let returnedItems = [];
+    allItems.forEach((item) => {
         if (itemIds.includes(item._id)) {
-            returned_items.push(item);
+            returnedItems.push(item);
         }
     });
 
-    res.status(constants.RES_OK).send(returned_items);
+    res.status(constants.RES_OK).send(returnedItems);
 };
 
 const postItem = async (name, description, barcode, units, res) => {
     const DUMMY_ITEM_ID = "afbc12345678dcba";
-    const existing_items_barcode_only = ["1234567899"];
+    const existingItemsBarcodeOnly = ["1234567899"];
 
-    if (existing_items_barcode_only.includes(barcode)) {
+    if (existingItemsBarcodeOnly.includes(barcode)) {
         res.sendStatus(constants.RES_BAD_REQUEST);
         return;
     }

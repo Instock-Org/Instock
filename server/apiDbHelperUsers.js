@@ -59,7 +59,7 @@ const deleteUserById = async (userId, res) => {
 
 const getUserSubscriptions = async (userId, res) => {
     db.getDB().collection(userSubscriptionsCollection).find({
-        "userId": userId
+        userId
     }, {projection: {_id: 0, userId: 0}}).toArray((err, result) => {
         if (err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);

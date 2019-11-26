@@ -1,11 +1,11 @@
-const app = require('../server');
-const constants = require('../constants');
-const supertest = require('supertest');
+const app = require("../server");
+const constants = require("../constants");
+const supertest = require("supertest");
 const request = supertest(app);
 
-jest.mock('../apiDbHelperUsers');
+jest.mock("../apiDbHelperUsers");
 
-describe('GET /api/users/{userId}', () => {
+describe("GET /api/users/{userId}", () => {
     const expected = [{
         _id: "123456123456abcdefabcdef",
         email: "johndoe@someemail.com",
@@ -13,7 +13,7 @@ describe('GET /api/users/{userId}', () => {
         authType: "email"
     }];
 
-    test('Test getting a user retrieves all relevant details', (res) => {
+    test("Test getting a user retrieves all relevant details", (res) => {
         request.get("/api/users/123456123456abcdefabcdef")
             .set("Accept", "application/json")
             .expect(constants.RES_OK, res)
@@ -21,8 +21,8 @@ describe('GET /api/users/{userId}', () => {
     });
 });
 
-describe('POST /api/users', () => {
-    test('Missing information results in bad request', (res) => {
+describe("POST /api/users", () => {
+    test("Missing information results in bad request", (res) => {
         const newUser = {
             email: "johndoe@someemail.com",
             auth_type: "email"
@@ -31,10 +31,10 @@ describe('POST /api/users', () => {
         request.post("/api/users")
             .set("Accept", "application/json")
             .send(newUser)
-            .expect(constants.RES_BAD_REQUEST, res)
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 
-    test('Complete information results in success', (res) => {
+    test("Complete information results in success", (res) => {
         const newUser = {
             email: "johndoe@someemail.com",
             password: "myPasswordSucks",
@@ -44,12 +44,12 @@ describe('POST /api/users', () => {
         request.post("/api/users")
             .set("Accept", "application/json")
             .send(newUser)
-            .expect(constants.RES_OK, res)
+            .expect(constants.RES_OK, res);
     });
 });
 
-describe('PUT /api/users', () => {
-    test('Missing information results in bad request', (res) => {
+describe("PUT /api/users", () => {
+    test("Missing information results in bad request", (res) => {
         const updatedUser = {
             email: "johndoe@someemail.com",
             auth_type: "email"
@@ -58,10 +58,10 @@ describe('PUT /api/users', () => {
         request.put("/api/users/abcdefabcdef123456123456")
             .set("Accept", "application/json")
             .send(updatedUser)
-            .expect(constants.RES_BAD_REQUEST, res)
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 
-    test('Complete information results in success', (res) => {
+    test("Complete information results in success", (res) => {
         const updatedUser = {
             email: "johndoe@someemail.com",
             password: "B3tterP4$$WurD",
@@ -71,20 +71,20 @@ describe('PUT /api/users', () => {
         request.put("/api/users/abcdefabcdef123456123456")
             .set("Accept", "application/json")
             .send(updatedUser)
-            .expect(constants.RES_OK, res)
+            .expect(constants.RES_OK, res);
     });
 });
 
-describe('DELETE /api/users', () => {
-    test('Should return OK regardless of whether a user was deleted', (res) => {
+describe("DELETE /api/users", () => {
+    test("Should return OK regardless of whether a user was deleted", (res) => {
         request.delete("/api/users/abcdefabcdef123456123456")
             .set("Accept", "application/json")
-            .expect(constants.RES_OK, res)
+            .expect(constants.RES_OK, res);
     });
 });
 
-describe('GET /api/users/subscriptions/{userId}', () => {
-    test('Should return OK if user has no subscriptions', (res) => {
+describe("GET /api/users/subscriptions/{userId}", () => {
+    test("Should return OK if user has no subscriptions", (res) => {
         const expectedSubscriptions = [];
         request.get("/api/users/subscriptions/abcdefabcdefabcdefabcdef")
             .set("Accept", "application/json")
@@ -92,7 +92,7 @@ describe('GET /api/users/subscriptions/{userId}', () => {
             .expect(expectedSubscriptions, res.body);
     });
 
-    test('Should return OK if user has subscriptions', (res) => {
+    test("Should return OK if user has subscriptions", (res) => {
         const expectedSubscriptions = [{
             storeId: "123123123123123123123123",
             itemId: "321321321321321321321321"
@@ -108,8 +108,8 @@ describe('GET /api/users/subscriptions/{userId}', () => {
     });
 });
 
-describe('POST /api/users/subscriptions', () => {
-    test('Should return OK if all fields present', (res) => {
+describe("POST /api/users/subscriptions", () => {
+    test("Should return OK if all fields present", (res) => {
         const body = {
             user_id: "abcdefabcdefabcdefabcdef",
             store_id: "abcdefabcdefabcdefabcdef",
@@ -118,10 +118,10 @@ describe('POST /api/users/subscriptions', () => {
         request.post("/api/users/subscriptions")
             .set("Accept", "application/json")
             .send(body)
-            .expect(constants.RES_OK, res)
+            .expect(constants.RES_OK, res);
     });
 
-    test('Should return Bad request if missing fields', (res) => {
+    test("Should return Bad request if missing fields", (res) => {
         const body = {
             user_id: "abcdefabcdefabcdefabcdef",
             store_id: "abcdefabcdefabcdefabcdef",
@@ -130,14 +130,14 @@ describe('POST /api/users/subscriptions', () => {
         request.post("/api/users/subscriptions")
             .set("Accept", "application/json")
             .send(body)
-            .expect(constants.RES_BAD_REQUEST, res)
+            .expect(constants.RES_BAD_REQUEST, res);
     });
 
-    describe('DELETE /api/users/subscriptions/{userId}/{storeId}/{itemId}', () => {
-        test('Should return OK if endpoint is reached regardless of item is deleted or not', (res) => {
+    describe("DELETE /api/users/subscriptions/{userId}/{storeId}/{itemId}", () => {
+        test("Should return OK if endpoint is reached regardless of item is deleted or not", (res) => {
             request.delete("/api/users/subscriptions/abcdefabcdef123456123456/abcdefabcdef123456123456/abcdefabcdef123456123456")
                 .set("Accept", "application/json")
-                .expect(constants.RES_OK, res)
+                .expect(constants.RES_OK, res);
         });
     });
 });

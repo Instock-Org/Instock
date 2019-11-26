@@ -94,9 +94,9 @@ const getAllItems = async (req, res) => {
             res.status(constants.RES_INTERNAL_ERR).send(err);
             return;
         } else {
-            var itemNamesArr = result.map(obj => {
+            var itemNamesArr = result.map((obj) => {
                 return obj.name;
-            })
+            });
 
             res.status(constants.RES_OK).send(itemNamesArr);
         }
@@ -171,7 +171,7 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
             var itemName = item[0].name;
             var storeName = store[0].name;
             
-            var registrationToken = 'dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV';
+            var registrationToken = "dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV";
         
             var message = {
                 token: registrationToken,
@@ -214,4 +214,4 @@ module.exports = {
     deleteItems,
     getAllItems,
     postRestockItemNotifs
-}
+};

@@ -12,7 +12,7 @@ const getUserById = async (req, res) => {
     const userId = db.getPrimaryKey(req.params.user_id);
     
     dbHelper.getUserById(userId, res);
-}
+};
 
 // Add a single user
 const postOneUser = async (req, res) => {
@@ -41,7 +41,7 @@ const putUserById = async (req, res) => {
         return;
     }
 
-    dbHelper.putUserById(userId, email, password, authType, res)
+    dbHelper.putUserById(userId, email, password, authType, res);
 };
 
 // Deletes a single user by user_id

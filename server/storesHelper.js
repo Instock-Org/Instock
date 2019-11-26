@@ -1,6 +1,6 @@
 const constants = require("./constants");
 const isValidCoordinates = (latitude, longitude) => {
-    return latitude <= constants.MAX_LATITUDE && latitude >= constants.MIN_LATITUDE &&  longitude <= constants.MAX_LONGITUDE && longitude >= constants.MIN_LONGITUDE
+    return latitude <= constants.MAX_LATITUDE && latitude >= constants.MIN_LATITUDE &&  longitude <= constants.MAX_LONGITUDE && longitude >= constants.MIN_LONGITUDE;
 }
 
 const getBoundaryCoordinates = (latitude, longitude, radiusKm) => {
@@ -19,4 +19,4 @@ const getBoundaryCoordinates = (latitude, longitude, radiusKm) => {
 module.exports = {
     isValidCoordinates,
     getBoundaryCoordinates
-}
+};

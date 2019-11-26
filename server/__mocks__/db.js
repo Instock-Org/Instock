@@ -1,5 +1,5 @@
 const connect = (cb) => {
-    cb()
+    cb();
 };
 
 const getPrimaryKey = (_id) => {
