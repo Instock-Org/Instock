@@ -8,3 +8,6 @@ before_script:
   - npm install --save-dev jest
 script:
   - npm test
+services:
+  - redis-server
+  - mongodb
