@@ -74,6 +74,18 @@ const complexLogic = async (req, res) => {
     return;
 };
 
+const getAllStoresWithItemByName = async (req, res) => {
+    const regex = new RegExp(".*" + req.query.search_term + ".*", "i");
+
+    try {
+        const regex = new RegExp(".*" + req.query.search_term + ".*", "i");
+
+        dbHelper.getAllStoresWithItemByName(regex, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
+
 // Get all stores and their details. 
 router.get("/", (req, res) => {
 
@@ -84,6 +96,9 @@ router.get("/", (req, res) => {
     dbHelper.getAllStores(clientId, token, res);
 
 });
+
+// Return all items with given name
+router.get("/item", getAllStoresWithItemByName)
 
 // Get details for a specific store
 router.get("/:storeID", (req, res) => {

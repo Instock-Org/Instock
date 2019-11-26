@@ -128,7 +128,7 @@ const complexLogic = async (shoppingList, boundaries, redisKey, res) => {
             });
         });
     });
-}
+};
 
 const getAllStores = async (clientId, token, res) => {
     db.getDB().collection(authCollection).find({
@@ -159,7 +159,7 @@ const getAllStores = async (clientId, token, res) => {
             });
         }
     });
-}
+};
 
 const getSpecificStore = async (storeID, res) => {
     db.getDB().collection(storesCollection).find({
@@ -174,7 +174,7 @@ const getSpecificStore = async (storeID, res) => {
             res.json(documents);
         }
     });
-}
+};
 
 const nearbyStores = async (northBoundaryLat, southBoundaryLat, eastBoundaryLong, westBoundaryLong, res) => {
     db.getDB().collection(storesCollection).find({
@@ -208,11 +208,69 @@ const nearbyStores = async (northBoundaryLat, southBoundaryLat, eastBoundaryLong
         });
         res.status(constants.RES_OK).send(stores);
     });
-}
+};
+
+const getAllStoresWithItemByName = async (regex, res) => {
+    db.getDB().collection(itemsCollection).find({
+        "name": regex
+    }).toArray((itemsErr, items) => {
+        if (itemsErr) {
+            res.sendStatus(constants.RES_INTERNAL_ERR);
+            return;
+        }
+        else if (items.length == 0) {
+            res.sendStatus(constants.RES_NOT_FOUND);
+            return;
+        }
+        
+        let finalJson = items[0];
+        const itemId = items[0]._id;
+        let storesArray = [];
+
+        db.getDB().collection(storeHasCollection).find({
+            "itemId": db.getPrimaryKey(itemId)
+        }, {projection: {_id: 0, itemId: 0}}).toArray((storeHasErr, storeItemDetails) => {
+            if (storeHasErr) {
+                res.sendStatus(constants.RES_INTERNAL_ERR);
+                return;
+            }
+            else if (storeItemDetails.length == 0) {
+                res.sendStatus(constants.RES_NOT_FOUND);
+                return;
+            }
+            const numStores = storeItemDetails.length;
+            let numStoreCounter = 0;
+            storeItemDetails.forEach(storeItemDetail => {
+                db.getDB().collection(storesCollection).find({
+                    "_id": db.getPrimaryKey(storeItemDetail.storeId)
+                }).toArray((storeErr, store) => {
+                    if (storeErr) {
+                        res.sendStatus(constants.RES_INTERNAL_ERR);
+                        return;
+                    }
+                    let storeWithPriceAndQuantity = store[0];
+                    storeWithPriceAndQuantity.price = storeItemDetail.price;
+                    storeWithPriceAndQuantity.quantity = storeItemDetail.quantity;
+
+                    storesArray.push(JSON.parse(JSON.stringify(storeWithPriceAndQuantity)));
+
+                    numStoreCounter = numStoreCounter + 1;
+
+                    if(numStoreCounter == numStores) {
+                        finalJson.stores = storesArray;
+                        res.status(constants.RES_OK).send(finalJson);
+                        return;
+                    }
+                });
+            })
+        });
+    });
+};
 
 module.exports = {
     complexLogic,
     getAllStores,
     getSpecificStore,
-    nearbyStores
+    nearbyStores,
+    getAllStoresWithItemByName
 }
