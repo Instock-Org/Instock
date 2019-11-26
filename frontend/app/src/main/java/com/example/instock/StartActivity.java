@@ -28,7 +28,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch User activity
-//                Intent intent = new Intent(StartActivity.this, UserViewActivity.class);
+            //    Intent intent = new Intent(StartActivity.this, UserViewActivity.class);
                 Intent intent = new Intent(StartActivity.this, AuthenticationActivity.class);
                 startActivity(intent);
             }
@@ -39,6 +39,8 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch Employee activity
+                Intent intent = new Intent(StartActivity.this, EmployeeStockActivity.class);
+                startActivity(intent);
 
             }
         });

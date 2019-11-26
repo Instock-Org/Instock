@@ -30,4 +30,8 @@
     <!-- Shopping Trip -->
     <string name="trip_map_button">Maps View</string>
 
+    <!-- Employee Stock -->
+    <string name="store_name_placeholder">Grocery Store</string>
+    <string name="product_count">Count</string>
+
 </resources>
