@@ -1,6 +1,7 @@
 package com.example.instock;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -51,6 +52,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng marker = new LatLng(store.getLat(), store.getLng());
             mMap.addMarker(new MarkerOptions().position(marker).title(store.getName()));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        }
+
+        try {
+            Thread.sleep(3000);
+            String uri = "https://www.google.com/maps/dir/?api=1&origin=49.260587,-123.251153&destination=49.260587,-123.251153&waypoints=49.2605024,-123.2476207%7C49.262369,-123.2501181&travelmode=walking&dir_action=navigate";
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            i.setPackage("com.google.android.apps.maps");
+            startActivity(i);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
