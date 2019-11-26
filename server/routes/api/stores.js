@@ -130,8 +130,8 @@ const postShortestPath = async (req, res) => {
         optimize: true
     }).asPromise()
         .then((response) => {
-            var overview_polyline = response.json.routes[0].overview_polyline;
-	    res.status(constants.RES_OK).send(overview_polyline);
+            var overviewPolyline = response.json.routes[0].overviewPolyline;
+	        res.status(constants.RES_OK).send(overviewPolyline);
         })
         .catch((err) => {
             res.status(constants.RES_BAD_REQUEST).send(err);
@@ -193,7 +193,7 @@ const deleteStore = async (req, res) => {
 router.get("/", getAllStores);
 
 // Return all items with given name
-router.get("/item", getAllStoresWithItemByName)
+router.get("/item", getAllStoresWithItemByName);
 
 // Get details for a specific store
 router.get("/:storeID", getStoreId);

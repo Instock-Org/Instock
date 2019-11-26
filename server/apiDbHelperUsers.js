@@ -106,4 +106,4 @@ module.exports = {
     getUserSubscriptions,
     postItemToSubscription,
     deleteItemFromSubscription
-}
+};

@@ -151,4 +151,4 @@ module.exports = {
     getAllStores,
     getSpecificStore,
     nearbyStores
-}
+};

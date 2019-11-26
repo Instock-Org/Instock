@@ -162,7 +162,7 @@ const getAllStores = async (clientId, token, res) => {
 };
 
 const postStore = async (address, city, province, name, lat, lng, placeId, res) => {
-    db.getDB().collection(collection).insertOne({
+    db.getDB().collection(storesCollection).insertOne({
         address,
         city,
         province,
@@ -181,7 +181,7 @@ const postStore = async (address, city, province, name, lat, lng, placeId, res) 
 };
 
 const putStore = async (storeId, address, city, province, name, res) => {
-    db.getDB().collection(collection).findOneAndUpdate(
+    db.getDB().collection(storesCollection).findOneAndUpdate(
         {_id : db.getPrimaryKey(storeId)}, 
         {$set : {
             address,
@@ -257,7 +257,7 @@ const getAllStoresWithItemByName = async (regex, res) => {
             res.sendStatus(constants.RES_INTERNAL_ERR);
             return;
         }
-        else if (items.length == 0) {
+        else if (items.length === 0) {
             res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
@@ -273,13 +273,13 @@ const getAllStoresWithItemByName = async (regex, res) => {
                 res.sendStatus(constants.RES_INTERNAL_ERR);
                 return;
             }
-            else if (storeItemDetails.length == 0) {
+            else if (storeItemDetails.length === 0) {
                 res.sendStatus(constants.RES_NOT_FOUND);
                 return;
             }
             const numStores = storeItemDetails.length;
             let numStoreCounter = 0;
-            storeItemDetails.forEach(storeItemDetail => {
+            storeItemDetails.forEach((storeItemDetail) => {
                 db.getDB().collection(storesCollection).find({
                     "_id": db.getPrimaryKey(storeItemDetail.storeId)
                 }).toArray((storeErr, store) => {
@@ -295,7 +295,7 @@ const getAllStoresWithItemByName = async (regex, res) => {
 
                     numStoreCounter = numStoreCounter + 1;
 
-                    if(numStoreCounter == numStores) {
+                    if(numStoreCounter === numStores) {
                         finalJson.stores = storesArray;
                         res.status(constants.RES_OK).send(finalJson);
                         return;
@@ -307,7 +307,7 @@ const getAllStoresWithItemByName = async (regex, res) => {
 };
 
 const deleteStore = async (storeId, res) => {
-    db.getDB().collection(collection).findOneAndDelete(
+    db.getDB().collection(storesCollection).findOneAndDelete(
         {_id : db.getPrimaryKey(storeId)}, 
     (err, result) => {
         if(err) {
@@ -328,4 +328,4 @@ module.exports = {
     putStore,
     postStore,
     deleteStore
-}
+};
