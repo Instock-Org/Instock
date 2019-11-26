@@ -48,6 +48,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.transition.slide_from_right, R.transition.slide_to_left);
         setContentView(R.layout.activity_shopping_list);
+        getSupportActionBar().setTitle("Shopping List");
 
         mHelper = new TaskDbHelper(this);
         mTaskListView = (ListView) findViewById(R.id.list_items);

@@ -23,6 +23,7 @@ public class ShoppingTripActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.transition.slide_from_right, R.transition.slide_to_left);
         setContentView(R.layout.activity_shopping_trip);
+        getSupportActionBar().setTitle("Stores");
 
         ExpandableListView expandableListView;
         ExpandableListAdapter expandableListAdapter;

@@ -36,4 +36,8 @@
     <string name="availability_label">Available Store</string>
     <string name="count_lable">Item Count</string>
 
+    <!-- Employee Stock -->
+    <string name="store_name_placeholder">Grocery Store</string>
+    <string name="product_count">Count</string>
+
 </resources>
