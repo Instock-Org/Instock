@@ -54,9 +54,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
         }
 
-        String uri = "https://www.google.com/maps/dir/?api=1&origin=Madrid,Spain&destination=Barcelona,Spain&waypoints=Zaragoza,Spain%7CHuesca,Spain&travelmode=driving&dir_action=navigate";
-        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        i.setPackage("com.google.android.apps.maps");
-        startActivity(i);
+        try {
+            Thread.sleep(3000);
+            String uri = "https://www.google.com/maps/dir/?api=1&origin=49.260587,-123.251153&destination=49.260587,-123.251153&waypoints=49.2605024,-123.2476207%7C49.262369,-123.2501181&travelmode=walking&dir_action=navigate";
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            i.setPackage("com.google.android.apps.maps");
+            startActivity(i);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
