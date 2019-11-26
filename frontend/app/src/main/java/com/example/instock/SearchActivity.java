@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -40,7 +42,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         // TODO: Replace this with the real list of products from server.
         Retrofit retrofit = NetworkClient.getRetrofitClient();
-        InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
+        final InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
 
         Call call = instockAPIs.getAllItems(); // get request
 
@@ -59,6 +61,18 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                             productList );
 
                     productListView.setAdapter(productListAdapter);
+
+                    productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String item = productListAdapter.getItem(position);
+
+                            Intent intent = new Intent(SearchActivity.this, ProductViewActivity.class);
+                            intent.putExtra("Item name", item);
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
             @Override

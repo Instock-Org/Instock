@@ -29,5 +29,11 @@
 
     <!-- Shopping Trip -->
     <string name="trip_map_button">Maps View</string>
+    
+    <!-- Product View -->
+    <string name="item_label">Item:</string>
+    <string name="price_label">Price:</string>
+    <string name="availability_label">Available Store</string>
+    <string name="count_lable">Item Count</string>
 
 </resources>

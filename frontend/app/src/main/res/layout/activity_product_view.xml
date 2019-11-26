@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductViewActivity">
+    
+    <TextView
+        android:id="@+id/item_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_label"
+        android:textSize="24dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:paddingVertical="@dimen/activity_vertical_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:paddingVertical="@dimen/activity_vertical_margin"
+        app:layout_constraintLeft_toRightOf="@id/item_label"
+        app:layout_constraintTop_toTopOf="@id/item_label"/>
+
+    <TextView
+        android:id="@+id/price_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/price_label"
+        android:textSize="24dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_label"/>
+
+    <TextView
+        android:id="@+id/price_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintLeft_toRightOf="@id/price_label"
+        app:layout_constraintTop_toTopOf="@id/price_label"/>
+
+    <TextView
+        android:id="@+id/availability_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/availability_label"
+        android:textSize="24dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/price_label"/>
+
+    <TextView
+        android:id="@+id/store_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/count_lable"
+        android:textSize="24dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/availability_label"/>
+
+
+    <ListView
+        android:id="@+id/availability_stores_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@id/availability_label"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+    </ListView>
+
+    <Button
+        android:id="@+id/notify_stock_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notify me when back in stock"
+        android:layout_marginTop="45dp"
+        android:paddingVertical="@dimen/activity_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/availability_stores_list"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
