@@ -61,7 +61,6 @@ const complexLogic = async (req, res) => {
             // Calculate long/lat bounds (north, south, west, east)
             // Will assume square instead of circle
             const boundaries = storesHelper.getBoundaryCoordinates(latitude, longitude, radiusKm);
-            var storePickupList = [];
 
             // Convert each item on shopping list to regex to make it case insensitive
             shoppingList.forEach((searchTerm, key) => {
@@ -69,7 +68,7 @@ const complexLogic = async (req, res) => {
             });
 
             // Get item IDs by name
-            dbHelper.complexLogic(shoppingList, boundaries, res);
+            dbHelper.complexLogic(shoppingList, boundaries, redisKey, res);
         }
     });
     return;

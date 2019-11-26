@@ -1,6 +1,6 @@
 const constants = require("../constants");
 
-const complexLogic = async (shoppingList, boundaries, res) => {
+const complexLogic = async (shoppingList, boundaries, redisKey, res) => {
     const sampleResponse = {
         "stores": [
             {
