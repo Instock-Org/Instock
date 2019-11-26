@@ -74,6 +74,16 @@ const complexLogic = async (req, res) => {
     return;
 };
 
+const getAllStores = async (req, res) => {
+
+    var clientId = req.query.clientId;
+    var token = req.query.token;
+
+    // Get all stores from DB
+    dbHelper.getAllStores(clientId, token, res);
+
+};
+
 const getAllStoresWithItemByName = async (req, res) => {
     const regex = new RegExp(".*" + req.query.search_term + ".*", "i");
 
@@ -86,35 +96,28 @@ const getAllStoresWithItemByName = async (req, res) => {
     }
 };
 
-// Get all stores and their details. 
-router.get("/", (req, res) => {
-
-    var clientId = req.query.clientId;
-    var token = req.query.token;
-
-    // Get all stores from DB
-    dbHelper.getAllStores(clientId, token, res);
-
-});
-
-// Return all items with given name
-router.get("/item", getAllStoresWithItemByName)
-
-// Get details for a specific store
-router.get("/:storeID", (req, res) => {
+const getStoreId = (req, res) => {
     const storeID = req.params.storeID;
 
     dbHelper.getSpecificStore(storeID, res);
-});
+};
 
+const postNearbyStores = async (req, res) => {
+    const latitude = req.body.location.latitude || constants.DEFAULT_LATITUDE;
+    const longitude = req.body.location.longitude || constants.DEFAULT_LONGITUDE;
+    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS_KM;
 
-/**
- * POST requests
- */
+    // Calculate long/lat bounds (north, south, west, east)
+    // Will assume square instead of radius
+    const eastBoundaryLong = longitude + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const westBoundaryLong = longitude - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
+    const northBoundaryLat = latitude  + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
+    const southBoundaryLat = latitude  - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
 
+    dbHelper.nearbyStores(northBoundaryLat, southBoundaryLat, eastBoundaryLong, westBoundaryLong, res);
+};
 
-// Get shortest path
-router.post("/shortestPath", (req, res) => {
+const postShortestPath = async (req, res) => {
     const waypoints = req.body.waypoints;
     const origin = req.body.origin;
     const destination = req.body.destination;
@@ -134,31 +137,9 @@ router.post("/shortestPath", (req, res) => {
             res.status(constants.RES_BAD_REQUEST).send(err);
         });
     
-});
+};
 
-
-// Given a shopping list and user's location, find all stores nearby that have the items on the shopping list in stock
-// ASSUMES NO AMBIGUITY ON ITEMS: EXACT MATCH ONLY (NOT CASE SENSITIVE)
-router.post("/feweststores", complexLogic);
-
-// Endpoint for getting nearest stores
-router.post("/nearbyStores", (req, res) => {
-    const latitude = req.body.location.latitude || constants.DEFAULT_LATITUDE;
-    const longitude = req.body.location.longitude || constants.DEFAULT_LONGITUDE;
-    const radiusKm = req.body.radius || constants.DEFAULT_RADIUS_KM;
-
-    // Calculate long/lat bounds (north, south, west, east)
-    // Will assume square instead of radius
-    const eastBoundaryLong = longitude + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const westBoundaryLong = longitude - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI) / Math.cos(latitude * Math.PI/180.0);
-    const northBoundaryLat = latitude  + (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
-    const southBoundaryLat = latitude  - (radiusKm / constants.R_EARTH) * (180.0 / Math.PI);
-
-    dbHelper.nearbyStores(northBoundaryLat, southBoundaryLat, eastBoundaryLong, westBoundaryLong, res);
-});
-
-// Create a store object
-router.post("/", (req, res) => {
+const postStore = async (req, res) => {
     const userInput = req.body;
 
     var addressString = userInput.address 
@@ -169,27 +150,70 @@ router.post("/", (req, res) => {
     maps.googleMapsClient.geocode({address: addressString}).asPromise()
         .then((response) => {
             var results = response.json.results;
-            db.getDB().collection(collection).insertOne({
-                "address": userInput.address,
-                "city": userInput.city,
-                "province": userInput.province,
-                "name": userInput.name,
-                "lat": results[0].geometry.location.lat,
-                "lng": results[0].geometry.location.lng,
-                "place_id": results[0].place_id
-            }, (err, result) => {
-                if(err) {
-                    res.status(constants.RES_BAD_REQUEST).send(err);
-                    return; 
-                } else {
-                    res.status(constants.RES_OK).send(result.ops[0]._id);
-                }
-            });
+            
+            const address = userInput.address;
+            const city = userInput.city;
+            const province = userInput.province;
+            const name = userInput.name;
+            const lat = results[0].geometry.location.lat;
+            const lng = results[0].geometry.location.lng;
+            const placeId = results[0].place_id;
+
+            dbHelper.postStore(address, city, province, name, lat, lng, placeId);
         })
         .catch((err) => {
             res.status(constants.RES_BAD_REQUEST).send(err);
         });
-});
+};
+
+const putStore = async (req, res) => {
+    const storeID = req.params.storeID;
+    const userInput = req.body;
+
+    const address = userInput.address;
+    const city = userInput.city;
+    const province = userInput.province;
+    const name = userInput.name;
+
+    dbHelper.putStore(storeID, address, city, province, name, res);
+};
+
+const deleteStore = async (req, res) => {
+    const storeID = req.params.storeID;
+
+    dbHelper.deleteStore(storeID, res);
+};
+
+
+/**
+ * GET requests
+ */
+
+// Get all stores and their details. 
+router.get("/", getAllStores);
+
+// Return all items with given name
+router.get("/item", getAllStoresWithItemByName)
+
+// Get details for a specific store
+router.get("/:storeID", getStoreId);
+
+
+/**
+ * POST requests
+ */
+
+// Get shortest path
+router.post("/shortestPath", postShortestPath);
+
+// Given a shopping list and user's location, find all stores nearby that have the items on the shopping list in stock
+router.post("/feweststores", complexLogic);
+
+// Endpoint for getting nearest stores
+router.post("/nearbyStores", postNearbyStores);
+
+// Create a store object
+router.post("/", postStore);
 
 
 /**
@@ -197,47 +221,13 @@ router.post("/", (req, res) => {
  */
 
 // Update all details for a specific store
-router.put("/:storeID", (req, res) => {
-    const storeID = req.params.storeID;
-    const userInput = req.body;
-
-    db.getDB().collection(collection).findOneAndUpdate(
-        {_id : db.getPrimaryKey(storeID)}, 
-        {$set : {
-            address: userInput.address,
-            city: userInput.city,
-            province: userInput.province,
-            name: userInput.name
-        }}, 
-        {returnOriginal : false}, 
-    (err, result) => {
-        if(err) {
-            res.sendStatus(constants.RES_BAD_REQUEST);
-        }
-        else {
-            res.json(result);
-        }
-    });
-});
+router.put("/:storeID", putStore);
 
 
 /**
  * DELETE requests
  */
 // Delete a store with store id "storeID"
-router.delete("/:storeID", (req, res) => {
-    const storeID = req.params.storeID;
-
-    db.getDB().collection(collection).findOneAndDelete(
-        {_id : db.getPrimaryKey(storeID)}, 
-    (err, result) => {
-        if(err) {
-            res.sendStatus(constants.RES_INTERNAL_ERR);
-        }
-        else {
-            res.json(result);
-        }
-    });
-});
+router.delete("/:storeID", deleteStore);
 
 module.exports = router;

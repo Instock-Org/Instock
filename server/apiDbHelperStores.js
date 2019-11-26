@@ -161,6 +161,45 @@ const getAllStores = async (clientId, token, res) => {
     });
 };
 
+const postStore = async (address, city, province, name, lat, lng, placeId, res) => {
+    db.getDB().collection(collection).insertOne({
+        address,
+        city,
+        province,
+        name,
+        lat,
+        lng,
+        "place_id": placeId
+    }, (err, result) => {
+        if(err) {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+            return; 
+        } else {
+            res.status(constants.RES_OK).send(result.ops[0]._id);
+        }
+    });
+};
+
+const putStore = async (storeId, address, city, province, name, res) => {
+    db.getDB().collection(collection).findOneAndUpdate(
+        {_id : db.getPrimaryKey(storeId)}, 
+        {$set : {
+            address,
+            city,
+            province,
+            name
+        }}, 
+        {returnOriginal : false}, 
+    (err, result) => {
+        if (err) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
+        }
+        else {
+            res.json(result);
+        }
+    });
+};
+
 const getSpecificStore = async (storeID, res) => {
     db.getDB().collection(storesCollection).find({
         _id : db.getPrimaryKey(storeID)
@@ -222,7 +261,7 @@ const getAllStoresWithItemByName = async (regex, res) => {
             res.sendStatus(constants.RES_NOT_FOUND);
             return;
         }
-        
+
         let finalJson = items[0];
         const itemId = items[0]._id;
         let storesArray = [];
@@ -267,10 +306,26 @@ const getAllStoresWithItemByName = async (regex, res) => {
     });
 };
 
+const deleteStore = async (storeId, res) => {
+    db.getDB().collection(collection).findOneAndDelete(
+        {_id : db.getPrimaryKey(storeId)}, 
+    (err, result) => {
+        if(err) {
+            res.sendStatus(constants.RES_INTERNAL_ERR);
+        }
+        else {
+            res.json(result);
+        }
+    });
+};
+
 module.exports = {
     complexLogic,
     getAllStores,
     getSpecificStore,
     nearbyStores,
-    getAllStoresWithItemByName
+    getAllStoresWithItemByName,
+    putStore,
+    postStore,
+    deleteStore
 }
