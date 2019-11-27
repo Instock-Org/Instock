@@ -55,10 +55,7 @@ const createUser = async (req, res) => {
             res.status(constants.RES_OK).send("It works!")
         }
     }
-    verify().catch(() => {
-        res.sendStatus(constants.RES_BAD_REQUEST);
-        return;
-    });
+    verify().catch(console.error);
 };
 
 // Update user
