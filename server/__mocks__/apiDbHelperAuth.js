@@ -10,4 +10,4 @@ const getToken = async (clientId, res) => {
 
 module.exports = {
     getToken
-}
+};
