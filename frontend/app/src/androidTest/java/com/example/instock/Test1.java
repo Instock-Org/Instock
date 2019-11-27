@@ -28,6 +28,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @LargeTest
 public class Test1 {
 
+    @Rule
+    public ActivityTestRule<ShoppingListActivity> activityRule =
+            new ActivityTestRule<>(ShoppingListActivity.class);
+
     @Before
     public void initIntent() {
         Intents.init();
@@ -37,10 +41,6 @@ public class Test1 {
     public void releaseInit() {
         Intents.release();
     }
-
-    @Rule
-    public ActivityTestRule<ShoppingListActivity> activityRule =
-            new ActivityTestRule<>(ShoppingListActivity.class);
 
     @Test
     public void addItemButtonEnabled() {
