@@ -74,8 +74,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         JsonObject body = new JsonObject();
         JsonArray origin = new JsonArray();
-        origin.add("49.261803");
-        origin.add("-123.249376");
+        origin.add("49.262715");
+        origin.add("-123.250304");
         body.add("origin", origin);
         body.add("destination", origin);
         body.add("waypoints", waypoints);
@@ -93,7 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     List<String> res = (List<String>) response.body();
 
                     StringBuilder url = new StringBuilder();
-                    url.append("https://www.google.com/maps/dir/?api=1&origin=49.261803,-123.249376&destination=49.261803,-123.249376&waypoints=");
+                    url.append("https://www.google.com/maps/dir/?api=1&origin=49.262715,-123.250304&destination=49.262715,-123.250304&waypoints=");
 
 
                     for (int i = 0; i < res.size(); i++) {
