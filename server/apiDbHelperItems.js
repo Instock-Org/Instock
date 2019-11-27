@@ -185,8 +185,8 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
             var storeName = store[0].name;
                 
             db.getDB().collection(userSubCollection).find({
-                storeId,
-                itemId
+                "storeId": db.getPrimaryKey(storeId),
+                "itemId": db.getPrimaryKey(itemId)
             }).toArray((userSubErr, userSub) => {
                 var fcmTokenList = [];
                 userSub.forEach((subscription) => {
