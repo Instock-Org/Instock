@@ -182,34 +182,45 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
             }
             var itemName = item[0].name;
             var storeName = store[0].name;
-            
-            var registrationToken = "dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV";
-        
-            var message = {
-                token: registrationToken,
-                notification: {
-                    title: "Item Restock Notification!",
-                    body: itemName + " has been re-stocked at " + storeName + "!"
-                }
-            };
+                
+            db.getDB().collection(userSubCollection).find({
+                storeId,
+                itemId
+            }).toArray((userSubErr, userSub) => {
+                var fcmTokenList = [];
+                userSub.forEach((subscription) => {
+                    fcmTokenList.push(subscription.fcm);
+                });
 
-            try {
-                // Send a message to the device corresponding to the provided
-                // registration token.
-                admin.messaging().send(message)
-                .then((response) => {
-                    // Response is a message ID string.
-                    res.sendStatus(constants.RES_OK);
-                    return;
-                })
-                .catch((error) => {
+                const uniqueFcmTokenSet = new Set(fcmTokenList);
+                const uniqueFcmTokens = [...uniqueFcmTokenSet];
+
+                var message = {
+                    tokens: uniqueFcmTokens,
+                    notification: {
+                        title: "Item Restock Notification!",
+                        body: itemName + " has been re-stocked at " + storeName + "!"
+                    }
+                };
+                
+                try {
+                    // Send a message to the device corresponding to the provided
+                    // registration token.
+                    admin.messaging().sendMulticast(message)
+                    .then((response) => {
+                        // Response is a message ID string.
+                        res.sendStatus(constants.RES_OK);
+                        return;
+                    })
+                    .catch((error) => {
+                        res.status(constants.RES_INTERNAL_ERR).send(error);
+                        return;
+                    });
+                } catch (error) {
                     res.status(constants.RES_INTERNAL_ERR).send(error);
                     return;
-                });
-            } catch (error) {
-                res.status(constants.RES_INTERNAL_ERR).send(error);
-                return;
-            }
+                }
+            });
         });
     });
 };
