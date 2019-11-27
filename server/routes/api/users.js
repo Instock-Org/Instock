@@ -4,6 +4,7 @@ const constants = require("../../constants");
 
 const db = require("../../db");
 const dbHelper = require("../../apiDbHelperUsers");
+const {OAuth2Client} = require('google-auth-library');
 
 router.use(express.json());
 
@@ -26,6 +27,40 @@ const postOneUser = async (req, res) => {
     }
 
     dbHelper.postOneUser(email, password, authType, res);
+};
+
+// Add a single user
+const createUser = async (req, res) => {
+    const idToken = req.body.idToken;
+
+    if (!idToken) {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    }
+
+    const client = new OAuth2Client(constants.GOOGLE_AUTH_CLIENT_ID);
+
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: constants.GOOGLE_AUTH_CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+        const userid = payload['sub'];
+        // If request specified a G Suite domain:
+        //const domain = payload['hd'];
+        if(!userid) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
+            return;
+        } else {
+            // dbHelper.createUser(userid);
+            res.status(constants.RES_OK).send("It works!")
+        }
+    }
+    verify().catch(() => {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    });
 };
 
 // Update user
@@ -88,6 +123,7 @@ const deleteItemFromSubscription = async (req, res) => {
 // Endpoints
 router.get("/api/users/:user_id", getUserById);
 router.post("/api/users", postOneUser);
+router.post("/api/users/createUser", createUser);
 router.put("/api/users/:user_id", putUserById);
 router.delete("/api/users/:user_id", deleteUserById);
 router.get("/api/users/subscriptions/:user_id", getUserSubscriptions);

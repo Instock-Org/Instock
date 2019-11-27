@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
-const passport = require("passport");
 
 const db = require("../../db");
 const authCollection = constants.COLLECTION_AUTH;
@@ -52,18 +51,5 @@ router.get("/token", (req, res) => {
         }
     });
 });
-
-router.get("/login", (req, res) => {
-    res.send("loggin in");
-});
-
-router.get("/logout", (req, res) => {
-    res.send("loggin out");
-});
-
-// google auth
-router.get("/google", passport.authenticate("google", {
-    scope: ['profile']
-}));
 
 module.exports = router;
