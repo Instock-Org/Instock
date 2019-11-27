@@ -51,4 +51,18 @@ public interface InstockAPIs {
     @POST("api/users/createUser")
     Call<Void> googleAuth(@Body JsonObject body);
 
+    /*
+    Post request to get waypoint order for shortest path
+    */
+    @Headers("Content-Type: application/json")
+    @POST("api/stores/shortestPath")
+    Call<List<String>> getShortestPath(@Body JsonObject body);
+
+    /*
+    Post request to subscribe to an item in a store
+     */
+    @Headers("Content-Type: application/json")
+    @POST("api/users/subscriptions")
+    Call<Void> addSubscription(@Body JsonObject body);
+
 }

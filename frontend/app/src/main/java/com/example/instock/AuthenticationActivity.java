@@ -2,12 +2,14 @@ package com.example.instock;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 //import android.widget.Button;
 
@@ -17,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 
@@ -40,35 +43,49 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        // Google login
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestIdToken(getString(R.string.server_client_id))
-                .build();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        GoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton googleSignInButton = findViewById(R.id.sign_in_button);
-        googleSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signInIntent = GoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, 101);
-            }
-        });
+//        if (account != null) {
+//            Intent intent = new Intent(AuthenticationActivity.this, UserViewActivity.class);
+//            Log.d(TAG, "user already signed in");
+//
+//            startActivity(intent);
+//            finish();
+//        } else {
+            // Google login
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestIdToken(getString(R.string.server_client_id))
+                    .build();
 
-        // Google logout
-//        signOut = (Button) findViewById(R.id.sign_out_button);
-//        signOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        Log.d(TAG, "Successfully signed out of google");
-//                    }
-//                });
-//            }
-//        });
+            GoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            SignInButton googleSignInButton = findViewById(R.id.sign_in_button);
+            googleSignInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent signInIntent = GoogleSignInClient.getSignInIntent();
+                    startActivityForResult(signInIntent, 101);
+                }
+            });
+
+            // Google logout
+            Button signOut = (Button) findViewById(R.id.sign_out_button);
+            signOut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d(TAG, "Successfully signed out of google");
+                            Intent intent = new Intent(AuthenticationActivity.this, StartActivity.class);
+
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                }
+            });
+//        }
     }
 
     @Override

@@ -12,6 +12,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,9 @@ public class ProductViewActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     ItemStoreListResponse res = (ItemStoreListResponse) response.body();
 
+                    final String itemId = res.getId();
+                    final ArrayList<String> storeIds = new ArrayList<>();
+
                     ArrayList<String> storesList = new ArrayList<>();
                     ArrayList<String> stockList = new ArrayList<>();
                     ArrayList<String> priceList = new ArrayList<>();
@@ -53,6 +58,7 @@ public class ProductViewActivity extends AppCompatActivity {
                     for (ItemStore store : res.getStores()) {
                         storesList.add(store.getName());
                         stockList.add(String.valueOf(store.getQuantity()));
+                        storeIds.add(store.getId());
                     }
 
                     CustomListAdapter adapter = new CustomListAdapter(ProductViewActivity.this, storesList, stockList, priceList);
@@ -65,14 +71,32 @@ public class ProductViewActivity extends AppCompatActivity {
                    // priceAmountTextView = findViewById(R.id.price_amount);
 //                    priceAmountTextView.setText();
 
-                    // TODO: set real price amount
-
                     Button notifyStockButton = findViewById(R.id.notify_stock_button);
 
                     notifyStockButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // TODO: add user to list to be updated by push notification
+//                            JsonObject body = new JsonObject();
+//                            body.addProperty("storeId", storeIds.get(0));
+//                            body.addProperty("itemId", itemId);
+//
+//                            Call call2 = instockAPIs.addSubscription(body);
+//
+//                            call2.enqueue(new Callback() {
+//                                @Override
+//                                public void onResponse(Call call, Response response) {
+//                                    Log.d("ProductViewActivity", String.valueOf(response.code()));
+//
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call call, Throwable t) {
+//                                    // Error callback
+//                                    Log.d("ProductViewActivity", t.getMessage());
+//                                    Log.d("ProductViewActivity", "API request failed");
+//                                }
+//                            });
                         }
                     });
                 }
