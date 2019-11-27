@@ -100,6 +100,18 @@ router.delete("/api/internal/items/store", (req, res) => {
     });
 });
 
+// Delete all user subscriptions
+router.delete("/api/internal/users/subscriptions", (req, res) => {
+    db.getDB().collection(userSubCollection).deleteMany({}, (err, result) => {
+        if (err) {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+            return;
+        }
+
+        res.status(constants.RES_OK).send(result);
+    });
+});
+
 // Create an auth token and client
 router.post("/api/internal/auth", (req, res) => {
     const userInput = req.body;
