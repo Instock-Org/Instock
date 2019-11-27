@@ -15,8 +15,6 @@ describe("GET /api/employees/login", () => {
                 "password": "abc"
             })
             .expect(constants.RES_OK, res)
-            .expect({
-                "Success": "Login successfull."
-            }, res.body);
+            .expect("jsliendldie", res.body);
     });
 });

@@ -16,9 +16,7 @@ const loginEmployee = async (req, res) => {
                     "Error": "Invalid email or password"
                 });
             } else {
-                res.status(constants.RES_OK).json({
-                    "Success": "Login successfull."
-                });
+                res.status(constants.RES_OK).send(documents[0].storeid);
             }
         }
     });

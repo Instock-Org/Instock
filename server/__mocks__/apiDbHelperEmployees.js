@@ -1,9 +1,7 @@
 const constants = require("../constants");
 
 const loginEmployee = async (req, res) => {
-    res.status(constants.RES_OK).json({
-        "Success": "Login successfull."
-    });
+    res.status(constants.RES_OK).send("jsliendldie");
 };
 
 const createEmployee = async (userInput, res) => {
