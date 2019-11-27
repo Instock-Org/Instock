@@ -1,20 +1,10 @@
 package com.example.instock;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import com.example.instock.FewestStoresResponse;
-import com.example.instock.InstockAPIs;
-import com.example.instock.R;
-import com.example.instock.ShoppingListActivity;
-import com.example.instock.ShoppingTripActivity;
-import com.google.gson.JsonObject;
-
-import java.io.Serializable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,8 +45,7 @@ public class SearchTestActivity extends AppCompatActivity {
                     //Log.d(TAG, res.getStores().get(0).getName());
 
                     Log.d(TAG, response.toString());
-
-                    Bundle bundle = new Bundle();
+                    
                    // bundle.putSerializable("SEARCH", (Serializable)res.getStores());
 
 //                    // Launch Shopping trip activity

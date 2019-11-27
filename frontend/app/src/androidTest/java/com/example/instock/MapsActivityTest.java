@@ -31,6 +31,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @LargeTest
 public class MapsActivityTest {
 
+    @Rule
+    public ActivityTestRule<MapsActivity> activityRule =
+            new ActivityTestRule<>(MapsActivity.class, false, false);
+
     public void initSingleStore() {
         Store store = new Store();
         store.setLat(49.2605024);
@@ -82,10 +86,6 @@ public class MapsActivityTest {
         intent.putExtra("BUNDLE", bundle);
         activityRule.launchActivity(intent);
     }
-
-    @Rule
-    public ActivityTestRule<MapsActivity> activityRule =
-            new ActivityTestRule<>(MapsActivity.class, false, false);
 
     @Test
     public void mapsFragmentDisplayed() {
