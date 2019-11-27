@@ -96,7 +96,7 @@ const getUserSubscriptions = async (req, res) => {
 // Add item to subscription
 // POST /api/users/subscriptions
 const postItemToSubscription = async (req, res) => {
-    if (!req.body.userId || !req.body.storeId || !req.body.itemId) {
+    if (!req.body.userId || !req.body.storeId || !req.body.itemId || !req.body.fcm) {
         res.sendStatus(constants.RES_BAD_REQUEST);
         return;
     }
@@ -104,8 +104,9 @@ const postItemToSubscription = async (req, res) => {
     const userId = req.body.userId;
     const storeId = req.body.storeId;
     const itemId = req.body.itemId;
+    const fcm = req.body.fcm;
 
-    dbHelper.postItemToSubscription(userId, storeId, itemId, res);
+    dbHelper.postItemToSubscription(userId, storeId, itemId, fcm, res);
 };
 
 // Delete item from subscription

@@ -97,10 +97,12 @@ describe("GET /api/users/subscriptions/{userId}", () => {
     test("Should return OK if user has subscriptions", (res) => {
         const expectedSubscriptions = [{
             storeId: "123123123123123123123123",
-            itemId: "321321321321321321321321"
+            itemId: "321321321321321321321321",
+            fcm: "testfcm"
         }, {
             storeId: "abcdefabcdef123123123123",
-            itemId: "123456123456123456123456"
+            itemId: "123456123456123456123456",
+            fcm: "testfcm2"
         }];
 
         request.get("/api/users/subscriptions/abcdefabcdef123456123456")
@@ -115,7 +117,8 @@ describe("POST /api/users/subscriptions", () => {
         const body = {
             userId: "abcdefabcdefabcdefabcdef",
             storeId: "abcdefabcdefabcdefabcdef",
-            itemId: "abcdefabcdefabcdefabcdef"
+            itemId: "abcdefabcdefabcdefabcdef",
+            fcm: "testfcm"
         };
         request.post("/api/users/subscriptions")
             .set("Accept", "application/json")

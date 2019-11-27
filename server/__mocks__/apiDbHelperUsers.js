@@ -32,16 +32,18 @@ const getUserSubscriptions = async (userId, res) => {
     else {
         const response = [{
             storeId: "123123123123123123123123",
-            itemId: "321321321321321321321321"
+            itemId: "321321321321321321321321",
+            fcm: "testfcm"
         }, {
             storeId: "abcdefabcdef123123123123",
-            itemId: "123456123456123456123456"
+            itemId: "123456123456123456123456",
+            fcm: "testfcm2"
         }];
         res.status(constants.RES_OK).send(response);
     }
 };
 
-const postItemToSubscription = async (userId, storeId, itemId, res) => {
+const postItemToSubscription = async (userId, storeId, itemId, fcm, res) => {
     res.sendStatus(constants.RES_OK);
 };
 

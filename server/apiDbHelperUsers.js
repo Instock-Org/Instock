@@ -83,11 +83,12 @@ const getUserSubscriptions = async (userId, res) => {
     });
 };
 
-const postItemToSubscription = async (userId, storeId, itemId, res) => {
+const postItemToSubscription = async (userId, storeId, itemId, fcm, res) => {
     db.getDB().collection(userSubscriptionsCollection).insertOne({
         "userId": db.getPrimaryKey(userId),
         "storeId": db.getPrimaryKey(storeId),
-        "itemId": db.getPrimaryKey(itemId)
+        "itemId": db.getPrimaryKey(itemId),
+        fcm
     }, (err, result) => {
         if (err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);
