@@ -78,26 +78,27 @@ public class ProductViewActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             // TODO: add user to list to be updated by push notification
-//                            JsonObject body = new JsonObject();
-//                            body.addProperty("storeId", storeIds.get(0));
-//                            body.addProperty("itemId", itemId);
-//
-//                            Call call2 = instockAPIs.addSubscription(body);
-//
-//                            call2.enqueue(new Callback() {
-//                                @Override
-//                                public void onResponse(Call call, Response response) {
-//                                    Log.d("ProductViewActivity", String.valueOf(response.code()));
-//
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call call, Throwable t) {
-//                                    // Error callback
-//                                    Log.d("ProductViewActivity", t.getMessage());
-//                                    Log.d("ProductViewActivity", "API request failed");
-//                                }
-//                            });
+                            JsonObject body = new JsonObject();
+                            body.addProperty("storeId", storeIds.get(0));
+                            body.addProperty("itemId", itemId);
+
+
+                            Call call2 = instockAPIs.addSubscription(body);
+
+                            call2.enqueue(new Callback() {
+                                @Override
+                                public void onResponse(Call call, Response response) {
+                                    Log.d("ProductViewActivity", String.valueOf(response.code()));
+
+                                }
+
+                                @Override
+                                public void onFailure(Call call, Throwable t) {
+                                    // Error callback
+                                    Log.d("ProductViewActivity", t.getMessage());
+                                    Log.d("ProductViewActivity", "API request failed");
+                                }
+                            });
                         }
                     });
                 }
@@ -109,44 +110,5 @@ public class ProductViewActivity extends AppCompatActivity {
                 Log.d("ProductViewActivity", "API request failed");
             }
         });
-
-        // TODO: replace with real data
-
-//        ArrayList<String> storesList = new ArrayList<>();
-//        storesList.add("Save On");
-//        storesList.add("Safeway");
-//        storesList.add("Whole Foods");
-//        storesList.add("Costco");
-//
-//        ArrayList<String> stockList = new ArrayList<>();
-//        stockList.add("0");
-//        stockList.add("1");
-//        stockList.add("2");
-//        stockList.add("3");
-//
-//        ArrayList<String> priceList = new ArrayList<>();
-//        priceList.add("$1.99");
-//        priceList.add("$2.50");
-//        priceList.add("$3.99");
-//        priceList.add("$1.50");
-//
-//        CustomListAdapter adapter = new CustomListAdapter(this, storesList, stockList, priceList);
-//
-//        ListView storesListView = findViewById(R.id.availability_stores_list);
-//        storesListView.setAdapter(adapter);
-//
-//        itemNameTextView = findViewById(R.id.item_name);
-//        itemNameTextView.setText(itemName);
-//
-//        // TODO: set real price amount
-//
-//        Button notifyStockButton = findViewById(R.id.notify_stock_button);
-//
-//        notifyStockButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: add user to list to be updated by push notification
-//            }
-//        });
     }
 }

@@ -1,5 +1,6 @@
 package com.example.instock;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface InstockAPIs {
@@ -66,9 +69,30 @@ public interface InstockAPIs {
     Call<Void> addSubscription(@Body JsonObject body);
 
     /*
-    Get request to log in user
+    Get request to log in employee user
      */
+    @Headers({"Accept:text/plain"})
     @GET("api/employees/login")
-    Call<Void> loginEmployee(@Query("email") String email, @Query("password") String password);
+    Call<String> loginEmployee(@Query("email") String email, @Query("password") String password);
+
+    /*
+    Get request to get all items for a store
+     */
+    @GET("api/items/store/{id}")
+    Call<List<StoreItem>> getItemsForStore(@Path("id") String id);
+
+    /*
+    Post request to get item objects via ids
+     */
+    @Headers("Content-Type: application/json")
+    @POST("api/items/multiple")
+    Call<List<Item>> getMulitpleItems(@Body JsonObject body);
+
+    /*
+    Put request to update product count in store
+    */
+    @Headers("Content-Type: application/json")
+    @PUT("api/items/store/{storeId}/{itemId}")
+    Call<Void> updateItem(@Path("storeId") String storeId, @Path("itemId") String itemId, @Body JsonObject body);
 
 }

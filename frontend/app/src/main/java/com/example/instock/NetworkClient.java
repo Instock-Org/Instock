@@ -2,6 +2,7 @@ package com.example.instock;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class NetworkClient {
 
@@ -21,6 +22,7 @@ public class NetworkClient {
             // Defining the Retrofit using Builder
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL) //This is the only mandatory call on Builder object.
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create()) // Converter library used to convert response into POJO
                     .build();
         }

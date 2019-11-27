@@ -48,7 +48,9 @@ public class EmployeeLoginActivity extends AppCompatActivity {
                     public void onResponse(Call call, Response response) {
                         Log.d(TAG, String.valueOf(response.code()));
                         if (response.code() == 200) {
+                            String storeId = (String) response.body();
                             Intent intent = new Intent(EmployeeLoginActivity.this, EmployeeStockActivity.class);
+                            intent.putExtra("storeId", storeId);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(),"Incorrect username or password.",Toast.LENGTH_SHORT).show();

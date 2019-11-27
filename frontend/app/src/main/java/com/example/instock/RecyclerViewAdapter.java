@@ -1,14 +1,24 @@
 package com.example.instock;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
 
@@ -37,7 +47,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     dataList.get(getAdapterPosition()).setProductCount(textViewCount.getText().toString()); // Updates the UI to display the new number.
-                    // TODO: Also add a call to update the database.
+                    Retrofit retrofit = NetworkClient.getRetrofitClient();
+                    final InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
+                    JsonObject body = new JsonObject();
+                    body.addProperty("quantity",  dataList.get(getAdapterPosition()).getProductCount());
+
+                    Call call = instockAPIs.updateItem(dataList.get(getAdapterPosition()).getStoreId(), dataList.get(getAdapterPosition()).getProductId(), body); // get request
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onResponse(Call call, Response response) {
+                            if (response.code() == 200) {
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call call, Throwable t) {
+
+                        }
+                    });
                 }
 
                 @Override
