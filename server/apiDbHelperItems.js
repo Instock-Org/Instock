@@ -15,7 +15,7 @@ admin.initializeApp({
 
 const getItemsByStore = async (storeId, res) => {
     db.getDB().collection(storeHasCollection).find({
-        storeId
+        "storeId": db.getPrimaryKey(storeId)
     }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
     });
@@ -23,8 +23,8 @@ const getItemsByStore = async (storeId, res) => {
 
 const postItemsByStore = async (storeId, itemId, quantity, price, res) => {
     db.getDB().collection(storeHasCollection).insertOne({
-        storeId,
-        itemId,
+        "storeId": db.getPrimaryKey(storeId),
+        "itemId": db.getPrimaryKey(itemId),
         quantity,
         price
     }, (err, result) => {
@@ -39,8 +39,8 @@ const postItemsByStore = async (storeId, itemId, quantity, price, res) => {
 
 const putItemAtStoreId = async (storeId, itemId, quantity, price, res) => {
     db.getDB().collection(storeHasCollection).updateOne({
-        storeId,
-        itemId
+        "storeId": db.getPrimaryKey(storeId),
+        "itemId": db.getPrimaryKey(itemId)
     }, {$set: {
         quantity,
         price
@@ -76,8 +76,13 @@ const getItemsBySearchTerm = async (regex, res) => {
 };
 
 const getMultipleItems = async (itemIds, res) => {
+    let querySafeItemIds = [];
+    itemIds.forEach((value) => {
+        querySafeItemIds.push(db.getPrimaryKey(value));
+    });
+
     db.getDB().collection(itemsCollection).find({
-        "_id": {$in: itemIds}
+        "_id": {$in: querySafeItemIds}
     }).toArray((err, result) => {
         if (err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);
@@ -121,7 +126,7 @@ const postItem = async (name, description, barcode, units, res) => {
 
 const putItem = async (itemId, name, description, barcode, units, res) => {
     db.getDB().collection(itemsCollection).updateOne({
-        "_id": itemId
+        "_id": db.getPrimaryKey(itemId)
     },
     {$set: {
         name,
@@ -139,8 +144,14 @@ const putItem = async (itemId, name, description, barcode, units, res) => {
 };
 
 const deleteItems = async (itemIds, res) => {
+
+    let querySafeItemIds = [];
+    itemIds.forEach( (value, key) => {
+        querySafeItemIds[key] = db.getPrimaryKey(value);
+    });
+
     db.getDB().collection(itemsCollection).deleteMany({
-        "_id": {$in: itemIds}
+        "_id": {$in: querySafeItemIds}
     }, (err, result) => {
         if (err) {
             res.status(constants.RES_BAD_REQUEST).send(err);

@@ -9,7 +9,7 @@ router.use(express.json());
 
 // Get user by id
 const getUserById = async (req, res) => {
-    const userId = db.getPrimaryKey(req.params.user_id);
+    const userId = req.params.user_id;
     
     dbHelper.getUserById(userId, res);
 };
@@ -31,7 +31,7 @@ const postOneUser = async (req, res) => {
 // Update user
 // PUT /api/users/{user_id}
 const putUserById = async (req, res) => {
-    const userId = db.getPrimaryKey(req.params.user_id);
+    const userId = req.params.user_id;
     const email = req.body.email;
     const password = req.body.password;
     const authType = req.body.auth_type;
@@ -47,7 +47,7 @@ const putUserById = async (req, res) => {
 // Deletes a single user by user_id
 // DELETE /api/users/{user_id}
 const deleteUserById = async (req, res) => {
-    const userId = db.getPrimaryKey(req.params.user_id);
+    const userId = req.params.user_id;
 
     dbHelper.deleteUserById(userId, res);
 };
@@ -55,7 +55,7 @@ const deleteUserById = async (req, res) => {
 // Get user subscriptions
 // GET /api/users/subscriptions/{user_id}
 const getUserSubscriptions = async (req, res) => {
-    const userId = db.getPrimaryKey(req.params.user_id);
+    const userId = req.params.user_id;
 
     dbHelper.getUserSubscriptions(userId, res);
 };
@@ -68,9 +68,9 @@ const postItemToSubscription = async (req, res) => {
         return;
     }
 
-    const userId = db.getPrimaryKey(req.body.user_id);
-    const storeId = db.getPrimaryKey(req.body.store_id);
-    const itemId = db.getPrimaryKey(req.body.item_id);
+    const userId = req.body.user_id;
+    const storeId = req.body.store_id;
+    const itemId = req.body.item_id;
 
     dbHelper.postItemToSubscription(userId, storeId, itemId, res);
 };
@@ -78,9 +78,9 @@ const postItemToSubscription = async (req, res) => {
 // Delete item from subscription
 // DELETE /api/users/subscriptions/{user_id}/{store_id}/{item_id}
 const deleteItemFromSubscription = async (req, res) => {
-    const userId = db.getPrimaryKey(req.params.user_id);
-    const storeId = db.getPrimaryKey(req.params.store_id);
-    const itemId = db.getPrimaryKey(req.params.item_id);
+    const userId = req.params.user_id;
+    const storeId = req.params.store_id;
+    const itemId = req.params.item_id;
 
     dbHelper.deleteItemFromSubscription(userId, storeId, itemId, res);
 };
