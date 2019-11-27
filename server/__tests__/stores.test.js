@@ -59,7 +59,7 @@ describe("POST /api/stores/feweststores (Complex Logic)", () => {
                 longitude: 200
             },
             radius: 2
-        }
+        };
 
         request.post("/api/stores/feweststores")
             .set("Accept", "application/json")
