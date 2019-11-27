@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
 const dbHelper = require("../../apiDbHelperUsers");
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
 
 router.use(express.json());
 
 // Get user by id
 const getUserById = async (req, res) => {
     const userId = req.params.user_id;
-    
+
     dbHelper.getUserById(userId, res);
 };
 
@@ -40,14 +40,14 @@ const createUser = async (req, res) => {
 
     async function verify() {
         const ticket = await client.verifyIdToken({
-            idToken: token,
+            idToken: idToken,
             audience: constants.GOOGLE_AUTH_CLIENT_ID
         });
         const payload = ticket.getPayload();
         const userid = payload['sub'];
         // If request specified a G Suite domain:
         //const domain = payload['hd'];
-        if(!userid) {
+        if (!userid) {
             res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         } else {
