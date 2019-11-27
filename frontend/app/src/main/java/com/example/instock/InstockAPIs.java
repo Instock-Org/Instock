@@ -85,7 +85,7 @@ public interface InstockAPIs {
      */
     @Headers("Content-Type: application/json")
     @POST("api/items/multiple")
-    Call<List<Item>> getMulitpleItems(@Body JsonObject body);
+    Call<List<Item>> getMultipleItems(@Body JsonObject body);
 
     /*
     Put request to update product count in store

@@ -66,7 +66,7 @@ public class EmployeeStockActivity extends AppCompatActivity {
                     JsonObject body = new JsonObject();
                     body.add("itemIds", itemIds);
 
-                    Call call2 = instockAPIs.getMulitpleItems(body);
+                    Call call2 = instockAPIs.getMultipleItems(body);
 
                     call2.enqueue(new Callback() {
                         @Override
