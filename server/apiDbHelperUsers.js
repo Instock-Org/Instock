@@ -28,7 +28,7 @@ const postOneUser = async (email, password, authType, res) => {
 
 const createUser = async (userid, res) => {
     db.getDB().collection(usersCollection).find({
-        "userid": userid
+        userid
     }).toArray((err, result) => {
         if(err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);

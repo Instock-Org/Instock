@@ -22,7 +22,7 @@ const loginEmployee = async (req, res) => {
             }
         }
     });
-}
+};
 
 const createEmployee = async (userInput, res) => {
     db.getDB().collection(employeesCollection).insertOne({
@@ -40,7 +40,7 @@ const createEmployee = async (userInput, res) => {
             res.status(constants.RES_OK).send(employeeid);
         }
     });
-}
+};
 
 module.exports = {
     createEmployee,
