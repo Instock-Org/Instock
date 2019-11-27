@@ -27,7 +27,7 @@ const deleteUserById = async (userId, res) => {
 const getUserSubscriptions = async (userId, res) => {
     if (userId === "abcdefabcdefabcdefabcdef") {
         const response = [];
-        res.status(constants.RES_OK).send(response)
+        res.status(constants.RES_OK).send(response);
     }
     else {
         const response = [{

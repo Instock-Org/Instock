@@ -27,7 +27,7 @@ describe("POST /api/users", () => {
     test("Missing information results in bad request", (res) => {
         const newUser = {
             email: "johndoe@someemail.com",
-            auth_type: "email"
+            authType: "email"
         };
 
         request.post("/api/users")
@@ -40,7 +40,7 @@ describe("POST /api/users", () => {
         const newUser = {
             email: "johndoe@someemail.com",
             password: "myPasswordSucks",
-            auth_type: "email"
+            authType: "email"
         };
 
         request.post("/api/users")
@@ -54,7 +54,7 @@ describe("PUT /api/users", () => {
     test("Missing information results in bad request", (res) => {
         const updatedUser = {
             email: "johndoe@someemail.com",
-            auth_type: "email"
+            authType: "email"
         };
 
         request.put("/api/users/abcdefabcdef123456123456")
@@ -67,7 +67,7 @@ describe("PUT /api/users", () => {
         const updatedUser = {
             email: "johndoe@someemail.com",
             password: "B3tterP4$$WurD",
-            auth_type: "email"
+            authType: "email"
         };
 
         request.put("/api/users/abcdefabcdef123456123456")
@@ -113,9 +113,9 @@ describe("GET /api/users/subscriptions/{userId}", () => {
 describe("POST /api/users/subscriptions", () => {
     test("Should return OK if all fields present", (res) => {
         const body = {
-            user_id: "abcdefabcdefabcdefabcdef",
-            store_id: "abcdefabcdefabcdefabcdef",
-            item_id: "abcdefabcdefabcdefabcdef"
+            userId: "abcdefabcdefabcdefabcdef",
+            storeId: "abcdefabcdefabcdefabcdef",
+            itemId: "abcdefabcdefabcdefabcdef"
         };
         request.post("/api/users/subscriptions")
             .set("Accept", "application/json")
@@ -125,8 +125,8 @@ describe("POST /api/users/subscriptions", () => {
 
     test("Should return Bad request if missing fields", (res) => {
         const body = {
-            user_id: "abcdefabcdefabcdefabcdef",
-            store_id: "abcdefabcdefabcdefabcdef",
+            userId: "abcdefabcdefabcdefabcdef",
+            storeId: "abcdefabcdefabcdefabcdef",
         };
 
         request.post("/api/users/subscriptions")

@@ -52,7 +52,7 @@ const putItemAtStoreId = async (storeId, itemId, quantity, price, res) => {
 
         res.sendStatus(constants.RES_OK);
     });
-}
+};
 
 const deleteItemsFromStore = async (storeId, itemIds, res) => {
     db.getDB().collection(storeHasCollection).deleteMany({
@@ -66,7 +66,8 @@ const deleteItemsFromStore = async (storeId, itemIds, res) => {
  
         res.sendStatus(constants.RES_OK);
     });
-}
+};
+
 const getItemsBySearchTerm = async (regex, res) => {
     db.getDB().collection(itemsCollection).find({
         "name": regex

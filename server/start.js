@@ -1,6 +1,6 @@
 const db = require("./db");
 const app = require("./server");
-const constants = require("./constants")
+const constants = require("./constants");
 const PORT = constants.PORT;
 
 db.connect((err) => {
