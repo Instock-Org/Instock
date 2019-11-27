@@ -45,15 +45,13 @@ const createUser = async (req, res) => {
         });
         const payload = ticket.getPayload();
         const userid = payload["sub"];
+        
         // If request specified a G Suite domain:
-        //const domain = payload['hd'];
         if (!userid) {
             res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         } else {
-            console.log("Calling DB");
             dbHelper.createUser(userid, res);
-            // res.status(constants.RES_OK).send("It works!")
         }
     }
     verify().catch(() => {
