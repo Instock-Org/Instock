@@ -31,7 +31,7 @@
 
     <!-- Shopping Trip -->
     <string name="trip_map_button">Maps View</string>
-    
+
     <!-- Product View -->
     <string name="item_label">Item:</string>
     <string name="price_label">Price:</string>
@@ -41,5 +41,9 @@
     <!-- Employee Stock -->
     <string name="store_name_placeholder">Grocery Store</string>
     <string name="product_count">Count</string>
+
+    <!-- Employee Login -->
+    <string name="employee_login_title">Employee Login</string>
+    <string name="employee_username">Username</string>
 
 </resources>
