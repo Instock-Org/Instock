@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
-
-const db = require("../../db");
 const dbHelper = require("../../apiDbHelperItems");
 
 router.use(express.json());
@@ -11,7 +9,7 @@ router.use(express.json());
 // GET /api/items/store/{storeId}
 const getItemsByStore = async (req, res) => {
     try {
-        const storeId = db.getPrimaryKey(req.params.storeId);
+        const storeId = req.params.storeId;
 
         dbHelper.getItemsByStore(storeId, res);
     } catch (error) {
@@ -28,8 +26,8 @@ const postItemsByStore = async (req, res) => {
             return;
         }
 
-        const storeId = db.getPrimaryKey(req.params.storeId);
-        const itemId = db.getPrimaryKey(req.body.itemId);      
+        const storeId = req.params.storeId;
+        const itemId = req.body.itemId;      
         const quantity = req.body.quantity || 0;
         const price = req.body.price || 0;
 
@@ -43,8 +41,8 @@ const postItemsByStore = async (req, res) => {
 // PUT /api/items/store/{storeId}/{itemId}
 const putItemAtStoreId = async (req, res) => {
     try {
-        const storeId = db.getPrimaryKey(req.params.storeId);
-        const itemId = db.getPrimaryKey(req.params.itemId);
+        const storeId = req.params.storeId;
+        const itemId = req.params.itemId;
         // Maybe we should disallow empty values
         const quantity = req.body.quantity || 0;
         const price = req.body.price || 0;
@@ -93,12 +91,7 @@ const getAllItems = async (req, res) => {
 // POST /api/items/multiple
 const getMultipleItems = async (req, res) => {
     try {
-        let itemIds = [];
-        req.body.itemIds.forEach((value) => {
-            itemIds.push(db.getPrimaryKey(value));
-        });
-
-        dbHelper.getMultipleItems(itemIds, res);
+        dbHelper.getMultipleItems(req.body.itemIds, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
@@ -128,7 +121,7 @@ const postItem = (req, res) => {
 // PUT /api/items/{itemId}
 const putItem = async (req, res) => {
     try {
-        const itemId = db.getPrimaryKey(req.params.itemId);
+        const itemId = req.params.itemId;
         const name = req.body.name;
         const description = req.body.description;
         const barcode = req.body.barcode;
@@ -149,12 +142,7 @@ const putItem = async (req, res) => {
 // DELETE /api/items
 const deleteItems = async (req, res) => {
     try {
-        let itemIds = [];
-        req.body.itemIds.forEach( (value, key) => {
-            itemIds[key] = db.getPrimaryKey(value);
-        });
-
-        dbHelper.deleteItems(itemIds, res);
+        dbHelper.deleteItems(req.body.itemIds, res);
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }
