@@ -51,6 +51,7 @@ const createUser = async (req, res) => {
             res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         } else {
+            console.log("Calling DB");
             dbHelper.createUser(userid, res);
             // res.status(constants.RES_OK).send("It works!")
         }
