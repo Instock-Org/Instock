@@ -1,8 +1,7 @@
 const db = require("./db");
 const constants = require("./constants");
 
-const redisClient = require("redis").createClient;
-const redis = redisClient(constants.REDIS_PORT, "localhost");
+const redis = "./services/redis";
 
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const itemsCollection = constants.COLLECTION_ITEMS;
@@ -123,7 +122,7 @@ const complexLogic = async (shoppingList, boundaries, redisKey, res) => {
 
                 // Send response to client and store in Redis
                 const response = { stores: storePickupList };
-                redis.set(redisKey, JSON.stringify(response), () => {});
+                redis.redis.set(redisKey, JSON.stringify(response), () => {});
                 res.status(constants.RES_OK).send(response);
             });
         });

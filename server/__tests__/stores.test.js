@@ -4,6 +4,8 @@ const supertest = require("supertest");
 const request = supertest(app);
 const storesHelper = require("../storesHelper");
 
+const redis = "../services/redis";
+
 jest.mock("../apiDbHelperStores");
 describe("StoresHelper methods", () => {
     test("isValidCoordinates - Invalid coordinates should return false", () => {
@@ -256,4 +258,9 @@ describe("POST /api/stores/nearbyStores ", () => {
                 }
             ], res);
     });
+});
+
+afterAll((done) => {
+    redis.shutdown;
+    done();
 });

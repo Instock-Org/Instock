@@ -3,6 +3,8 @@ const constants = require("../constants");
 const supertest = require("supertest");
 const request = supertest(app);
 
+const redis = "../services/redis";
+
 jest.mock("../apiDbHelperUsers");
 
 describe("GET /api/users/{userId}", () => {
@@ -132,13 +134,17 @@ describe("POST /api/users/subscriptions", () => {
             .send(body)
             .expect(constants.RES_BAD_REQUEST, res);
     });
+});
 
-    describe("DELETE /api/users/subscriptions/{userId}/{storeId}/{itemId}", () => {
-        test("Should return OK if endpoint is reached regardless of item is deleted or not", (res) => {
-            request.delete("/api/users/subscriptions/abcdefabcdef123456123456/abcdefabcdef123456123456/abcdefabcdef123456123456")
-                .set("Accept", "application/json")
-                .expect(constants.RES_OK, res);
-        });
+describe("DELETE /api/users/subscriptions/{userId}/{storeId}/{itemId}", () => {
+    test("Should return OK if endpoint is reached regardless of item is deleted or not", (res) => {
+        request.delete("/api/users/subscriptions/abcdefabcdef123456123456/abcdefabcdef123456123456/abcdefabcdef123456123456")
+            .set("Accept", "application/json")
+            .expect(constants.RES_OK, res);
     });
 });
 
+afterAll((done) => {
+    redis.shutdown;
+    done();
+});

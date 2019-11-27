@@ -3,8 +3,7 @@ const router = express.Router();
 const constants = require("../../constants");
 const storesHelper = require("../../storesHelper");
 const maps = require("./maps");
-const redisClient = require("redis").createClient;
-const redis = redisClient(constants.REDIS_PORT, "localhost");
+const redis = require("../../services/redis");
 const dbHelper = require("../../apiDbHelperStores");
 
 /**
@@ -41,14 +40,12 @@ const complexLogic = async (req, res) => {
         radiusKm
     });
 
-    redis.get(redisKey, (rediserr, reply) => {
+    redis.redis.get(redisKey, (rediserr, reply) => {
         if (rediserr) {
             res.status(constants.RES_INTERNAL_ERR);
-            return;
         }
         else if (reply) {
             res.status(constants.RES_OK).send(JSON.parse(reply)); // exists in cache
-            return;
         }
         else {
             // Calculate long/lat bounds (north, south, west, east)
@@ -64,7 +61,6 @@ const complexLogic = async (req, res) => {
             dbHelper.complexLogic(shoppingList, boundaries, redisKey, res);
         }
     });
-    return;
 };
 
 const getAllStores = async (req, res) => {
