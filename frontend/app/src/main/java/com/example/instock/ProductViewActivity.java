@@ -59,6 +59,7 @@ public class ProductViewActivity extends AppCompatActivity {
                         storesList.add(store.getName());
                         stockList.add(String.valueOf(store.getQuantity()));
                         storeIds.add(store.getId());
+                        priceList.add('$' + String.valueOf(store.getPrice()));
                     }
 
                     CustomListAdapter adapter = new CustomListAdapter(ProductViewActivity.this, storesList, stockList, priceList);

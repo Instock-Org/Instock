@@ -57,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bundle args = intent.getBundleExtra("BUNDLE");
         final List<Store> stores = (List<Store>) args.getSerializable("STORES");
 
-//        JsonArray waypoints = new JsonArray();
+        JsonArray waypoints = new JsonArray();
 
 
         GoogleMap mMap = googleMap;
@@ -68,80 +68,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(marker).title(store.getName()));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
 
-//            JsonArray waypoint = new JsonArray();
-//            waypoint.add(store.getLat());
-//            waypoint.add(store.getLng());
-//            waypoints.add(waypoint);
+            JsonArray waypoint = new JsonArray();
+            waypoint.add(store.getLat());
+            waypoint.add(store.getLng());
+            waypoints.add(waypoint);
         }
 
-//        JsonObject body = new JsonObject();
-//        JsonArray origin = new JsonArray();
-//        origin.add("49.260587");
-//        origin.add("-123.251153");
-//        body.add("origin", origin);
-//        body.add("destination", origin);
-//        body.add("waypoints", waypoints);
-//
-//        Retrofit retrofit = NetworkClient.getRetrofitClient();
-//        InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
-//
-//        Call call = instockAPIs.getShortestPath(body); // post request
-//
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onResponse(Call call, Response response) {
-//                Log.d(TAG, String.valueOf(response.code()));
-//                if (response.body() != null) {
-//                    List<String> res = (List<String>) response.body();
-//
-//                    StringBuilder url = new StringBuilder();
-//                    url.append("https://www.google.com/maps/dir/?api=1&origin=49.260587,-123.251153&destination=49.260587,-123.251153&waypoints=");
-//
-//
-//                    for (int i = 0; i < res.size(); i++) {
-//                        int idx = Integer.parseInt(res.get(i));
-//                        Store s = stores.get(idx);
-//                        url.append(s.getLat());
-//                        url.append(',');
-//                        url.append(s.getLng());
-//
-//                        if (i != res.size() - 1) {
-//                            url.append("%7C");
-//                        }
-//                    }
-//
-//                    url.append("&travelmode=walking&dir_action=navigate");
-//                    final String uri = url.toString();
-//
-//                    Button directionsButton = findViewById(R.id.directions_button);
-//                    directionsButton.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-//                            i.setPackage("com.google.android.apps.maps");
-//                            startActivity(i);
-//                        }
-//                    });
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call call, Throwable t) {
-//                // Error callback
-//                Log.d(TAG, t.getMessage());
-//                Log.d(TAG, "API request failed");
-//            }
-//        });
+        JsonObject body = new JsonObject();
+        JsonArray origin = new JsonArray();
+        origin.add("49.261803");
+        origin.add("-123.249376");
+        body.add("origin", origin);
+        body.add("destination", origin);
+        body.add("waypoints", waypoints);
 
+        Retrofit retrofit = NetworkClient.getRetrofitClient();
+        InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
 
+        Call call = instockAPIs.getShortestPath(body); // post request
 
-        Button directionsButton = findViewById(R.id.directions_button);
-        directionsButton.setOnClickListener(new View.OnClickListener() {
+        call.enqueue(new Callback() {
             @Override
-            public void onClick(View view) {
-                String uri = "https://www.google.com/maps/dir/?api=1&origin=49.260587,-123.251153&destination=49.260587,-123.251153&waypoints=49.2605024,-123.2476207%7C49.262369,-123.2501181&travelmode=walking&dir_action=navigate";
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                i.setPackage("com.google.android.apps.maps");
-                startActivity(i);
+            public void onResponse(Call call, Response response) {
+                Log.d(TAG, String.valueOf(response.code()));
+                if (response.body() != null) {
+                    List<String> res = (List<String>) response.body();
+
+                    StringBuilder url = new StringBuilder();
+                    url.append("https://www.google.com/maps/dir/?api=1&origin=49.261803,-123.249376&destination=49.261803,-123.249376&waypoints=");
+
+
+                    for (int i = 0; i < res.size(); i++) {
+                        int idx = Integer.parseInt(res.get(i));
+                        Store s = stores.get(idx);
+                        url.append(s.getLat());
+                        url.append(',');
+                        url.append(s.getLng());
+
+                        if (i != res.size() - 1) {
+                            url.append("%7C");
+                        }
+                    }
+
+                    url.append("&travelmode=walking&dir_action=navigate");
+                    final String uri = url.toString();
+
+                    Button directionsButton = findViewById(R.id.directions_button);
+                    directionsButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                            i.setPackage("com.google.android.apps.maps");
+                            startActivity(i);
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                // Error callback
+                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "API request failed");
             }
         });
     }

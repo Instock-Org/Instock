@@ -65,4 +65,10 @@ public interface InstockAPIs {
     @POST("api/users/subscriptions")
     Call<Void> addSubscription(@Body JsonObject body);
 
+    /*
+    Get request to log in user
+     */
+    @GET("api/employees/login")
+    Call<Void> loginEmployee(@Query("email") String email, @Query("password") String password);
+
 }
