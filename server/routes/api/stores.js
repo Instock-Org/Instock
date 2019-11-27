@@ -119,10 +119,9 @@ const postShortestPath = async (req, res) => {
         optimize: true
     }).asPromise()
         .then((response) => {
-            var overviewPolyline = response.json.routes[0].overview_polyline;
+            // var overviewPolyline = response.json.routes[0].overview_polyline;
             var waypointOrder = response.json.routes[0].waypoint_order;
             res.status(constants.RES_OK).json({
-                overviewPolyline,
                 waypointOrder
             });
         })
