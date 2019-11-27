@@ -77,7 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
+                    // no op
                 }
             });
         }
