@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
-
-const db = require("../../db");
 const dbHelper = require("../../apiDbHelperUsers");
 
 router.use(express.json());

@@ -2,14 +2,7 @@ const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
 const storesHelper = require("../../storesHelper");
-
-const db = require("../../db");
-const collection = constants.COLLECTION_STORES;
-const authCollection = constants.COLLECTION_AUTH;
-const tokenTimeout = constants.TOKEN_TIMEOUT;
-
 const maps = require("./maps");
-
 const redisClient = require("redis").createClient;
 const redis = redisClient(constants.REDIS_PORT, "localhost");
 const dbHelper = require("../../apiDbHelperStores");
