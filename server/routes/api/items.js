@@ -81,7 +81,7 @@ const getItemsBySearchTerm = async (req, res) => {
 
 const getAllItems = async (req, res) => {
     try {
-        dbHelper.getAllItems(req, res);
+        dbHelper.getAllItems(req, res).then(() => {});
     } catch (error) {
         res.status(constants.RES_INTERNAL_ERR).send(error);
     }

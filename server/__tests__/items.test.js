@@ -7,7 +7,7 @@ jest.mock("../apiDbHelperItems");
 
 // TODO: Move test request objects into a new folder? Some of these are duplicated in the mocks
 describe("GET /api/items/store/{storeId}", () => {
-    test("Retrieving a list of items that a store carries", (res) => {
+    test("Retrieving a list of items that a store carries", async (done) => {
         const resItems = [
             {
                 storeId: "43dabc123456123456abcdef",
@@ -19,89 +19,110 @@ describe("GET /api/items/store/{storeId}", () => {
             }
         ];
 
-        request.get("/api/items/store/43dabc123456123456abcdef")
-            .set("Accept", "application/json")
-            .expect(constants.RES_OK, res)
-            .expect(resItems, res.body);
+        const res = await request.get("/api/items/store/43dabc123456123456abcdef")
+            .set("Accept", "application/json");
+            
+            expect(res.status).toBe(constants.RES_OK);
+            expect(res.body).toEqual(resItems);
+
+        done();
     });
 });
 
 describe("POST /api/items/store/{storeId}", () => {
-    test("Adding item into store - all inputs specified", (res) => {
+    test("Adding item into store - all inputs specified", async (done) => {
         const reqBody = {
             itemId: "123456123456abcdefabcdef",
             quantity: 5,
             price: 2.99
         };
 
-        request.post("/api/items/store/43dabc123456123456abcdef")
+        const res = await request.post("/api/items/store/43dabc123456123456abcdef")
             .send(reqBody)
-            .set("Accept", "application/json")
-            .expect(constants.RES_OK, res);
+            .set("Accept", "application/json");
+            
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 
-    test("Adding item into store - test default values", (res) => {
+    test("Adding item into store - test default values", async (done) => {
         const reqBody = {
             itemId: "123456123456abcdefabcdef"
         };
 
-        request.post("/api/items/store/43dabc123456123456abcdef")
+        const res = await request.post("/api/items/store/43dabc123456123456abcdef")
             .send(reqBody)
-            .set("Accept", "application/json")
-            .expect(constants.RES_OK, res);
+            .set("Accept", "application/json");
+        
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 
-    test("Adding item into store - missing itemId", (res) => {
+    test("Adding item into store - missing itemId", async (done) => {
         const reqBody = {
             quantity: 5,
             units: "each"
         };
 
-        request.post("/api/items/store/43dabc123456123456abcdef")
+        const res = await request.post("/api/items/store/43dabc123456123456abcdef")
             .send(reqBody)
-            .set("Accept", "application/json")
-            .expect(constants.RES_BAD_REQUEST, res);
+            .set("Accept", "application/json");
+
+        expect(res.status).toBe(constants.RES_BAD_REQUEST);
+
+        done();
     });
 });
 
 describe("PUT /api/items/store/{storeId}/{itemId}", () => {
-    test("All values filled out should succeed", (res) => {
+    test("All values filled out should succeed", async (done) => {
         const reqBody = {
             quantity: 5,
             price: 7.99
         };
 
-        request.put("/api/items/store/abcdefabcdefabcdefabcdef/111122223333444455556666")
+        const res = await request.put("/api/items/store/abcdefabcdefabcdefabcdef/111122223333444455556666")
             .set("Accept", "application/json")
-            .send(reqBody)
-            .expect(constants.RES_OK, res);
+            .send(reqBody);
+            
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 
-    test("Any missing values should still succeed", (res) => {
+    test("Any missing values should still succeed", async (done) => {
         const reqBody = {};
 
-        request.put("/api/items/store/abcdefabcdefabcdefabcdef/111122223333444455556666")
+        const res = await request.put("/api/items/store/abcdefabcdefabcdefabcdef/111122223333444455556666")
             .set("Accept", "application/json")
-            .send(reqBody)
-            .expect(constants.RES_OK, res);
+            .send(reqBody);
+        
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 });
 
 describe("DELETE /api/items/store/{storeId}", () => {
-    test("Empty list should respond with OK", (res) => {
+    test("Empty list should respond with OK", async (done) => {
         const deleteList = {
             itemIds: []
         };
 
-        request.delete("/api/items/store/abcdefabcdefabcdefabcdef")
+        const res = await request.delete("/api/items/store/abcdefabcdefabcdefabcdef")
             .set("Accept", "application/json")
-            .send(deleteList)
-            .expect(constants.RES_OK, res);
+            .send(deleteList);
+        
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     })
 });
 
 describe("GET /api/items?search_term=example+string", () => { 
-    test("Retrieving items by search term", (res) => {
+    test("Retrieving items by search term", async (done) => {
         const resItems = [
             {
                 _id: "111122223333444455556666",
@@ -112,16 +133,19 @@ describe("GET /api/items?search_term=example+string", () => {
             }
         ];
 
-        request.get("/api/items?search_term=apple+pie")
-            .set("Accept", "application/json")
-            .expect(constants.RES_OK, res)
-            .expect(resItems, res.body);
+        const res = await request.get("/api/items?search_term=apple+pie")
+            .set("Accept", "application/json");
+        
+        expect(res.status).toBe(constants.RES_OK);
+        expect(res.body).toEqual(resItems);
+
+        done();
     });
 });
 
 describe("POST /api/items/multiple", () => {
-    test("Retrieve item data with specified item IDs", (res) => {
-        const returned_items = [
+    test("Retrieve item data with specified item IDs", async (done) => {
+        const returnedItems = [
             {
                 _id: "123456123456abcdefabcdef",
                 name: "grade a sirloin beef",
@@ -145,25 +169,31 @@ describe("POST /api/items/multiple", () => {
             ]
         };
 
-        request.post("/api/items/multiple")
+        const res = await request.post("/api/items/multiple")
             .set("Accept", "application/json")
-            .send(body)
-            .expect(constants.RES_OK, res)
-            .expect(returned_items, res.body);
+            .send(body);
+        
+        expect(res.status).toBe(constants.RES_OK);
+        expect(res.body).toEqual(returnedItems);
+
+        done();
     });
 });
 
 describe("POST /api/items", () => {
-    test("Missing values should return bad request", (res) => {
+    test("Missing values should return bad request", async (done) => {
         const body = {};
 
-        request.post("/api/items")
+        const res = await request.post("/api/items")
             .set("Accept", "application/json")
-            .send(body)
-            .expect(constants.RES_BAD_REQUEST, res);
+            .send(body);
+
+        expect(res.status).toBe(constants.RES_BAD_REQUEST);
+
+        done();
     });
 
-    test("Completed fields and non-duplicated items should succeed", (res) => {
+    test("Completed fields and non-duplicated items should succeed", async (done) => {
         const EXPECTED_ITEM_ID = "afbc12345678dcba";
         
         const body = {
@@ -173,14 +203,17 @@ describe("POST /api/items", () => {
             units: "650g"
         };
 
-        request.post("/api/items")
+        const res = await request.post("/api/items")
             .set("Accept", "application/json")
-            .send(body)
-            .expect(constants.RES_OK, res)
-            .expect(EXPECTED_ITEM_ID, res.body)
+            .send(body);
+        
+        expect(res.status).toBe(constants.RES_OK);
+        expect(res.text).toBe(EXPECTED_ITEM_ID);
+
+        done();
     });
 
-    test("Duplicate items (by barcode) should return bad request", (res) => {
+    test("Duplicate items (by barcode) should return bad request", async (done) => {
         const body = {
             name: "Chip's Ahoy",
             description: "Everyone's favourite cookies",
@@ -188,24 +221,30 @@ describe("POST /api/items", () => {
             units: "650g"
         };
 
-        request.post("/api/items")
+        const res = await request.post("/api/items")
             .set("Accept", "application/json")
-            .send(body)
-            .expect(constants.RES_BAD_REQUEST, res);
+            .send(body);
+        
+        expect(res.status).toBe(constants.RES_BAD_REQUEST);
+
+        done();
     });
 });
 
 describe("PUT /api/items/{itemId}", () => {
-    test("Missing values should return bad request", (res) => {
+    test("Missing values should return bad request", async (done) => {
         const body = {};
 
-        request.put("/api/items/12345678abcdef12345678ab")
+        const res = await request.put("/api/items/12345678abcdef12345678ab")
             .set("Accept", "application/json")
-            .send(body)
-            .expect(constants.RES_BAD_REQUEST, res);
+            .send(body);
+
+        expect(res.status).toBe(constants.RES_BAD_REQUEST);
+
+        done();
     });
 
-    test("Filled in values should succeed", (res) => {
+    test("Filled in values should succeed", async (done) => {
         const body = {
             name: "Maple syrup",
             description: "Canada's #1",
@@ -213,26 +252,32 @@ describe("PUT /api/items/{itemId}", () => {
             units: "500 mL"
         };
 
-        request.put("/api/items/12345678abcdef12345678ab")
+        const res = await request.put("/api/items/12345678abcdef12345678ab")
             .set("Accept", "application/json")
-            .send(body)
-            .expect(constants.RES_OK, res);
+            .send(body);
+
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 });
 
 describe("DELETE /api/items/{itemId}", () => {
-    test("Empty list should respond with OK", (res) => {
+    test("Empty list should respond with OK", async (done) => {
         const deleteList = {
             itemIds: []
         };
 
-        request.delete("/api/items")
+        const res = await request.delete("/api/items")
             .set("Accept", "application/json")
-            .send(deleteList)
-            .expect(constants.RES_OK, res);
+            .send(deleteList);
+        
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 
-    test("Nonempty list should respond with OK", (res) => {
+    test("Nonempty list should respond with OK", async (done) => {
         const deleteList = {
             itemIds: [
                 "111122223333444455556666",
@@ -240,9 +285,12 @@ describe("DELETE /api/items/{itemId}", () => {
             ]
         };
 
-        request.delete("/api/items")
+        const res = await request.delete("/api/items")
             .set("Accept", "application/json")
-            .send(deleteList)
-            .expect(constants.RES_OK, res);
+            .send(deleteList);
+        
+        expect(res.status).toBe(constants.RES_OK);
+
+        done();
     });
 });
