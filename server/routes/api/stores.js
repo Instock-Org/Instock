@@ -120,7 +120,7 @@ const postShortestPath = async (req, res) => {
     }).asPromise()
         .then((response) => {
             var overviewPolyline = response.json.routes[0].overviewPolyline;
-	        res.status(constants.RES_OK).send(overviewPolyline);
+            res.status(constants.RES_OK).send(overviewPolyline);
         })
         .catch((err) => {
             res.status(constants.RES_BAD_REQUEST).send(err);

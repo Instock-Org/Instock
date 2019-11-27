@@ -70,7 +70,7 @@ describe("POST /api/stores/feweststores (Complex Logic)", () => {
     test("Valid inputs return results", (res) => {
         const body = {
             "shoppingList": ["cookies", "apple", "banana", "butter"],
-	        "radius": 15
+            "radius": 15
         };
 
         const expectedResponse = {
@@ -225,7 +225,7 @@ describe("POST /api/stores/nearbyStores ", () => {
                 "longtitude": -123.250578
             },
             "radius": 1.0
-        }
+        };
 
         request.post("/api/stores/nearbyStores")
             .set("Accept", "application/json")
