@@ -1,120 +1,131 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
-
-const db = require("../../db");
-const usersCollection = constants.COLLECTION_USERS;
-const userSubscriptionsCollection = constants.COLLECTION_USERSUBSCRIPTIONS;
+const dbHelper = require("../../apiDbHelperUsers");
+const { OAuth2Client } = require('google-auth-library');
 
 router.use(express.json());
 
 // Get user by id
-router.get("/api/users/:user_id", (req, res) => {
-    db.getDB().collection(usersCollection).find({
-        "_id": db.getPrimaryKey(req.params.user_id),
-    }).toArray((err, result) => {
-        res.status(constants.RES_OK).send(result);
-    });
-});
+const getUserById = async (req, res) => {
+    const userId = req.params.user_id;
+
+    dbHelper.getUserById(userId, res);
+};
 
 // Add a single user
-router.post("/api/users", (req, res) => {
-    db.getDB().collection(usersCollection).insertOne({
-        "email": req.body.email,
-        "password": req.body.password,
-        "authType": req.body.auth_type
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
+const postOneUser = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const authType = req.body.auth_type;
 
-        res.status(constants.RES_OK).send(result.ops[0]._id);
+    if (!email || !password || !authType) {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    }
+
+    dbHelper.postOneUser(email, password, authType, res);
+};
+
+// Add a single user
+const createUser = async (req, res) => {
+    const idToken = req.body.idToken;
+
+    if (!idToken) {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    }
+
+    const client = new OAuth2Client(constants.GOOGLE_AUTH_CLIENT_ID);
+
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken: idToken,
+            audience: constants.GOOGLE_AUTH_CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+        const userid = payload['sub'];
+        // If request specified a G Suite domain:
+        //const domain = payload['hd'];
+        if (!userid) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
+            return;
+        } else {
+            dbHelper.createUser(userid, res);
+            // res.status(constants.RES_OK).send("It works!")
+        }
+    }
+    verify().catch(() => {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
     });
-});
+};
 
 // Update user
 // PUT /api/users/{user_id}
-router.put("/api/users/:user_id", (req, res) => {
-    db.getDB().collection(usersCollection).updateOne({
-        "_id": db.getPrimaryKey(req.params.user_id)
-    }, 
-    {$set: {
-        "email": req.body.email,
-        "password": req.body.password,
-        "authType": req.body.auth_type
-    }}, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
+const putUserById = async (req, res) => {
+    const userId = req.params.user_id;
+    const email = req.body.email;
+    const password = req.body.password;
+    const authType = req.body.auth_type;
 
-        res.sendStatus(constants.RES_OK);
-    });
-});
+    if (!email || !password || !authType) {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    }
+
+    dbHelper.putUserById(userId, email, password, authType, res);
+};
 
 // Deletes a single user by user_id
 // DELETE /api/users/{user_id}
-router.delete("/api/users/:user_id", (req, res) => {
-    db.getDB().collection(usersCollection).deleteOne({
-        "_id": db.getPrimaryKey(req.params.user_id)
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
- 
-        res.sendStatus(constants.RES_OK);
-    });
- });
+const deleteUserById = async (req, res) => {
+    const userId = req.params.user_id;
+
+    dbHelper.deleteUserById(userId, res);
+};
 
 // Get user subscriptions
 // GET /api/users/subscriptions/{user_id}
-router.get("/api/users/subscriptions/:user_id", (req, res) => {
-    db.getDB().collection(userSubscriptionsCollection).find({
-        "userId": db.getPrimaryKey(req.params.user_id)
-    }, {projection: {_id: 0, userId: 0}}).toArray((err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
+const getUserSubscriptions = async (req, res) => {
+    const userId = req.params.user_id;
 
-        res.status(constants.RES_OK).send(result);
-    });
-});
+    dbHelper.getUserSubscriptions(userId, res);
+};
 
 // Add item to subscription
 // POST /api/users/subscriptions
-router.post("/api/users/subscriptions", (req, res) => {
-    db.getDB().collection(userSubscriptionsCollection).insertOne({
-        "userId": db.getPrimaryKey(req.body.user_id),
-        "storeId": db.getPrimaryKey(req.body.store_id),
-        "itemId": db.getPrimaryKey(req.body.item_id)
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
+const postItemToSubscription = async (req, res) => {
+    if (!req.body.user_id || !req.body.store_id || !req.body.item_id) {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    }
 
-        res.sendStatus(constants.RES_OK);
-    });
-});
+    const userId = req.body.user_id;
+    const storeId = req.body.store_id;
+    const itemId = req.body.item_id;
+
+    dbHelper.postItemToSubscription(userId, storeId, itemId, res);
+};
 
 // Delete item from subscription
 // DELETE /api/users/subscriptions/{user_id}/{store_id}/{item_id}
-router.delete("/api/users/subscriptions/:user_id/:store_id/:item_id", (req, res) => {
-    db.getDB().collection(userSubscriptionsCollection).deleteOne({
-        "userId": db.getPrimaryKey(req.params.user_id),
-        "storeId": db.getPrimaryKey(req.params.store_id),
-        "itemId": db.getPrimaryKey(req.params.item_id)
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
+const deleteItemFromSubscription = async (req, res) => {
+    const userId = req.params.user_id;
+    const storeId = req.params.store_id;
+    const itemId = req.params.item_id;
 
-        res.sendStatus(constants.RES_OK);
-    });
-});
+    dbHelper.deleteItemFromSubscription(userId, storeId, itemId, res);
+};
+
+// Endpoints
+router.get("/api/users/:user_id", getUserById);
+router.post("/api/users", postOneUser);
+router.post("/api/users/createUser", createUser);
+router.put("/api/users/:user_id", putUserById);
+router.delete("/api/users/:user_id", deleteUserById);
+router.get("/api/users/subscriptions/:user_id", getUserSubscriptions);
+router.post("/api/users/subscriptions", postItemToSubscription);
+router.delete("/api/users/subscriptions/:user_id/:store_id/:item_id", deleteItemFromSubscription);
 
 module.exports = router;

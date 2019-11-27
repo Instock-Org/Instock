@@ -1,10 +1,6 @@
 var express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const constants = require("./constants");
-
-const PORT = constants.PORT;
-const db = require("./db");
 
 app.use(bodyParser.json());
 
@@ -15,10 +11,4 @@ app.use("/", require("./routes/api/items"));
 app.use("/", require("./routes/api/internal"));
 app.use("/", require("./routes/api/users"));
 
-db.connect((err) => {
-    if(err) {
-        process.exit(1);
-    } else {
-        app.listen(PORT, () => {});
-    }
-});
+module.exports = app;

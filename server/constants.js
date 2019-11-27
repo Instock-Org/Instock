@@ -46,6 +46,8 @@ const TOKEN_TIMEOUT = 10; // 5 mins - 300 seconds
 
 module.exports = {
     API_KEY: process.env.API_KEY,
+    GOOGLE_AUTH_CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID,
+    GOOGLE_AUTH_SECRET: process.env.GOOGLE_AUTH_SECRET,
     PORT,
     REDIS_PORT,
     DB_NAME,

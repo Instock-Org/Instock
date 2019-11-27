@@ -1,164 +1,170 @@
 const express = require("express");
 const router = express.Router();
 const constants = require("../../constants");
-
-const db = require("../../db");
-const storeHasCollection = constants.COLLECTION_STOREHAS;
-const itemsCollection = constants.COLLECTION_ITEMS;
+const dbHelper = require("../../apiDbHelperItems");
 
 router.use(express.json());
 
-
 // Gets all the items from a store
 // GET /api/items/store/{storeId}
-router.get("/api/items/store/:storeId", (req, res) => {
-    db.getDB().collection(storeHasCollection).find({
-        "storeId": db.getPrimaryKey(req.params.storeId)
-    }, {projection: {_id: 0, storeId: 0}}).toArray((err, result) => {
-        res.status(constants.RES_OK).send(result);
-    });
-});
+const getItemsByStore = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+
+        dbHelper.getItemsByStore(storeId, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Adds an item to a store
 // POST /api/items/store/{storeId}
-router.post("/api/items/store/:storeId", (req, res) => {
-    db.getDB().collection(storeHasCollection).insertOne({
-        "storeId": db.getPrimaryKey(req.params.storeId),
-        "itemId": db.getPrimaryKey(req.body.itemId),
-        "quantity": req.body.quantity || 0,
-        "price": req.body.price || 0
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
+const postItemsByStore = async (req, res) => {
+    try {
+        if (!req.params.storeId || !req.body.itemId) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         }
 
-        res.sendStatus(constants.RES_OK);
-    });
-});
+        const storeId = req.params.storeId;
+        const itemId = req.body.itemId;      
+        const quantity = req.body.quantity || 0;
+        const price = req.body.price || 0;
+
+        dbHelper.postItemsByStore(storeId, itemId, quantity, price, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Updates a store's availability on an item
 // PUT /api/items/store/{storeId}/{itemId}
-router.put("/api/items/store/:storeId/:itemId", (req, res) => {
-    db.getDB().collection(storeHasCollection).updateOne({
-        "storeId": db.getPrimaryKey(req.params.storeId),
-        "itemId": db.getPrimaryKey(req.params.itemId),
-    }, {$set: {
-        "quantity": req.body.quantity || 0,
-        "price": req.body.price || 0
-    }}, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
+const putItemAtStoreId = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+        const itemId = req.params.itemId;
+        // Maybe we should disallow empty values
+        const quantity = req.body.quantity || 0;
+        const price = req.body.price || 0;
 
-        res.sendStatus(constants.RES_OK);
-    });
-});
+        dbHelper.putItemAtStoreId(storeId, itemId, quantity, price, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Removes items from a store
 // DELETE /api/items/store/{storeId}
-router.delete("/api/items/store/:storeId", (req, res) => {
-   db.getDB().collection(storeHasCollection).deleteMany({
-       "storeId": req.params.storeId,
-       "itemId": {$in: req.body.itemIds}
-   }, (err, result) => {
-       if (err) {
-           res.status(constants.RES_BAD_REQUEST).send(err);
-           return;
-       }
+const deleteItemsFromStore = async (req, res) => {
+    try {
+        const storeId = req.params.storeId;
+        const itemIds = req.body.itemIds;
 
-       res.sendStatus(constants.RES_OK);
-   });
-});
+        dbHelper.deleteItemsFromStore(storeId, itemIds, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+ };
+
 
 // Gets items by name or brand. Returns results only if exact match, case insensitive
 // GET /api/items?search_term=example+string
-router.get("/api/items", (req, res) => {
-    db.getDB().collection(itemsCollection).find({
-        "name": new RegExp(".*" + req.query.search_term + ".*", "i")
-    }).toArray((err, result) => {
-        res.status(constants.RES_OK).send(result);
-    });
-});
+const getItemsBySearchTerm = async (req, res) => {
+    try {
+        const regex = new RegExp(".*" + req.query.search_term + ".*", "i");
+
+        dbHelper.getItemsBySearchTerm(regex, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
+
+const getAllItems = async (req, res) => {
+    try {
+        dbHelper.getAllItems(req, res).then(() => {});
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Get items by item IDs
 // POST /api/items/multiple
-router.post("/api/items/multiple", (req, res) => {
-    var itemIds = [];
-    req.body.itemIds.forEach((value, key) => {
-        itemIds[key] = db.getPrimaryKey(value);
-    });
-
-    db.getDB().collection(itemsCollection).find({
-        "_id": {$in: itemIds}
-    }).toArray((err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
-
-        res.status(constants.RES_OK).send(result);
-    });
-});
+const getMultipleItems = async (req, res) => {
+    try {
+        dbHelper.getMultipleItems(req.body.itemIds, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Add item to items list
 // POST /api/items
-router.post("/api/items", (req, res) => {
-    db.getDB().collection(itemsCollection).insertOne({
-        "name": req.body.name,
-        "description": req.body.description,
-        "barcode": req.body.barcode,
-        "units": req.body.units
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
+const postItem = (req, res) => {
+    try {
+        const name = req.body.name;
+        const description = req.body.description;
+        const barcode = req.body.barcode;
+        const units = req.body.units;
+
+        if (!name || !description || !barcode || !units) {
+            res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         }
-
-        res.status(constants.RES_OK).send(result.ops[0]._id);
-    });
-});
+        
+        dbHelper.postItem(name, description, barcode, units, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Update item
 // PUT /api/items/{itemId}
-router.put("/api/items/:itemId", (req, res) => {
-    db.getDB().collection(itemsCollection).updateOne({
-        "_id": db.getPrimaryKey(req.params.itemId)
-    },
-    {$set: {
-        "name": req.body.name,
-        "description": req.body.description,
-        "barcode": req.body.barcode,
-        "units": req.body.units
-    }}, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
+const putItem = async (req, res) => {
+    try {
+        const itemId = req.params.itemId;
+        const name = req.body.name;
+        const description = req.body.description;
+        const barcode = req.body.barcode;
+        const units = req.body.units;
+
+        if (!name || !description || !barcode || !units){
+            res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         }
 
-        res.sendStatus(constants.RES_OK);
-    });
-});
+        dbHelper.putItem(itemId, name, description, barcode, units, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
 // Deletes items
 // DELETE /api/items
-router.delete("/api/items", (req, res) => {
-    let itemIds = [];
-    req.body.itemIds.forEach( (value, key) => {
-        itemIds[key] = db.getPrimaryKey(value);
-    });
+const deleteItems = async (req, res) => {
+    try {
+        dbHelper.deleteItems(req.body.itemIds, res);
+    } catch (error) {
+        res.status(constants.RES_INTERNAL_ERR).send(error);
+    }
+};
 
-    db.getDB().collection(itemsCollection).deleteMany({
-        "_id": {$in: itemIds}
-    }, (err, result) => {
-        if (err) {
-            res.status(constants.RES_BAD_REQUEST).send(err);
-            return;
-        }
- 
-        res.sendStatus(constants.RES_OK);
-    });
- });
+const postRestockItemNotifs = async (req, res) => {
+    let storeId = req.params.storeId;
+    let itemId = req.params.itemId;
+
+    dbHelper.postRestockItemNotifs(storeId, itemId, res);
+};
+// Endpoints
+router.get("/api/items/store/:storeId", getItemsByStore);
+router.post("/api/items/store/:storeId", postItemsByStore);
+router.put("/api/items/store/:storeId/:itemId", putItemAtStoreId);
+router.delete("/api/items/store/:storeId", deleteItemsFromStore);
+router.get("/api/items", getItemsBySearchTerm);
+router.get("/api/items/all", getAllItems);
+router.post("/api/items/multiple", getMultipleItems);
+router.post("/api/items", postItem);
+router.put("/api/items/:itemId", putItem);
+router.delete("/api/items", deleteItems);
+router.post("/api/items/restockNotifs/:storeId/:itemId", postRestockItemNotifs);
 
 module.exports = router;
