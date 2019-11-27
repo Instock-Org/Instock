@@ -145,7 +145,6 @@ describe("DELETE /api/users/subscriptions/{userId}/{storeId}/{itemId}", () => {
 });
 
 afterAll((done) => {
-    console.log("reach2");
     redis.shutdown;
     done();
 });

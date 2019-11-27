@@ -298,7 +298,6 @@ describe("DELETE /api/items/{itemId}", () => {
 });
 
 afterAll((done) => {
-    console.log("reach1");
     redis.shutdown;
     done();
 });

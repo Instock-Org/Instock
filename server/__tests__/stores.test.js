@@ -261,7 +261,6 @@ describe("POST /api/stores/nearbyStores ", () => {
 });
 
 afterAll((done) => {
-    console.log("reach3");
     redis.shutdown;
     done();
 });
