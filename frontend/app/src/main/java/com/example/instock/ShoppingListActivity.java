@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.instock.db.TaskContractUtil;
 import com.example.instock.db.TaskDbHelper;
@@ -156,19 +157,6 @@ public class ShoppingListActivity extends AppCompatActivity {
         JsonObject shoppingList = new JsonObject();
         shoppingList.add("shoppingList", jsonarray);
 
-        // Include coordinates of users current location.
-        // TODO: Uncomment and fix this later when using other locations.
-//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        double longitude = location.getLongitude();
-//        double latitude = location.getLatitude();
-
-//        double longitude = -123.249411;
-//        double latitude = 49.261773;
-//        shoppingList.addProperty("longitude", longitude);
-//        shoppingList.addProperty("latitude", latitude);
-
-        // TODO: Send the shoppinglist Json as a post request to the server.
         sendShoppingList(instockAPIs, shoppingList);
     }
 
@@ -196,6 +184,9 @@ public class ShoppingListActivity extends AppCompatActivity {
                     Intent intent = new Intent(ShoppingListActivity.this, ShoppingTripActivity.class);
                     intent.putExtra("BUNDLE", bundle);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),"One or more items not found in any nearby stores.",Toast.LENGTH_SHORT).show();
+
                 }
             }
             @Override

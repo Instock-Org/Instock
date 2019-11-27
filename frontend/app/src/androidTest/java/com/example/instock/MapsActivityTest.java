@@ -127,4 +127,11 @@ public class MapsActivityTest {
         Rect rects = marker.getBounds();
         device.click(rects.centerX(), rects.top - 30);
     }
+
+    @Test
+    public void mapDirectionButtonDisplayed() {
+        initSingleStore();
+        onView(withId(R.id.directions_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.directions_button)).perform(click());
+    }
 }
