@@ -44,4 +44,11 @@ public interface InstockAPIs {
     @GET("api/stores/item")
     Call<ItemStoreListResponse> getStoresForItem(@Query("search_term") String term);
 
+    /*
+    Post request to send google account id token to backend for auth
+     */
+    @Headers("Content-Type: application/json")
+    @POST("api/users/createUser")
+    Call<Void> googleAuth(@Body JsonObject body);
+
 }

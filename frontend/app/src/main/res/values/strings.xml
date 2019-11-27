@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">InStock</string>
 
+    <string name="server_client_id">765859976963-m34ah8bbv3us4525kge0hpqg4f2m2fh7.apps.googleusercontent.com</string>
+
     <!--Start-->
     <string name="start_title">In Stock</string>
     <string name="start_customer_login">Log In as Customer</string>

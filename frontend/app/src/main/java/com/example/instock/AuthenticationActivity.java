@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 //import android.widget.Button;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -15,11 +18,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class AuthenticationActivity extends AppCompatActivity {
     private final String TAG = "AuthenticationActivity";
 
     private GoogleSignInClient GoogleSignInClient;
+    private Retrofit retrofit;
+    private InstockAPIs instockAPIs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +43,9 @@ public class AuthenticationActivity extends AppCompatActivity {
         // Google login
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestIdToken(getString(R.string.server_client_id))
                 .build();
+
         GoogleSignInClient = GoogleSignIn.getClient(this, gso);
         SignInButton googleSignInButton = findViewById(R.id.sign_in_button);
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -81,10 +97,38 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     private void onGoogleLoggedIn(GoogleSignInAccount account) {
-        Intent intent = new Intent(this, UserViewActivity.class);
-        Log.d(TAG, account.getEmail());
+        String idTokenStr = account.getIdToken();
+        final GoogleSignInAccount googleAcc = account;
+        Log.d(TAG, idTokenStr);
 
-        startActivity(intent);
-        finish();
+        retrofit = NetworkClient.getRetrofitClient();
+        instockAPIs = retrofit.create(InstockAPIs.class);
+
+        JsonObject idToken = new JsonObject();
+        idToken.addProperty("idToken", idTokenStr);
+
+        Call call = instockAPIs.googleAuth(idToken); // post request
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                Log.d(TAG, String.valueOf(response.code()));
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(AuthenticationActivity.this, UserViewActivity.class);
+                    Log.d(TAG, googleAcc.getEmail());
+
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Google authentication failed.",Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                // Error callback
+                Log.d(TAG, t.getMessage());
+                Log.d(TAG, "API request failed");
+            }
+        });
     }
 }
