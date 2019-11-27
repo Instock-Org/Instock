@@ -1,16 +1,14 @@
 package com.example.instock;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
@@ -22,8 +20,6 @@ import retrofit2.Retrofit;
 public class ProductViewActivity extends AppCompatActivity {
 
     private TextView itemNameTextView;
-    private TextView priceAmountTextView;
-    private ArrayList<String> storesData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +41,7 @@ public class ProductViewActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     ItemStoreListResponse res = (ItemStoreListResponse) response.body();
 
-                    final String itemId = res.getId();
+//                    final String itemId = res.getId();
                     final ArrayList<String> storeIds = new ArrayList<>();
 
                     ArrayList<String> storesList = new ArrayList<>();

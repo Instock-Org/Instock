@@ -1,15 +1,12 @@
 package com.example.instock;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
@@ -57,13 +54,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         @Override
                         public void onResponse(Call call, Response response) {
                             if (response.code() == 200) {
-
+                                // no op
                             }
                         }
 
                         @Override
                         public void onFailure(Call call, Throwable t) {
-
+                            // no op
                         }
                     });
                 }

@@ -39,7 +39,7 @@ public class EmployeeStock {
     }
 
     public String getStoreId() {
-        return toString();
+        return storeId;
     }
 
     public void setStoreId(String storeId) {
