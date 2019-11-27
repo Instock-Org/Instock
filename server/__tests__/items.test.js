@@ -3,6 +3,8 @@ const constants = require("../constants");
 const supertest = require("supertest");
 const request = supertest(app);
 
+const redis = "../services/redis";
+
 jest.mock("../apiDbHelperItems");
 
 // TODO: Move test request objects into a new folder? Some of these are duplicated in the mocks
@@ -293,4 +295,10 @@ describe("DELETE /api/items/{itemId}", () => {
 
         done();
     });
+});
+
+afterAll((done) => {
+    console.log("reach1");
+    redis.shutdown;
+    done();
 });
