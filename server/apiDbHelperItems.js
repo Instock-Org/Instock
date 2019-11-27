@@ -176,39 +176,50 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
             "_id": db.getPrimaryKey(storeId)
         }).toArray((storeerr, store) => {
             if (!store.length){
-                res.sendStatus(constants.RES_BAD_REQUEST);
+                res.sendStatus(constants.RES_OK);
                 return;
             }
-            var itemName = item[0].name;
-            var storeName = store[0].name;
+            db.getDB().collection(constants.COLLECTION_USERSUBSCRIPTIONS).find({
+                "storeId": db.getPrimaryKey(storeId),
+                "itemId": db.getPrimaryKey(itemId)
+            }, {projection: {_id: 0, storeId: 0, itemId: 0}}).toArray((userSubErr, userIds) => {
+                var itemName = item[0].name;
+                var storeName = store[0].name;
+                
+                var registrationToken = "dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV";
             
-            var registrationToken = "dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV";
-        
-            var message = {
-                token: registrationToken,
-                notification: {
-                    title: "Item Restock Notification!",
-                    body: itemName + " has been re-stocked at " + storeName + "!"
-                }
-            };
+                var message = {
+                    token: registrationToken,
+                    notification: {
+                        title: "Item Restock Notification!",
+                        body: itemName + " has been re-stocked at " + storeName + "!"
+                    }
+                };
 
-            try {
-                // Send a message to the device corresponding to the provided
-                // registration token.
-                admin.messaging().send(message)
-                .then((response) => {
-                    // Response is a message ID string.
-                    res.sendStatus(constants.RES_OK);
+                // No users subscribing, no push notifications sent
+                if (userIds.length === 0){
+                    res.sendStatus(constants.RES_NOT_FOUND);
                     return;
-                })
-                .catch((error) => {
+                }
+
+                try {
+                    // Send a message to the device corresponding to the provided
+                    // registration token.
+                    admin.messaging().send(message)
+                    .then((response) => {
+                        // Response is a message ID string.
+                        res.sendStatus(constants.RES_OK);
+                        return;
+                    })
+                    .catch((error) => {
+                        res.status(constants.RES_INTERNAL_ERR).send(error);
+                        return;
+                    });
+                } catch (error) {
                     res.status(constants.RES_INTERNAL_ERR).send(error);
                     return;
-                });
-            } catch (error) {
-                res.status(constants.RES_INTERNAL_ERR).send(error);
-                return;
-            }
+                }
+            });
         });
     });
 };
