@@ -6,8 +6,10 @@ const constants = require("../../constants");
 const db = require("../../db");
 const itemsCollection = constants.COLLECTION_ITEMS;
 const storeHasCollection = constants.COLLECTION_STOREHAS;
+const storeCollection = constants.COLLECTION_STORES;
 const usersCollection = constants.COLLECTION_USERS;
 const authCollection = constants.COLLECTION_AUTH;
+const userSubCollection = constants.COLLECTION_USERSUBSCRIPTIONS;
 
 const TokenGenerator = require("uuid-token-generator");
 const tokgen2 = new TokenGenerator(256, TokenGenerator.BASE62);
@@ -40,7 +42,7 @@ router.get("/api/internal/items/store", (req, res) => {
 
 // Get all entries from the StoreHas table
 router.get("/api/internal/store", (req, res) => {
-    db.getDB().collection(storeHasCollection).find({}).toArray((err, result) => {
+    db.getDB().collection(storeCollection).find({}).toArray((err, result) => {
         if (err) {
             res.status(constants.RES_BAD_REQUEST).send(err);
             return;
@@ -77,6 +79,18 @@ router.delete("/api/internal/items/store", (req, res) => {
  // Get all users
  router.get("/api/internal/users", (req, res) => {
     db.getDB().collection(usersCollection).find({}).toArray((err, result) => {
+        if (err) {
+            res.status(constants.RES_BAD_REQUEST).send(err);
+            return;
+        }
+
+        res.status(constants.RES_OK).send(result);
+    });
+});
+
+ // Get all user subscriptions
+ router.get("/api/internal/users/subscriptions", (req, res) => {
+    db.getDB().collection(userSubCollection).find({}).toArray((err, result) => {
         if (err) {
             res.status(constants.RES_BAD_REQUEST).send(err);
             return;

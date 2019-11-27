@@ -3,6 +3,7 @@ const constants = require("./constants");
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const storesCollection = constants.COLLECTION_STORES;
 const itemsCollection = constants.COLLECTION_ITEMS;
+const userSubCollection = constants.COLLECTION_USERSUBSCRIPTIONS;
 
 // Firebase and cloud messaging setup
 var admin = require("firebase-admin");
@@ -192,6 +193,11 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
                     fcmTokenList.push(subscription.fcm);
                 });
 
+                if (fcmTokenList.length === 0) {
+                    res.sendStatus(constants.RES_OK);
+                    return;
+                }
+                
                 const uniqueFcmTokenSet = new Set(fcmTokenList);
                 const uniqueFcmTokens = [...uniqueFcmTokenSet];
 

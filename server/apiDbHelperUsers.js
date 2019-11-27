@@ -27,15 +27,32 @@ const postOneUser = async (email, password, authType, res) => {
 };
 
 const createUser = async (userid, res) => {
-    db.getDB().collection(usersCollection).insertOne({
-        userid
-    }, (err, result) => {
-        if (err) {
+    console.log("Inside create user db helper");
+    db.getDB().collection(usersCollection).find({
+        "userid": userid
+    }).toArray((err, result) => {
+        console.log("Called find");
+        if(err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);
             return;
         }
 
-        res.status(constants.RES_OK).send(result.ops[0]._id);
+        if(result.length === 0) {
+            console.log("User not found");
+
+            db.getDB().collection(usersCollection).insertOne({
+                userid
+            }, (err, result) => {
+                if (err) {
+                    res.status(constants.RES_INTERNAL_ERR).send(err);
+                    return;
+                }
+        
+                res.sendStatus(constants.RES_OK);
+            });
+        }
+
+        res.status(constants.RES_OK).send(result);
     });
 };
 
