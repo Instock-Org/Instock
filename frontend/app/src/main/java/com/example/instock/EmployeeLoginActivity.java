@@ -32,7 +32,7 @@ public class EmployeeLoginActivity extends AppCompatActivity {
 
                 //TODO: first check if username and password is autherized in the data base
 
-                Intent intent = new Intent(EmployeeLoginActivity.this, EmployeeStock.class);
+                Intent intent = new Intent(EmployeeLoginActivity.this, EmployeeStockActivity.class);
                 startActivity(intent);
             }
         });
