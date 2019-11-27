@@ -5,6 +5,7 @@ before_script:
   - cd server
   - npm install
   - npm install express --save
+  - npm install --save-dev jest
 script:
   - npm test
 services:
