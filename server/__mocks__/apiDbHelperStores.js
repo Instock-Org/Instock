@@ -55,7 +55,7 @@ const complexLogic = async (shoppingList, boundaries, redisKey, res) => {
     };
 
     res.status(constants.RES_OK).send(sampleResponse);
-}
+};
 
 const getAllStores = async (clientId, token, res) => {
 
@@ -95,7 +95,7 @@ const getAllStores = async (clientId, token, res) => {
             ]
         );
     }
-}
+};
 
 const getSpecificStore = async (storeID, res) => {
     if(storeID !== "1234") {
@@ -119,7 +119,7 @@ const getSpecificStore = async (storeID, res) => {
             ]
         );
     }
-}
+};
 
 const nearbyStores = async (northBoundaryLat, southBoundaryLat, eastBoundaryLong, westBoundaryLong, res) => {
     if(northBoundaryLat >= 49.2548294 
@@ -144,7 +144,7 @@ const nearbyStores = async (northBoundaryLat, southBoundaryLat, eastBoundaryLong
         res.sendStatus(constants.RES_NOT_FOUND);
         return;
     }
-}
+};
 
 module.exports = {
     complexLogic,

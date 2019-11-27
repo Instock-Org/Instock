@@ -3,6 +3,7 @@ const constants = require("./constants");
 const storeHasCollection = constants.COLLECTION_STOREHAS;
 const storesCollection = constants.COLLECTION_STORES;
 const itemsCollection = constants.COLLECTION_ITEMS;
+const userSubCollection = constants.COLLECTION_USERSUBSCRIPTIONS;
 
 // Firebase and cloud messaging setup
 var admin = require("firebase-admin");
@@ -52,7 +53,7 @@ const putItemAtStoreId = async (storeId, itemId, quantity, price, res) => {
 
         res.sendStatus(constants.RES_OK);
     });
-}
+};
 
 const deleteItemsFromStore = async (storeId, itemIds, res) => {
     db.getDB().collection(storeHasCollection).deleteMany({
@@ -66,7 +67,8 @@ const deleteItemsFromStore = async (storeId, itemIds, res) => {
  
         res.sendStatus(constants.RES_OK);
     });
-}
+};
+
 const getItemsBySearchTerm = async (regex, res) => {
     db.getDB().collection(itemsCollection).find({
         "name": regex
@@ -179,33 +181,38 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
                 res.sendStatus(constants.RES_BAD_REQUEST);
                 return;
             }
-            db.getDB().collection(constants.COLLECTION_USERSUBSCRIPTIONS).find({
-                "storeId": db.getPrimaryKey(storeId),
-                "itemId": db.getPrimaryKey(itemId)
-            }, {projection: {_id: 0, storeId: 0, itemId: 0}}).toArray((userSubErr, userIds) => {
-                var itemName = item[0].name;
-                var storeName = store[0].name;
+            var itemName = item[0].name;
+            var storeName = store[0].name;
                 
-                var registrationToken = "dBunx2SPvzc:APA91bHHyeferFCAAB1z1kEmRSGj00OwXl94ZrjRnkdNEwdryRkgSw-8_bkuFgCDN7qLnRc5bpHzpYBxIi4XhBtkYOhjoAP7DzdBwm1itKgD338B7UvdR1FODvOXM9T2jyidBDNg8udV";
-            
+            db.getDB().collection(userSubCollection).find({
+                storeId,
+                itemId
+            }).toArray((userSubErr, userSub) => {
+                var fcmTokenList = [];
+                userSub.forEach((subscription) => {
+                    fcmTokenList.push(subscription.fcm);
+                });
+
+                if (fcmTokenList.length === 0) {
+                    res.sendStatus(constants.RES_OK);
+                    return;
+                }
+                
+                const uniqueFcmTokenSet = new Set(fcmTokenList);
+                const uniqueFcmTokens = [...uniqueFcmTokenSet];
+
                 var message = {
-                    token: registrationToken,
+                    tokens: uniqueFcmTokens,
                     notification: {
                         title: "Item Restock Notification!",
                         body: itemName + " has been re-stocked at " + storeName + "!"
                     }
                 };
-
-                // No users subscribing, no push notifications sent
-                if (userIds.length === 0){
-                    res.sendStatus(constants.RES_OK);
-                    return;
-                }
-
+                
                 try {
                     // Send a message to the device corresponding to the provided
                     // registration token.
-                    admin.messaging().send(message)
+                    admin.messaging().sendMulticast(message)
                     .then((response) => {
                         // Response is a message ID string.
                         res.sendStatus(constants.RES_OK);

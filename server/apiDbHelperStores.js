@@ -300,7 +300,7 @@ const getAllStoresWithItemByName = async (regex, res) => {
                         return;
                     }
                 });
-            })
+            });
         });
     });
 };

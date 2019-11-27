@@ -9,7 +9,7 @@ const getUserById = async (userId, res) => {
     }).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
     });
-}
+};
 
 const postOneUser = async (email, password, authType, res) => {
     db.getDB().collection(usersCollection).insertOne({
@@ -24,7 +24,7 @@ const postOneUser = async (email, password, authType, res) => {
 
         res.status(constants.RES_OK).send(result.ops[0]._id);
     });
-}
+};
 
 const createUser = async (userid, res) => {
     console.log("Inside create user db helper");
@@ -54,7 +54,7 @@ const createUser = async (userid, res) => {
 
         res.status(constants.RES_OK).send(result);
     });
-}
+};
 
 const putUserById = async (userId, email, password, authType, res) => {
     db.getDB().collection(usersCollection).updateOne({
@@ -72,7 +72,7 @@ const putUserById = async (userId, email, password, authType, res) => {
 
         res.sendStatus(constants.RES_OK);
     });
-}
+};
 
 const deleteUserById = async (userId, res) => {
     db.getDB().collection(usersCollection).deleteOne({
@@ -85,7 +85,7 @@ const deleteUserById = async (userId, res) => {
  
         res.sendStatus(constants.RES_OK);
     });
-}
+};
 
 const getUserSubscriptions = async (userId, res) => {
     db.getDB().collection(userSubscriptionsCollection).find({
@@ -98,13 +98,14 @@ const getUserSubscriptions = async (userId, res) => {
 
         res.status(constants.RES_OK).send(result);
     });
-}
+};
 
-const postItemToSubscription = async (userId, storeId, itemId, res) => {
+const postItemToSubscription = async (userId, storeId, itemId, fcm, res) => {
     db.getDB().collection(userSubscriptionsCollection).insertOne({
         "userId": db.getPrimaryKey(userId),
         "storeId": db.getPrimaryKey(storeId),
-        "itemId": db.getPrimaryKey(itemId)
+        "itemId": db.getPrimaryKey(itemId),
+        fcm
     }, (err, result) => {
         if (err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);
@@ -113,7 +114,7 @@ const postItemToSubscription = async (userId, storeId, itemId, res) => {
 
         res.sendStatus(constants.RES_OK);
     });
-}
+};
 
 const deleteItemFromSubscription = async (userId, storeId, itemId, res) => {
     db.getDB().collection(userSubscriptionsCollection).deleteOne({
@@ -128,7 +129,7 @@ const deleteItemFromSubscription = async (userId, storeId, itemId, res) => {
 
         res.sendStatus(constants.RES_OK);
     });
-}
+};
 
 module.exports = {
     getUserById,

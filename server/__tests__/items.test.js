@@ -120,7 +120,7 @@ describe("DELETE /api/items/store/{storeId}", () => {
         expect(res.status).toBe(constants.RES_OK);
 
         done();
-    })
+    });
 });
 
 describe("GET /api/items?search_term=example+string", () => { 
