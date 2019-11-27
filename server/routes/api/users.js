@@ -51,11 +51,14 @@ const createUser = async (req, res) => {
             res.sendStatus(constants.RES_BAD_REQUEST);
             return;
         } else {
-            // dbHelper.createUser(userid);
-            res.status(constants.RES_OK).send("It works!")
+            dbHelper.createUser(userid, res);
+            // res.status(constants.RES_OK).send("It works!")
         }
     }
-    verify().catch(console.error);
+    verify().catch(() => {
+        res.sendStatus(constants.RES_BAD_REQUEST);
+        return;
+    });
 };
 
 // Update user

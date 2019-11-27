@@ -5,7 +5,7 @@ const userSubscriptionsCollection = constants.COLLECTION_USERSUBSCRIPTIONS;
 
 const getUserById = async (userId, res) => {
     db.getDB().collection(usersCollection).find({
-        "_id": db.getPrimaryKey(userId)
+        "userid": userId
     }).toArray((err, result) => {
         res.status(constants.RES_OK).send(result);
     });
@@ -16,6 +16,19 @@ const postOneUser = async (email, password, authType, res) => {
         email,
         password,
         authType
+    }, (err, result) => {
+        if (err) {
+            res.status(constants.RES_INTERNAL_ERR).send(err);
+            return;
+        }
+
+        res.status(constants.RES_OK).send(result.ops[0]._id);
+    });
+}
+
+const createUser = async (userid, res) => {
+    db.getDB().collection(usersCollection).insertOne({
+        userid
     }, (err, result) => {
         if (err) {
             res.status(constants.RES_INTERNAL_ERR).send(err);
@@ -107,5 +120,6 @@ module.exports = {
     deleteUserById,
     getUserSubscriptions,
     postItemToSubscription,
-    deleteItemFromSubscription
+    deleteItemFromSubscription,
+    createUser
 };
