@@ -53,9 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     call.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {
-                            if (response.code() == 200) {
-                                // no op
-                            }
+                            // no op
                         }
 
                         @Override
