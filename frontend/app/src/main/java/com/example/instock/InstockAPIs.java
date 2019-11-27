@@ -98,7 +98,7 @@ public interface InstockAPIs {
     Post request to send notifications
      */
     @Headers("Content-Type: application/json")
-    @PUT("api/items/restockNotifs/{storeId}/{itemId}")
+    @POST("api/items/restockNotifs/{storeId}/{itemId}")
     Call<Void> sendNotification(@Path("storeId") String storeId, @Path("itemId") String itemId);
 
 }

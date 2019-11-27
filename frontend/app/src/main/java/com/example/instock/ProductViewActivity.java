@@ -89,7 +89,6 @@ public class ProductViewActivity extends AppCompatActivity {
                                             // Get new Instance ID token
                                             String token = task.getResult().getToken();
 
-//                                            TODO: add user to list to be updated by push notification
                                             JsonObject body = new JsonObject();
                                             if (storeIds.size() > 2) {
                                                 body.addProperty("storeId", storeIds.get(0));
