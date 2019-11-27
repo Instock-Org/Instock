@@ -176,7 +176,7 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
             "_id": db.getPrimaryKey(storeId)
         }).toArray((storeerr, store) => {
             if (!store.length){
-                res.sendStatus(constants.RES_OK);
+                res.sendStatus(constants.RES_BAD_REQUEST);
                 return;
             }
             db.getDB().collection(constants.COLLECTION_USERSUBSCRIPTIONS).find({
@@ -198,7 +198,7 @@ const postRestockItemNotifs = async(storeId, itemId, res) => {
 
                 // No users subscribing, no push notifications sent
                 if (userIds.length === 0){
-                    res.sendStatus(constants.RES_NOT_FOUND);
+                    res.sendStatus(constants.RES_OK);
                     return;
                 }
 
