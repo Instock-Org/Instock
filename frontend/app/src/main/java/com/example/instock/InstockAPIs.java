@@ -94,4 +94,11 @@ public interface InstockAPIs {
     @PUT("api/items/store/{storeId}/{itemId}")
     Call<Void> updateItem(@Path("storeId") String storeId, @Path("itemId") String itemId, @Body JsonObject body);
 
+    /*
+    Post request to send notifications
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("api/items/restockNotifs/{storeId}/{itemId}")
+    Call<Void> sendNotification(@Path("storeId") String storeId, @Path("itemId") String itemId);
+
 }

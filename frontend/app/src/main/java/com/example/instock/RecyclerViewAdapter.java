@@ -44,6 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     dataList.get(getAdapterPosition()).setProductCount(textViewCount.getText().toString()); // Updates the UI to display the new number.
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
                     Retrofit retrofit = NetworkClient.getRetrofitClient();
                     final InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
                     JsonObject body = new JsonObject();
@@ -53,7 +57,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     call.enqueue(new Callback() {
                         @Override
                         public void onResponse(Call call, Response response) {
-                            // no op
+                            Call call2 = instockAPIs.sendNotification(dataList.get(getAdapterPosition()).getStoreId(), dataList.get(getAdapterPosition()).getProductId());
+
+                            call2.enqueue(new Callback() {
+                                @Override
+                                public void onResponse(Call call, Response response) {
+                                    // no op
+                                }
+
+                                @Override
+                                public void onFailure(Call call, Throwable t) {
+                                    // no op
+                                }
+                            });
                         }
 
                         @Override
@@ -61,11 +77,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             // no op
                         }
                     });
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    // No op
                 }
             });
         }

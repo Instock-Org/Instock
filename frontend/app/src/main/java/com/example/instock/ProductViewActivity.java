@@ -2,6 +2,7 @@ package com.example.instock;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
@@ -41,7 +48,7 @@ public class ProductViewActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     ItemStoreListResponse res = (ItemStoreListResponse) response.body();
 
-//                    final String itemId = res.getId();
+                    final String itemId = res.getId();
                     final ArrayList<String> storeIds = new ArrayList<>();
 
                     ArrayList<String> storesList = new ArrayList<>();
@@ -70,46 +77,48 @@ public class ProductViewActivity extends AppCompatActivity {
                     notifyStockButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            FirebaseInstanceId.getInstance().getInstanceId()
-//                                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-//                                            if (!task.isSuccessful()) {
-//                                                Log.w("ProductViewActivity", "getInstanceId failed", task.getException());
-//                                                return;
-//                                            }
-//
-//                                            // Get new Instance ID token
-//                                            String token = task.getResult().getToken();
-//
-////                                            TODO: add user to list to be updated by push notification
-//                                            JsonObject body = new JsonObject();
-//                                            body.addProperty("storeId", storeIds.get(0));
-//                                            body.addProperty("itemId", itemId);
-//                                            body.addProperty("fcm", token);
-////                                            body.addProperty("userId", );
-//
-//
-//                                            Call call2 = instockAPIs.addSubscription(body);
-//
-//                                            call2.enqueue(new Callback() {
-//                                                @Override
-//                                                public void onResponse(Call call, Response response) {
-//                                                    Log.d("ProductViewActivity", String.valueOf(response.code()));
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onFailure(Call call, Throwable t) {
-//                                                    // Error callback
-//                                                    Log.d("ProductViewActivity", t.getMessage());
-//                                                    Log.d("ProductViewActivity", "API request failed");
-//                                                }
-//                                            });
-//                                            Toast.makeText(getApplicationContext(),"You will be notified when the item is restocked!",Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-                            Toast.makeText(getApplicationContext(),"You will be notified when the item is restocked!",Toast.LENGTH_SHORT).show();
+                            FirebaseInstanceId.getInstance().getInstanceId()
+                                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.w("ProductViewActivity", "getInstanceId failed", task.getException());
+                                                return;
+                                            }
+
+                                            // Get new Instance ID token
+                                            String token = task.getResult().getToken();
+
+//                                            TODO: add user to list to be updated by push notification
+                                            JsonObject body = new JsonObject();
+                                            if (storeIds.size() > 2) {
+                                                body.addProperty("storeId", storeIds.get(0));
+                                            } else {
+                                                body.addProperty("storeId", storeIds.get(0));
+                                            }
+                                            body.addProperty("itemId", itemId);
+                                            body.addProperty("fcm", token);
+                                            body.addProperty("userId", "101574668310051785515233");
+
+
+                                            Call call2 = instockAPIs.addSubscription(body);
+
+                                            call2.enqueue(new Callback() {
+                                                @Override
+                                                public void onResponse(Call call, Response response) {
+                                                    Log.d("ProductViewActivity", String.valueOf(response.code()));
+                                                    Toast.makeText(getApplicationContext(),"You will be notified when the item is restocked!",Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call call, Throwable t) {
+                                                    // Error callback
+                                                    Log.d("ProductViewActivity", t.getMessage());
+                                                    Log.d("ProductViewActivity", "API request failed");
+                                                }
+                                            });
+                                        }
+                                    });
 
                         }
                     });
