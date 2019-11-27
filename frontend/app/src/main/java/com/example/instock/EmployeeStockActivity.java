@@ -27,10 +27,8 @@ public class EmployeeStockActivity extends AppCompatActivity {
     private String TAG = "EmployeeStockActivity";
 
     private static RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     static View.OnClickListener myOnClickListener;
-    private ArrayList<EmployeeStock> employeeStockList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

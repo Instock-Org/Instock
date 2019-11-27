@@ -5,17 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,7 +42,7 @@ public class ProductViewActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     ItemStoreListResponse res = (ItemStoreListResponse) response.body();
 
-                    final String itemId = res.getId();
+                  //  final String itemId = res.getId();
                     final ArrayList<String> storeIds = new ArrayList<>();
 
                     ArrayList<String> storesList = new ArrayList<>();
