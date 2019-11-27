@@ -42,7 +42,7 @@ public class ProductViewActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     ItemStoreListResponse res = (ItemStoreListResponse) response.body();
 
-                    final String itemId = res.getId();
+                  //  final String itemId = res.getId();
                     final ArrayList<String> storeIds = new ArrayList<>();
 
                     ArrayList<String> storesList = new ArrayList<>();

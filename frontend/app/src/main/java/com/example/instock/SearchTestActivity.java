@@ -45,8 +45,7 @@ public class SearchTestActivity extends AppCompatActivity {
                     //Log.d(TAG, res.getStores().get(0).getName());
 
                     Log.d(TAG, response.toString());
-
-                    Bundle bundle = new Bundle();
+                    
                    // bundle.putSerializable("SEARCH", (Serializable)res.getStores());
 
 //                    // Launch Shopping trip activity

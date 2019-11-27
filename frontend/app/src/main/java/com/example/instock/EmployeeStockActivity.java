@@ -13,10 +13,8 @@ import java.util.ArrayList;
 public class EmployeeStockActivity extends AppCompatActivity {
 
     private static RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     static View.OnClickListener myOnClickListener;
-    private ArrayList<EmployeeStock> employeeStockList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +25,7 @@ public class EmployeeStockActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // TODO: replace with pulling the data from the backend
-        employeeStockList = new ArrayList<>();
+        ArrayList<EmployeeStock> employeeStockList = new ArrayList<>();
         employeeStockList.add(new EmployeeStock("Apple", "0"));
         employeeStockList.add(new EmployeeStock("Banana", "1"));
         employeeStockList.add(new EmployeeStock("Yogurt", "2"));
@@ -51,7 +49,7 @@ public class EmployeeStockActivity extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(employeeStockList);
 
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 

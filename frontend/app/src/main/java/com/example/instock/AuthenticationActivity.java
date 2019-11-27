@@ -30,15 +30,13 @@ public class AuthenticationActivity extends AppCompatActivity {
     private final String TAG = "AuthenticationActivity";
 
     private GoogleSignInClient GoogleSignInClient;
-    private Retrofit retrofit;
-    private InstockAPIs instockAPIs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+    //    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
 //        if (account != null) {
 //            Intent intent = new Intent(AuthenticationActivity.this, UserViewActivity.class);
@@ -113,8 +111,8 @@ public class AuthenticationActivity extends AppCompatActivity {
         final GoogleSignInAccount googleAcc = account;
         Log.d(TAG, idTokenStr);
 
-        retrofit = NetworkClient.getRetrofitClient();
-        instockAPIs = retrofit.create(InstockAPIs.class);
+        Retrofit retrofit = NetworkClient.getRetrofitClient();
+        InstockAPIs instockAPIs = retrofit.create(InstockAPIs.class);
 
         JsonObject idToken = new JsonObject();
         idToken.addProperty("idToken", idTokenStr);

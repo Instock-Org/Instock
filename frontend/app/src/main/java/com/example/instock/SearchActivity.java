@@ -26,8 +26,6 @@ import retrofit2.Retrofit;
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private final String TAG = "SearchActivity";
 
-    private MenuItem menuItemSearch;
-    private SearchView productSearchView;
     private ListView productListView;
     ArrayAdapter<String> productListAdapter;
 
@@ -104,8 +102,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         SearchManager searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
-        menuItemSearch = menu.findItem(R.id.search);
-        productSearchView = (SearchView) menuItemSearch.getActionView();
+        MenuItem menuItemSearch = menu.findItem(R.id.search);
+        SearchView productSearchView = (SearchView) menuItemSearch.getActionView();
 
         productSearchView.setSearchableInfo(searchManager.
                 getSearchableInfo(getComponentName()));
